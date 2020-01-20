@@ -31,7 +31,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     Character character;
     Bitmap fondo1, botonR, botonL, botonAction, interact, dialogImg;
     HashMap<Integer, Point> dedos = new HashMap<>();
-
     Background f1, f2;
 
     public Game(Context context) {
@@ -49,7 +48,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
         anchoPantalla = dm.widthPixels;
         altoPantalla = dm.heightPixels;
-
         gameThread = new GameThread();
         p = new Paint();
         p.setColor(Color.WHITE);
@@ -73,13 +71,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         interact = escalaAltura(interact, altoPantalla / 6);
         dialogImg = getBitmapFromAssets("dialog.png");
         dialogImg = escalaAltura(dialogImg, altoPantalla / 2);
-
-
     }
 
 
     public void dibujar(Canvas c) {
-
         c.drawBitmap(fondo1, 0, 0, null);
         if (dialog == false) {
             c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
@@ -91,7 +86,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         c.drawBitmap(interact, 1300, 80, null);
         c.drawText(altoPantalla + ":" + anchoPantalla, 10, 10 + p.getTextSize(), p);
         character.dibuja(c);
-
     }
 
     public void actualizaFisica() {
@@ -111,40 +105,47 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         int accion = event.getActionMasked();
         int indice = event.getActionIndex();
         int id = event.getPointerId(indice);
         float x = event.getX(indice);
         float y = event.getY(indice);
 
-
         switch (accion) {
             case MotionEvent.ACTION_DOWN:
-                if ((x > 300 && x < 300 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
-                    movementD = true;
-                }
-                if ((x > 20 && x < 20 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
-                    movementI = true;
+
+                // Pulsación Izquierda y Derecha
+                if (dialog == false) {
+                    if ((x > 300 && x < 300 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
+                        movementD = true;
+                    }
+                    if ((x > 20 && x < 20 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
+                        movementI = true;
+                    }
                 }
 
                 if ((character.x > 1300 - 50 && character.y > 80) && (x > anchoPantalla - botonAction.getWidth() - 20 && y > 80)) {
-                    dialog = true;
+                    dialog = !dialog;
                 }
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                if ((x < 300 || x > 300 + botonR.getWidth()) || (y < altoPantalla - botonR.getHeight())) {
-                    movementD = false;
-                }
-                if ((x < 20 || x > 20 + botonR.getWidth()) || (y < altoPantalla - botonR.getHeight())) {
-                    movementI = false;
-                }
-                if ((x > 300 && x < 300 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
-                    movementD = true;
-                }
-                if ((x > 20 && x < 20 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
-                    movementI = true;
+
+
+                // Movimiento y desplazamiento Izquierda y Derecha
+                if (dialog == false) {
+                    if ((x < 300 || x > 300 + botonR.getWidth()) || (y < altoPantalla - botonR.getHeight())) {
+                        movementD = false;
+                    }
+                    if ((x < 20 || x > 20 + botonR.getWidth()) || (y < altoPantalla - botonR.getHeight())) {
+                        movementI = false;
+                    }
+                    if ((x > 300 && x < 300 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
+                        movementD = true;
+                    }
+                    if ((x > 20 && x < 20 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
+                        movementI = true;
+                    }
                 }
 
                 return true;
@@ -154,9 +155,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                 movementD = false;
                 movementI = false;
                 return true;
-
-
         }
+
         return super.onTouchEvent(event);
     }
 
