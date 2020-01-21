@@ -8,13 +8,14 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -27,18 +28,19 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread gameThread;
-    Paint p;
+    Paint invisiblePaint;
     Character character;
-    Bitmap fondo1, botonR, botonL, botonAction, interact, dialogImg;
+    Bitmap fondo1, botonR, botonL, botonAction, interact, dialogImg,dialogBack,dialogArrow;
     HashMap<Integer, Point> dedos = new HashMap<>();
     Background f1, f2;
+    MediaPlayer mp;
+    Rect lMoveBtn,rMoveBtn,actionBtn,dialogInteract;
 
     public Game(Context context) {
         super(context);
         this.context = context;
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
-
         DisplayMetrics dm = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -49,15 +51,16 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         anchoPantalla = dm.widthPixels;
         altoPantalla = dm.heightPixels;
         gameThread = new GameThread();
-        p = new Paint();
-        p.setColor(Color.WHITE);
-        p.setTextSize(60);
+        invisiblePaint = new Paint();
+        //Color.argb(0,0,0,0)
+        invisiblePaint.setColor(Color.WHITE);
+        invisiblePaint.setTextSize(60);
         Bitmap[] bitmaps = new Bitmap[3];
         for (int i = 0; i < bitmaps.length; i++) {
             bitmaps[i] = getBitmapFromAssets("sprite" + i + ".png");
             bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 6);
         }
-        character = new Character(bitmaps, 20, 200, anchoPantalla, altoPantalla);
+        character = new Character(bitmaps, 20, 380, anchoPantalla, altoPantalla);
         fondo1 = getBitmapFromAssets("background.png");
         fondo1 = Bitmap.createScaledBitmap(fondo1, anchoPantalla, altoPantalla, false);
         botonL = getBitmapFromAssets("button movement.png");
@@ -71,23 +74,38 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         interact = escalaAltura(interact, altoPantalla / 6);
         dialogImg = getBitmapFromAssets("dialog.png");
         dialogImg = escalaAltura(dialogImg, altoPantalla / 2);
+        dialogBack=getBitmapFromAssets("dialog_background.png");
+        dialogBack=escalaAncho(dialogBack,anchoPantalla);
+        dialogArrow=getBitmapFromAssets("dialog_arrow.png");
+        dialogArrow=escalaAltura(dialogArrow,altoPantalla/6);
+        lMoveBtn = new Rect(20,altoPantalla-20-botonL.getHeight(),botonL.getWidth()+20,altoPantalla-20);
+        rMoveBtn = new Rect(60+botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth()+60+botonL.getWidth() , altoPantalla-20);
+        actionBtn = new Rect(anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla-20 , altoPantalla-20);
+        dialogInteract=new Rect(anchoPantalla/4,0,anchoPantalla/4+100,altoPantalla);
     }
-
 
     public void dibujar(Canvas c) {
         c.drawBitmap(fondo1, 0, 0, null);
+        c.drawRect(lMoveBtn, invisiblePaint);
+        c.drawRect(rMoveBtn, invisiblePaint);
+        c.drawRect(actionBtn, invisiblePaint);
+        c.drawRect(dialogInteract, invisiblePaint);
+
         if (dialog == false) {
             c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
-            c.drawBitmap(botonR, 300, altoPantalla - 20 - botonR.getHeight(), null);
+            c.drawBitmap(botonR, 60+botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
+            c.drawBitmap(botonAction, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
         } else {
+            c.drawBitmap(dialogBack,0,altoPantalla-dialogBack.getHeight(),null);
             c.drawBitmap(dialogImg, -100, altoPantalla - dialogImg.getHeight(), null);
+            c.drawBitmap(dialogArrow,anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(),null);
+            c.drawText(getResources().getString(R.string.dialogTest),dialogImg.getWidth()+40,altoPantalla-150, invisiblePaint);
         }
-        c.drawBitmap(botonAction, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
         c.drawBitmap(interact, 1300, 80, null);
-        c.drawText(altoPantalla + ":" + anchoPantalla, 10, 10 + p.getTextSize(), p);
+        c.drawText(altoPantalla + ":" + anchoPantalla, 10, 10 + invisiblePaint.getTextSize(), invisiblePaint);
         character.dibuja(c);
-    }
 
+    }
     public void actualizaFisica() {
         if (movementD) {
             character.cambiaFrame();
@@ -102,7 +120,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int accion = event.getActionMasked();
@@ -110,21 +127,24 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         int id = event.getPointerId(indice);
         float x = event.getX(indice);
         float y = event.getY(indice);
+        int xI=(int)event.getX(indice);
+        int yI=(int)event.getY(indice);
 
         switch (accion) {
             case MotionEvent.ACTION_DOWN:
 
                 // Pulsación Izquierda y Derecha
                 if (dialog == false) {
-                    if ((x > 300 && x < 300 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
+                    if (rMoveBtn.contains(xI,yI)) {
                         movementD = true;
                     }
-                    if ((x > 20 && x < 20 + botonR.getWidth()) && (y > altoPantalla - botonR.getHeight() && y < altoPantalla)) {
+                    if (lMoveBtn.contains(xI,yI)) {
                         movementI = true;
                     }
                 }
 
-                if ((character.x > 1300 - 50 && character.y > 80) && (x > anchoPantalla - botonAction.getWidth() - 20 && y > 80)) {
+                //Interacción con objeto
+                if (actionBtn.contains(xI,yI) && (character.x>dialogInteract.left-(dialogInteract.right-dialogInteract.left))) {
                     dialog = !dialog;
                 }
                 return true;
@@ -166,16 +186,18 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (this.gameThread.getState() == Thread.State.NEW) this.gameThread.start();
         if (this.gameThread.getState() == Thread.State.TERMINATED) {
             this.gameThread = new GameThread();
-            this.gameThread.start();
-        }
-    }
 
+           this.gameThread.start();
+
+        }
+        mp = MediaPlayer.create(context, R.raw.music);
+        mp.start();
+    }
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         this.anchoPantalla = width;
         this.altoPantalla = height;
     }
-
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         this.gameThread.setFuncionando(false);
@@ -184,6 +206,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        mp.pause();
     }
 
     public class GameThread extends Thread {
@@ -229,6 +252,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    //Métodos para imágenes
     public Bitmap getBitmapFromAssets(String fichero) {
         try {
             InputStream is = context.getAssets().open(fichero);
@@ -237,27 +261,19 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
             return null;
         }
     }
-
-
     public Bitmap escalaAltura(int res, int nuevoAlto) {
         Bitmap bitmapAux = BitmapFactory.decodeResource(context.getResources(), res);
         return escalaAltura(bitmapAux, nuevoAlto);
     }
-
-
     public Bitmap escalaAltura(Bitmap bitmapAux, int nuevoAlto) {
         if (nuevoAlto == bitmapAux.getHeight()) return bitmapAux;
         return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) /
                 bitmapAux.getHeight(), nuevoAlto, true);
     }
-
     public Bitmap escalaAncho(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho == bitmapAux.getWidth()) return bitmapAux;
-        return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getHeight() * nuevoAncho) /
-                bitmapAux.getWidth(), nuevoAncho, true);
+        return bitmapAux.createScaledBitmap(bitmapAux,  nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(),true);
     }
-
-
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
         Matrix matrix = new Matrix();
         if (horizontal) matrix.preScale(-1, 1);

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TheGuardian</string>
+    <string name="dialogTest">Test dialog. Does it work?</string>
 </resources>
