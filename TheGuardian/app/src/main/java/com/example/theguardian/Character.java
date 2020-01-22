@@ -5,10 +5,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.Log;
 
+import java.util.Random;
+
 public class Character {
+
+
 
     int anchoPantalla = 0, altoPantalla = 0;
     Bitmap[] frames, framesD, framesI;
@@ -20,13 +25,15 @@ public class Character {
     long tiempoFrame;
 
     int velocidad = 50;
-    int tickVelocidad = 50;
+    int tickVelocidad = 30;
     long tiempoVelocidad;
 
     Rect cuadrado;
     Paint pincelRect;
 
     public Character(Bitmap[] frames, int x, int y, int anchoPantalla, int altoPantalla) {
+
+
         this.frames = frames;
         framesD = frames;
         framesI = new Bitmap[frames.length];
@@ -53,7 +60,7 @@ public class Character {
 
     public void dibuja(Canvas c) {
         c.drawBitmap(frames[frameActual], x, y, null);
-        c.drawRect(cuadrado, pincelRect);
+//        c.drawRect(cuadrado, pincelRect);
     }
 
 
@@ -61,9 +68,9 @@ public class Character {
         if (System.currentTimeMillis() - tiempoVelocidad > tickVelocidad) {
 
             this.x += velocidad;
-            if (this.x + this.frames[frameActual].getWidth() > anchoPantalla) {
+            if (this.x  > anchoPantalla- this.frames[frameActual].getWidth()) {
                 this.x = anchoPantalla - this.frames[frameActual].getWidth();
-                this.x = anchoPantalla - cuadrado.width();
+
                 velocidad = 0;
             }
             if (this.y > altoPantalla) this.y = 0;
@@ -186,6 +193,11 @@ public class Character {
         return Bitmap.createBitmap(imagen, 0, 0, imagen.getWidth(),
                 imagen.getHeight(), matrix, false);
     }
+
+
+
+
+
 }
 
 
