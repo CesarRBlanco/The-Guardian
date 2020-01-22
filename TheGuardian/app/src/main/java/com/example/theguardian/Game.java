@@ -28,24 +28,27 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     boolean dialog = false;
     boolean colisionI = false;
     boolean colisionD = false;
-    boolean colSwitch= true;
-    int     anchoPantalla = 0, altoPantalla = 0;
+    boolean colSwitch = true;
+    int anchoPantalla = 0, altoPantalla = 0;
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread gameThread;
-    Paint invisiblePaint,textPaint;
+    Paint invisiblePaint, textPaint;
     Character character;
-    Bitmap fondo1, botonR, botonL, botonAction, dialogImg, dialogBack, dialogArrow,spriteRef;
+    Bitmap fondo1, botonR, botonL, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef;
     HashMap<Integer, Point> dedos = new HashMap<>();
     Background f1, f2;
     MediaPlayer mp;
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract;
-int charEnd;
+    int charEnd;
+
     public Game(Context context) {
         super(context);
         this.context = context;
         surfaceHolder = getHolder();
-        surfaceHolder.addCallback(this); gameThread = new GameThread();
+        surfaceHolder.addCallback(this);
+        gameThread = new GameThread();
+
 //        DisplayMetrics dm = new DisplayMetrics();
 //        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -56,15 +59,13 @@ int charEnd;
 //        anchoPantalla = dm.widthPixels;
 //        altoPantalla = dm.heightPixels;
 //        Log.i("ancho1",dm.widthPixels+":"+dm.heightPixels);
-
     }
 
-    public  void inicializao(){
-
+    public void inicializao() {
         invisiblePaint = new Paint();
         //Color.argb(0,0,0,0)
-        invisiblePaint.setColor(Color.argb(0,0,0,0));
-        textPaint=new Paint();
+        invisiblePaint.setColor(Color.argb(0, 0, 0, 0));
+        textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(60);
         Bitmap[] bitmaps = new Bitmap[3];
@@ -73,9 +74,9 @@ int charEnd;
             bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 6);
         }
 
-        character = new Character(bitmaps,1 , 400, anchoPantalla, altoPantalla);
-        spriteRef=getBitmapFromAssets("sprite0.png");
-        spriteRef=escalaAltura(spriteRef,altoPantalla/6);
+        character = new Character(bitmaps, 1, 400, anchoPantalla, altoPantalla);
+        spriteRef = getBitmapFromAssets("sprite0.png");
+        spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
         fondo1 = getBitmapFromAssets("background.png");
         fondo1 = Bitmap.createScaledBitmap(fondo1, anchoPantalla, altoPantalla, false);
         botonL = getBitmapFromAssets("button movement.png");
@@ -94,7 +95,7 @@ int charEnd;
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
         actionBtn = new Rect(anchoPantalla / 2, 0, anchoPantalla, altoPantalla);
-        ladderInteract = new Rect(anchoPantalla / 4 -20, altoPantalla/2-100, anchoPantalla / 4 + 90, altoPantalla-altoPantalla/4+30);
+        ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
 
     }
 
@@ -103,34 +104,26 @@ int charEnd;
         c.drawRect(lMoveBtn, invisiblePaint);
         c.drawRect(rMoveBtn, invisiblePaint);
         c.drawRect(actionBtn, invisiblePaint);
-        c.drawRect(ladderInteract, invisiblePaint);
+        c.drawRect(ladderInteract, textPaint);
         if (dialog == false) {
             c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
-
-
-
-
             c.drawBitmap(botonAction, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
-
-
-
-
-
         } else {
             c.drawBitmap(dialogBack, 0, altoPantalla - dialogBack.getHeight(), null);
             c.drawBitmap(dialogImg, -100, altoPantalla - dialogImg.getHeight(), null);
             c.drawBitmap(dialogArrow, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
-            c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, altoPantalla - 150, invisiblePaint);
+            c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, altoPantalla - 150, textPaint);
         }
-        charEnd=character.x+spriteRef.getWidth();
-        c.drawText(""+charEnd, 10, 50 + invisiblePaint.getTextSize(), textPaint);
-        c.drawText(""+ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
+        charEnd = character.x + spriteRef.getWidth();
+        c.drawText("" + charEnd, 10, 50 + invisiblePaint.getTextSize(), textPaint);
+        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
         character.dibuja(c);
     }
+
     public void actualizaFisica() {
 
-colisionStsten();
+        colisionStsten();
 
         if (movementD) {
             character.cambiaFrame();
@@ -138,29 +131,29 @@ colisionStsten();
                 character.setVelocidad(20);
                 character.moverR();
             }
-            colisionD=false;
+            colisionD = false;
         }
 
         if (movementI) {
             character.cambiaFrame();
-            if(colisionD==false){
-            character.setVelocidad(-20);
-            character.moverL();
+            if (colisionD == false) {
+                character.setVelocidad(-20);
+                character.moverL();
             }
             colisionI = false;
         }
     }
 
-    public void colisionStsten(){
+    public void colisionStsten() {
 
         //Columna de escaleras - ARRIBA
-        if (charEnd> ladderInteract.right&& colSwitch==true) {
+        if (charEnd > ladderInteract.right && colSwitch == true) {
 //            character.x=ladderInteract.left;
             colisionI = true;
         }
 
         //Columna de escaleras - ABAJO
-        if(character.x<ladderInteract.left && colSwitch==false){
+        if (character.x < ladderInteract.left && colSwitch == false) {
             colisionD = true;
         }
     }
@@ -187,17 +180,25 @@ colisionStsten();
                     }
                 }
 
-                //Interacción con objeto
+                //Interacción con escalera izquierda
                 if (actionBtn.contains(xI, yI) && (character.x > ladderInteract.left - (ladderInteract.right - ladderInteract.left))) {
-                    if(character.y == ladderInteract.bottom-spriteRef.getHeight()){
+
+                    // Subir
+                    if (character.y == ladderInteract.bottom - spriteRef.getHeight()) {
                         character.y = 400;
-                 colisionD=false;
-                        colSwitch=true;
-                    }else{
-                        character.y = ladderInteract.bottom-spriteRef.getHeight();
-                        colisionI=false;
-                        colSwitch=false;
+                        colisionD = false;
+                        colSwitch = true;
                     }
+
+                    // Bajar
+                    else {
+                        character.y = ladderInteract.bottom - spriteRef.getHeight();
+                        colisionI = false;
+                        colSwitch = false;
+                    }
+
+                    dialog = !dialog;
+
                 }
                 return true;
 
@@ -227,6 +228,7 @@ colisionStsten();
         }
         return super.onTouchEvent(event);
     }
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         this.gameThread.setFuncionando(true);
@@ -238,13 +240,15 @@ colisionStsten();
         mp = MediaPlayer.create(context, R.raw.music);
         mp.start();
     }
+
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         this.anchoPantalla = width;
         this.altoPantalla = height;
-        Log.i("ancho2",width+":"+height);
+        Log.i("ancho2", width + ":" + height);
         inicializao();
     }
+
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         this.gameThread.setFuncionando(false);
@@ -308,19 +312,23 @@ colisionStsten();
             return null;
         }
     }
+
     public Bitmap escalaAltura(int res, int nuevoAlto) {
         Bitmap bitmapAux = BitmapFactory.decodeResource(context.getResources(), res);
         return escalaAltura(bitmapAux, nuevoAlto);
     }
+
     public Bitmap escalaAltura(Bitmap bitmapAux, int nuevoAlto) {
         if (nuevoAlto == bitmapAux.getHeight()) return bitmapAux;
         return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) /
                 bitmapAux.getHeight(), nuevoAlto, true);
     }
+
     public Bitmap escalaAncho(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho == bitmapAux.getWidth()) return bitmapAux;
         return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
     }
+
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
         Matrix matrix = new Matrix();
         if (horizontal) matrix.preScale(-1, 1);
