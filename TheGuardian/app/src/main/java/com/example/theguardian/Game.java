@@ -11,36 +11,41 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
 class Game extends SurfaceView implements SurfaceHolder.Callback {
+
+    //LLaves
     boolean movementD = false;
     boolean movementI = false;
     boolean dialog = false;
     boolean colisionI = false;
     boolean colisionD = false;
     boolean colSwitch = true;
+    boolean boxPush = false;
+    boolean boxMove= false;
+
+
     int anchoPantalla = 0, altoPantalla = 0;
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread gameThread;
     Paint invisiblePaint, textPaint;
     Character character;
-    Bitmap fondo1, botonR, botonL, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef;
+    Bitmap fondo1, botonR, botonL, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef, box;
     HashMap<Integer, Point> dedos = new HashMap<>();
     Background f1, f2;
     MediaPlayer mp;
-    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract;
+    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, boxInteract;
     int charEnd;
+    Escenario_Objects iniEO,boxObj;
 
     public Game(Context context) {
         super(context);
@@ -74,6 +79,8 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
             bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 6);
         }
 
+
+        // Imagenes
         character = new Character(bitmaps, 1, 400, anchoPantalla, altoPantalla);
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
@@ -91,11 +98,21 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         dialogBack = getBitmapFromAssets("dialog_background.png");
         dialogBack = escalaAncho(dialogBack, anchoPantalla);
         dialogArrow = getBitmapFromAssets("dialog_arrow.png");
+        box = getBitmapFromAssets("box.png");
+        box = escalaAltura(box, altoPantalla / 6);
+
+        // Rectangulos
         dialogArrow = escalaAltura(dialogArrow, altoPantalla / 6);
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
         actionBtn = new Rect(anchoPantalla / 2, 0, anchoPantalla, altoPantalla);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
+        boxObj=new Escenario_Objects(anchoPantalla / 2  , 1100 - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla - 300,box);
+        boxInteract = new Rect(anchoPantalla / 2 , 1100 - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla - 300);
+
+        // Auxiliares
+iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
+
 
     }
 
@@ -104,26 +121,31 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         c.drawRect(lMoveBtn, invisiblePaint);
         c.drawRect(rMoveBtn, invisiblePaint);
         c.drawRect(actionBtn, invisiblePaint);
-        c.drawRect(ladderInteract, textPaint);
+        c.drawRect(ladderInteract, invisiblePaint);
+        c.drawRect(boxInteract, textPaint);
         if (dialog == false) {
             c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
             c.drawBitmap(botonAction, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+
         } else {
             c.drawBitmap(dialogBack, 0, altoPantalla - dialogBack.getHeight(), null);
             c.drawBitmap(dialogImg, -100, altoPantalla - dialogImg.getHeight(), null);
             c.drawBitmap(dialogArrow, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
             c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, altoPantalla - 150, textPaint);
         }
+
+//        c.drawBitmap(box, anchoPantalla / 2, 1100 - box.getHeight(), null);
+        boxObj.draw(c);
         charEnd = character.x + spriteRef.getWidth();
         c.drawText("" + charEnd, 10, 50 + invisiblePaint.getTextSize(), textPaint);
-        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
+//        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
         character.dibuja(c);
     }
 
     public void actualizaFisica() {
 
-        colisionStsten();
+        collisionSystem();
 
         if (movementD) {
             character.cambiaFrame();
@@ -142,9 +164,15 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
             colisionI = false;
         }
+
+
+
+        if(boxMove){
+            boxObj.move();
+        }
     }
 
-    public void colisionStsten() {
+    public void collisionSystem() {
 
         //Columna de escaleras - ARRIBA
         if (charEnd > ladderInteract.right && colSwitch == true) {
@@ -156,6 +184,16 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         if (character.x < ladderInteract.left && colSwitch == false) {
             colisionD = true;
         }
+
+
+        //Caja arrastrable
+        if (charEnd > boxInteract.left) {
+            colisionI = true;
+            boxPush = true;
+        } else {
+            boxPush = false;
+        }
+
     }
 
     @Override
@@ -170,7 +208,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         switch (accion) {
             case MotionEvent.ACTION_DOWN:
-                // Pulsación Izquierda y Derecha
+                // Boton Movimiento Izquierda y Derecha
                 if (dialog == false) {
                     if (rMoveBtn.contains(xI, yI)) {
                         movementD = true;
@@ -197,7 +235,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                         colSwitch = false;
                     }
 
-                    dialog = !dialog;
+                    if (boxPush) {
+  boxMove=true;
+                    }
+//                    dialog = !dialog;
 
                 }
                 return true;
