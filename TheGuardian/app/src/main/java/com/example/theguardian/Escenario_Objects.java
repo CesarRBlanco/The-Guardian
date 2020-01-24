@@ -6,16 +6,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+
+
+
+
 public class Escenario_Objects {
 
     int top, left, right, bottom, x, y, velocidad = 10, altoPantalla, anchoPantalla;
     Bitmap sprite;
     Rect hitbox;
-    Paint p=new Paint(Color.RED);
-    int tickFrame = 100;
-    long tiempoFrame;
-    int tickVelocidad = 30;
-    long tiempoVelocidad;
+    Paint pincelRect;
+//    int tickFrame = 100;
+//    long tiempoFrame;
+//    int tickVelocidad = 30;
+//    long tiempoVelocidad;
 
     public Escenario_Objects(int altoPantalla, int anchoPantalla) {
         this.altoPantalla = altoPantalla;
@@ -31,8 +35,10 @@ public class Escenario_Objects {
         this.hitbox = new Rect(left, top, right, bottom);
         this.x = left;
         this.y = top;
-        tiempoFrame = System.currentTimeMillis();
-        tiempoVelocidad = System.currentTimeMillis();
+pincelRect=new Paint();
+        pincelRect.setColor(Color.RED);
+        pincelRect.setStyle(Paint.Style.STROKE);
+        pincelRect.setStrokeWidth(10);
     }
 
     public void hitboxRefresh() {
@@ -40,24 +46,15 @@ public class Escenario_Objects {
     }
 
     public void move() {
-        if (System.currentTimeMillis() - tiempoVelocidad > tickVelocidad) {
 
-            this.x += velocidad;
-            if (this.x > anchoPantalla -sprite.getWidth()) {
-                this.x = anchoPantalla -sprite.getWidth();
 
-                velocidad = 0;
-            }
-            if (this.y > altoPantalla) this.y = 0;
-            if (this.y < 0) this.y = altoPantalla;
-            this.tiempoVelocidad = System.currentTimeMillis();
-            hitboxRefresh();
-        }
+    this.x=2000;
+    hitboxRefresh();
     }
 
 
     public void draw(Canvas c) {
-        c.drawBitmap(sprite, left, top, null);
-        c.drawRect(hitbox,p);
+        c.drawBitmap(sprite, x, top, null);
+        c.drawRect(hitbox,pincelRect);
     }
 }

@@ -31,6 +31,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     boolean colSwitch = true;
     boolean boxPush = false;
     boolean boxMove= false;
+    boolean boxColSwitch= true;
+    boolean ladderUpDown= true;
+
 
 
     int anchoPantalla = 0, altoPantalla = 0;
@@ -122,7 +125,7 @@ iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
         c.drawRect(rMoveBtn, invisiblePaint);
         c.drawRect(actionBtn, invisiblePaint);
         c.drawRect(ladderInteract, invisiblePaint);
-        c.drawRect(boxInteract, textPaint);
+//        c.drawRect(boxInteract, textPaint);
         if (dialog == false) {
             c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
@@ -165,11 +168,9 @@ iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
             colisionI = false;
         }
 
-
-
-        if(boxMove){
-            boxObj.move();
-        }
+if(boxMove){
+    boxObj.move();
+}
     }
 
     public void collisionSystem() {
@@ -177,17 +178,19 @@ iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
         //Columna de escaleras - ARRIBA
         if (charEnd > ladderInteract.right && colSwitch == true) {
 //            character.x=ladderInteract.left;
+            ladderUpDown=true;
             colisionI = true;
         }
 
         //Columna de escaleras - ABAJO
-        if (character.x < ladderInteract.left && colSwitch == false) {
-            colisionD = true;
-        }
+//        if (character.x < ladderInteract.left && colSwitch == false) {
+//           ladderUpDown=true;
+//            colisionD = true;
+//        }
 
 
         //Caja arrastrable
-        if (charEnd > boxInteract.left) {
+        if (charEnd > boxInteract.left && boxColSwitch==true) {
             colisionI = true;
             boxPush = true;
         } else {
@@ -222,23 +225,25 @@ iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
                 if (actionBtn.contains(xI, yI) && (character.x > ladderInteract.left - (ladderInteract.right - ladderInteract.left))) {
 
                     // Subir
-                    if (character.y == ladderInteract.bottom - spriteRef.getHeight()) {
-                        character.y = 400;
-                        colisionD = false;
-                        colSwitch = true;
-                    }
+//                    if (ladderUpDown) {
+//                        character.y = 400;
+//                        colisionD = false;
+//                        colSwitch = true;
+//                    }
 
                     // Bajar
-                    else {
+                    if(ladderUpDown){
                         character.y = ladderInteract.bottom - spriteRef.getHeight();
                         colisionI = false;
                         colSwitch = false;
                     }
 
                     if (boxPush) {
-  boxMove=true;
+                        boxMove=true;
+                        boxColSwitch=false;
+//                                            dialog = !dialog;
                     }
-//                    dialog = !dialog;
+
 
                 }
                 return true;
