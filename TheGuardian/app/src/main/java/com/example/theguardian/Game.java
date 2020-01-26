@@ -30,10 +30,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     boolean colisionD = false;
     boolean colSwitch = true;
     boolean boxPush = false;
-    boolean boxMove= false;
-    boolean boxColSwitch= true;
-    boolean ladderUpDown= true;
-
+    boolean boxMove = false;
+    boolean boxColSwitch = true;
+    boolean ladderUpDown = true;
 
 
     int anchoPantalla = 0, altoPantalla = 0;
@@ -42,13 +41,13 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     GameThread gameThread;
     Paint invisiblePaint, textPaint;
     Character character;
-    Bitmap fondo1, botonR, botonL, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef, box;
+    Bitmap fondo1, botonR, botonL,luces, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef, box;
     HashMap<Integer, Point> dedos = new HashMap<>();
     Background f1, f2;
     MediaPlayer mp;
-    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, boxInteract;
+    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract;
     int charEnd;
-    Escenario_Objects iniEO,boxObj;
+    Escenario_Objects iniEO, boxObj;
 
     public Game(Context context) {
         super(context);
@@ -87,13 +86,15 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         character = new Character(bitmaps, 1, 400, anchoPantalla, altoPantalla);
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
-        fondo1 = getBitmapFromAssets("background.png");
+        fondo1 = getBitmapFromAssets("fondo.png");
         fondo1 = Bitmap.createScaledBitmap(fondo1, anchoPantalla, altoPantalla, false);
-        botonL = getBitmapFromAssets("button movement.png");
+        luces= getBitmapFromAssets("sombras.png");
+        luces=Bitmap.createScaledBitmap(luces,anchoPantalla,altoPantalla,false);
+        botonL = getBitmapFromAssets("movement.png");
         botonL = escalaAltura(botonL, altoPantalla / 6);
-        botonR = getBitmapFromAssets("button movement.png");
+        botonL = espejo(botonL, true);
+        botonR = getBitmapFromAssets("movement.png");
         botonR = escalaAltura(botonR, altoPantalla / 6);
-        botonR = espejo(botonR, true);
         botonAction = getBitmapFromAssets("action.png");
         botonAction = escalaAltura(botonAction, altoPantalla / 6);
         dialogImg = getBitmapFromAssets("dialog.png");
@@ -110,11 +111,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
         actionBtn = new Rect(anchoPantalla / 2, 0, anchoPantalla, altoPantalla);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
-        boxObj=new Escenario_Objects(anchoPantalla / 2  , 1100 - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla - 300,box);
-        boxInteract = new Rect(anchoPantalla / 2 , 1100 - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla - 300);
+        boxObj = new Escenario_Objects(anchoPantalla / 2, 1100 - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla - 300, box);
 
         // Auxiliares
-iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
+        iniEO = new Escenario_Objects(altoPantalla, anchoPantalla);
 
 
     }
@@ -144,6 +144,7 @@ iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
         c.drawText("" + charEnd, 10, 50 + invisiblePaint.getTextSize(), textPaint);
 //        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
         character.dibuja(c);
+        c.drawBitmap(luces,0,0,null);
     }
 
     public void actualizaFisica() {
@@ -168,9 +169,9 @@ iniEO=new Escenario_Objects(altoPantalla,anchoPantalla);
             colisionI = false;
         }
 
-if(boxMove){
-    boxObj.move();
-}
+        if (boxMove) {
+            boxObj.move();
+        }
     }
 
     public void collisionSystem() {
@@ -178,7 +179,7 @@ if(boxMove){
         //Columna de escaleras - ARRIBA
         if (charEnd > ladderInteract.right && colSwitch == true) {
 //            character.x=ladderInteract.left;
-            ladderUpDown=true;
+            ladderUpDown = true;
             colisionI = true;
         }
 
@@ -190,7 +191,7 @@ if(boxMove){
 
 
         //Caja arrastrable
-        if (charEnd > boxInteract.left && boxColSwitch==true) {
+        if (charEnd > boxObj.left && boxColSwitch == true) {
             colisionI = true;
             boxPush = true;
         } else {
@@ -232,15 +233,15 @@ if(boxMove){
 //                    }
 
                     // Bajar
-                    if(ladderUpDown){
+                    if (ladderUpDown) {
                         character.y = ladderInteract.bottom - spriteRef.getHeight();
                         colisionI = false;
                         colSwitch = false;
                     }
 
                     if (boxPush) {
-                        boxMove=true;
-                        boxColSwitch=false;
+                        boxMove = true;
+                        boxColSwitch = false;
 //                                            dialog = !dialog;
                     }
 
