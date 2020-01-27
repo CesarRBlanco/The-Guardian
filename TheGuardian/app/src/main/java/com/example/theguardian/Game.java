@@ -33,19 +33,20 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     boolean boxMove = false;
     boolean boxColSwitch = true;
     boolean ladderUpDown = true;
+    boolean menuPrincipal = true;
 
 
     int anchoPantalla = 0, altoPantalla = 0;
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread gameThread;
-    Paint invisiblePaint, textPaint;
+    Paint invisiblePaint, textPaint,blackPaint;
     Character character;
-    Bitmap fondo1, botonR, botonL,luces, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef, box;
+    Bitmap fondo1, botonR, botonL, luces, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef, box, menuBackground,backOptions;
     HashMap<Integer, Point> dedos = new HashMap<>();
     Background f1, f2;
     MediaPlayer mp;
-    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract;
+    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, playBtn, optionsBtn, creditsBtn, helpBtn,backOptsBtn;
     int charEnd;
     Escenario_Objects iniEO, boxObj;
 
@@ -75,6 +76,9 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(60);
+        blackPaint= new Paint();
+        blackPaint.setColor(Color.BLACK);
+        blackPaint.setTextSize(60);
         Bitmap[] bitmaps = new Bitmap[3];
         for (int i = 0; i < bitmaps.length; i++) {
             bitmaps[i] = getBitmapFromAssets("sprite" + i + ".png");
@@ -86,10 +90,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         character = new Character(bitmaps, 1, 400, anchoPantalla, altoPantalla);
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
-        fondo1 = getBitmapFromAssets("fondo.png");
+        fondo1 = getBitmapFromAssets("background.png");
         fondo1 = Bitmap.createScaledBitmap(fondo1, anchoPantalla, altoPantalla, false);
-        luces= getBitmapFromAssets("sombras.png");
-        luces=Bitmap.createScaledBitmap(luces,anchoPantalla,altoPantalla,false);
+        luces = getBitmapFromAssets("sombras.png");
+        luces = Bitmap.createScaledBitmap(luces, anchoPantalla, altoPantalla, false);
         botonL = getBitmapFromAssets("movement.png");
         botonL = escalaAltura(botonL, altoPantalla / 6);
         botonL = espejo(botonL, true);
@@ -102,16 +106,27 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         dialogBack = getBitmapFromAssets("dialog_background.png");
         dialogBack = escalaAncho(dialogBack, anchoPantalla);
         dialogArrow = getBitmapFromAssets("dialog_arrow.png");
+        dialogArrow = escalaAltura(dialogArrow, altoPantalla / 6);
         box = getBitmapFromAssets("box.png");
         box = escalaAltura(box, altoPantalla / 6);
+        menuBackground = getBitmapFromAssets("menu.png");
+        menuBackground = Bitmap.createScaledBitmap(menuBackground, anchoPantalla, altoPantalla, false);
+        backOptions=getBitmapFromAssets("backOptions.png");
+        backOptions = escalaAltura(backOptions,altoPantalla/6);
+
 
         // Rectangulos
-        dialogArrow = escalaAltura(dialogArrow, altoPantalla / 6);
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
-        actionBtn = new Rect(anchoPantalla / 2, 0, anchoPantalla, altoPantalla);
+        actionBtn = new Rect(anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
         boxObj = new Escenario_Objects(anchoPantalla / 2, 1100 - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla - 300, box);
+        playBtn = new Rect(anchoPantalla / 3, altoPantalla / 3 + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla / 2);
+        optionsBtn = new Rect(anchoPantalla / 3, altoPantalla / 2 + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla - (altoPantalla / 3));
+        creditsBtn = new Rect(anchoPantalla / 3, altoPantalla - (altoPantalla / 3) + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla - (altoPantalla / 6));
+        helpBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
+backOptsBtn= new Rect(anchoPantalla-botonL.getWidth(), 0 , anchoPantalla, botonL.getHeight());
+
 
         // Auxiliares
         iniEO = new Escenario_Objects(altoPantalla, anchoPantalla);
@@ -120,31 +135,49 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void dibujar(Canvas c) {
-        c.drawBitmap(fondo1, 0, 0, null);
-        c.drawRect(lMoveBtn, invisiblePaint);
-        c.drawRect(rMoveBtn, invisiblePaint);
-        c.drawRect(actionBtn, invisiblePaint);
-        c.drawRect(ladderInteract, invisiblePaint);
-//        c.drawRect(boxInteract, textPaint);
-        if (dialog == false) {
-            c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
-            c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
-            c.drawBitmap(botonAction, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
 
+        if (menuPrincipal) {
+
+            c.drawBitmap(menuBackground, 0, 0, null);
+            c.drawRect(playBtn, textPaint);
+            c.drawText(getResources().getString(R.string.play), anchoPantalla/3, (altoPantalla/3+20)+100, blackPaint);
+            c.drawRect(optionsBtn, textPaint);
+            c.drawText(getResources().getString(R.string.options), anchoPantalla/3, (altoPantalla / 2 + 20)+100, blackPaint);
+            c.drawRect(creditsBtn, textPaint);
+            c.drawText(getResources().getString(R.string.credits), anchoPantalla/3, (altoPantalla- (altoPantalla / 3) + 20)+100, blackPaint);
+            c.drawRect(helpBtn, textPaint);
+            c.drawText(getResources().getString(R.string.help), 20, altoPantalla - 20 - botonL.getHeight()+100, blackPaint);
         } else {
-            c.drawBitmap(dialogBack, 0, altoPantalla - dialogBack.getHeight(), null);
-            c.drawBitmap(dialogImg, -100, altoPantalla - dialogImg.getHeight(), null);
-            c.drawBitmap(dialogArrow, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
-            c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, altoPantalla - 150, textPaint);
-        }
+
+
+            c.drawBitmap(fondo1, 0, 0, null);
+            c.drawRect(lMoveBtn, invisiblePaint);
+            c.drawRect(rMoveBtn, invisiblePaint);
+            c.drawRect(actionBtn, textPaint);
+            c.drawRect(ladderInteract, textPaint);
+        c.drawRect(backOptsBtn, textPaint);
+            if (dialog == false) {
+                c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
+                c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
+                c.drawBitmap(botonAction, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+                c.drawBitmap(backOptions, anchoPantalla - botonAction.getWidth() , 0, null);
+
+
+            } else {
+                c.drawBitmap(dialogBack, 0, altoPantalla - dialogBack.getHeight(), null);
+                c.drawBitmap(dialogImg, -100, altoPantalla - dialogImg.getHeight(), null);
+                c.drawBitmap(dialogArrow, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+                c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, altoPantalla - 150, textPaint);
+            }
 
 //        c.drawBitmap(box, anchoPantalla / 2, 1100 - box.getHeight(), null);
-        boxObj.draw(c);
-        charEnd = character.x + spriteRef.getWidth();
-        c.drawText("" + charEnd, 10, 50 + invisiblePaint.getTextSize(), textPaint);
+            boxObj.draw(c);
+            charEnd = character.x + spriteRef.getWidth();
+            c.drawText("" + character.y + " // " + ladderInteract.top, 10, 50 + invisiblePaint.getTextSize(), textPaint);
 //        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
-        character.dibuja(c);
-        c.drawBitmap(luces,0,0,null);
+            character.dibuja(c);
+            c.drawBitmap(luces, 0, 0, null);
+        }
     }
 
     public void actualizaFisica() {
@@ -222,18 +255,27 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                     }
                 }
 
+
+                if(playBtn.contains(xI,yI)){
+                    menuPrincipal=false;
+                }
+
+                if(backOptsBtn.contains(xI,yI)){
+                    menuPrincipal=true;
+                }
+
                 //Interacción con escalera izquierda
                 if (actionBtn.contains(xI, yI) && (character.x > ladderInteract.left - (ladderInteract.right - ladderInteract.left))) {
 
                     // Subir
-//                    if (ladderUpDown) {
-//                        character.y = 400;
-//                        colisionD = false;
-//                        colSwitch = true;
-//                    }
+                    if (ladderUpDown && (character.y > ladderInteract.top)) {
+                        character.y = 400;
+                        colisionD = false;
+                        colSwitch = true;
+                    }
 
                     // Bajar
-                    if (ladderUpDown) {
+                    if (ladderUpDown && (character.y < ladderInteract.top)) {
                         character.y = ladderInteract.bottom - spriteRef.getHeight();
                         colisionI = false;
                         colSwitch = false;
@@ -294,7 +336,11 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         this.altoPantalla = height;
         Log.i("ancho2", width + ":" + height);
         inicializao();
+
     }
+
+
+
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
