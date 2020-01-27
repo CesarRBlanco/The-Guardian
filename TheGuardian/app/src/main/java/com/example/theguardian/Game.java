@@ -34,19 +34,22 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     boolean boxColSwitch = true;
     boolean ladderUpDown = true;
     boolean menuPrincipal = true;
+    boolean pauseMenu = false;
+    boolean gameRunning = false;
+    boolean showActionBlack = false;
 
 
     int anchoPantalla = 0, altoPantalla = 0;
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread gameThread;
-    Paint invisiblePaint, textPaint,blackPaint;
+    Paint invisiblePaint, textPaint, blackPaint;
     Character character;
-    Bitmap fondo1, botonR, botonL, luces, botonAction, dialogImg, dialogBack, dialogArrow, spriteRef, box, menuBackground,backOptions;
+    Bitmap fondo1, botonR, botonL, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box, menuBackground, backOptions;
     HashMap<Integer, Point> dedos = new HashMap<>();
     Background f1, f2;
     MediaPlayer mp;
-    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, playBtn, optionsBtn, creditsBtn, helpBtn,backOptsBtn;
+    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, playBtn, optionsBtn, creditsBtn, helpBtn, backOptsBtn;
     int charEnd;
     Escenario_Objects iniEO, boxObj;
 
@@ -76,7 +79,7 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(60);
-        blackPaint= new Paint();
+        blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
         Bitmap[] bitmaps = new Bitmap[3];
@@ -99,8 +102,10 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         botonL = espejo(botonL, true);
         botonR = getBitmapFromAssets("movement.png");
         botonR = escalaAltura(botonR, altoPantalla / 6);
-        botonAction = getBitmapFromAssets("action.png");
-        botonAction = escalaAltura(botonAction, altoPantalla / 6);
+        actionButton_W = getBitmapFromAssets("actionButtonWhite.png");
+        actionButton_W = escalaAltura(actionButton_W, altoPantalla / 6);
+        actionButton_B = getBitmapFromAssets("actionButtonBlack.png");
+        actionButton_B = escalaAltura(actionButton_B, altoPantalla / 6);
         dialogImg = getBitmapFromAssets("dialog.png");
         dialogImg = escalaAltura(dialogImg, altoPantalla / 2);
         dialogBack = getBitmapFromAssets("dialog_background.png");
@@ -111,21 +116,21 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         box = escalaAltura(box, altoPantalla / 6);
         menuBackground = getBitmapFromAssets("menu.png");
         menuBackground = Bitmap.createScaledBitmap(menuBackground, anchoPantalla, altoPantalla, false);
-        backOptions=getBitmapFromAssets("backOptions.png");
-        backOptions = escalaAltura(backOptions,altoPantalla/6);
+        backOptions = getBitmapFromAssets("backOptions.png");
+        backOptions = escalaAltura(backOptions, altoPantalla / 6);
 
 
         // Rectangulos
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
-        actionBtn = new Rect(anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
+        actionBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
         boxObj = new Escenario_Objects(anchoPantalla / 2, 1100 - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla - 300, box);
         playBtn = new Rect(anchoPantalla / 3, altoPantalla / 3 + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla / 2);
         optionsBtn = new Rect(anchoPantalla / 3, altoPantalla / 2 + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla - (altoPantalla / 3));
         creditsBtn = new Rect(anchoPantalla / 3, altoPantalla - (altoPantalla / 3) + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla - (altoPantalla / 6));
         helpBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
-backOptsBtn= new Rect(anchoPantalla-botonL.getWidth(), 0 , anchoPantalla, botonL.getHeight());
+        backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
 
 
         // Auxiliares
@@ -137,43 +142,47 @@ backOptsBtn= new Rect(anchoPantalla-botonL.getWidth(), 0 , anchoPantalla, botonL
     public void dibujar(Canvas c) {
 
         if (menuPrincipal) {
-
             c.drawBitmap(menuBackground, 0, 0, null);
             c.drawRect(playBtn, textPaint);
-            c.drawText(getResources().getString(R.string.play), anchoPantalla/3, (altoPantalla/3+20)+100, blackPaint);
+            c.drawText(getResources().getString(R.string.play), anchoPantalla / 3, (altoPantalla / 3 + 20) + 100, blackPaint);
             c.drawRect(optionsBtn, textPaint);
-            c.drawText(getResources().getString(R.string.options), anchoPantalla/3, (altoPantalla / 2 + 20)+100, blackPaint);
+            c.drawText(getResources().getString(R.string.options), anchoPantalla / 3, (altoPantalla / 2 + 20) + 100, blackPaint);
             c.drawRect(creditsBtn, textPaint);
-            c.drawText(getResources().getString(R.string.credits), anchoPantalla/3, (altoPantalla- (altoPantalla / 3) + 20)+100, blackPaint);
+            c.drawText(getResources().getString(R.string.credits), anchoPantalla / 3, (altoPantalla - (altoPantalla / 3) + 20) + 100, blackPaint);
             c.drawRect(helpBtn, textPaint);
-            c.drawText(getResources().getString(R.string.help), 20, altoPantalla - 20 - botonL.getHeight()+100, blackPaint);
+            c.drawText(getResources().getString(R.string.help), 20, altoPantalla - 20 - botonL.getHeight() + 100, blackPaint);
+
         } else {
-
-
             c.drawBitmap(fondo1, 0, 0, null);
-            c.drawRect(lMoveBtn, invisiblePaint);
-            c.drawRect(rMoveBtn, invisiblePaint);
-            c.drawRect(actionBtn, textPaint);
-            c.drawRect(ladderInteract, textPaint);
-        c.drawRect(backOptsBtn, textPaint);
+//            c.drawRect(lMoveBtn, invisiblePaint);
+//            c.drawRect(rMoveBtn, invisiblePaint);
+//            c.drawRect(actionBtn, textPaint);
+//            c.drawRect(ladderInteract, textPaint);
+//            c.drawRect(backOptsBtn, textPaint);
+
             if (dialog == false) {
                 c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
                 c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
-                c.drawBitmap(botonAction, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
-                c.drawBitmap(backOptions, anchoPantalla - botonAction.getWidth() , 0, null);
+                if (showActionBlack) {
+                    c.drawBitmap(actionButton_B, anchoPantalla - actionButton_W.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+                } else {
+
+                    c.drawBitmap(actionButton_W, anchoPantalla - actionButton_W.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+                }
+                c.drawBitmap(backOptions, anchoPantalla - actionButton_W.getWidth(), 0, null);
 
 
             } else {
                 c.drawBitmap(dialogBack, 0, altoPantalla - dialogBack.getHeight(), null);
                 c.drawBitmap(dialogImg, -100, altoPantalla - dialogImg.getHeight(), null);
-                c.drawBitmap(dialogArrow, anchoPantalla - botonAction.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+                c.drawBitmap(dialogArrow, anchoPantalla - actionButton_W.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
                 c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, altoPantalla - 150, textPaint);
             }
 
 //        c.drawBitmap(box, anchoPantalla / 2, 1100 - box.getHeight(), null);
             boxObj.draw(c);
             charEnd = character.x + spriteRef.getWidth();
-            c.drawText("" + character.y + " // " + ladderInteract.top, 10, 50 + invisiblePaint.getTextSize(), textPaint);
+            c.drawText("" + charEnd + " // " + ladderInteract.left, 10, 50 + invisiblePaint.getTextSize(), textPaint);
 //        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
             character.dibuja(c);
             c.drawBitmap(luces, 0, 0, null);
@@ -182,38 +191,58 @@ backOptsBtn= new Rect(anchoPantalla-botonL.getWidth(), 0 , anchoPantalla, botonL
 
     public void actualizaFisica() {
 
-        collisionSystem();
 
-        if (movementD) {
-            character.cambiaFrame();
-            if (colisionI == false) {
-                character.setVelocidad(20);
-                character.moverR();
+        if (pauseMenu || menuPrincipal) {
+
+
+        } else {
+            collisionSystem();
+
+            if (movementD) {
+                character.cambiaFrame();
+                if (colisionI == false) {
+                    character.setVelocidad(20);
+                    character.moverR();
+
+                }
+                colisionD = false;
             }
-            colisionD = false;
-        }
 
-        if (movementI) {
-            character.cambiaFrame();
-            if (colisionD == false) {
-                character.setVelocidad(-20);
-                character.moverL();
+            if (movementI) {
+                character.cambiaFrame();
+                if (colisionD == false) {
+                    character.setVelocidad(-20);
+                    character.moverL();
+                }
+                colisionI = false;
             }
-            colisionI = false;
-        }
 
-        if (boxMove) {
-            boxObj.move();
+            if (boxMove) {
+                boxObj.move();
+            }
         }
     }
 
     public void collisionSystem() {
 
+
+
         //Columna de escaleras - ARRIBA
+
+        if(charEnd>ladderInteract.left){
+            showActionBlack=true;
+
+        }else{
+            showActionBlack=false;
+        }
+
         if (charEnd > ladderInteract.right && colSwitch == true) {
 //            character.x=ladderInteract.left;
+//            showActionBlack = true;
             ladderUpDown = true;
             colisionI = true;
+        }else{
+//            showActionBlack=false;
         }
 
         //Columna de escaleras - ABAJO
@@ -225,11 +254,14 @@ backOptsBtn= new Rect(anchoPantalla-botonL.getWidth(), 0 , anchoPantalla, botonL
 
         //Caja arrastrable
         if (charEnd > boxObj.left && boxColSwitch == true) {
+//            showActionBlack = true;
             colisionI = true;
             boxPush = true;
         } else {
+//            showActionBlack = false;
             boxPush = false;
         }
+
 
     }
 
@@ -245,50 +277,63 @@ backOptsBtn= new Rect(anchoPantalla-botonL.getWidth(), 0 , anchoPantalla, botonL
 
         switch (accion) {
             case MotionEvent.ACTION_DOWN:
-                // Boton Movimiento Izquierda y Derecha
-                if (dialog == false) {
-                    if (rMoveBtn.contains(xI, yI)) {
-                        movementD = true;
-                    }
-                    if (lMoveBtn.contains(xI, yI)) {
-                        movementI = true;
-                    }
-                }
 
 
-                if(playBtn.contains(xI,yI)){
-                    menuPrincipal=false;
-                }
+                if (!gameRunning) {
 
-                if(backOptsBtn.contains(xI,yI)){
-                    menuPrincipal=true;
-                }
-
-                //Interacción con escalera izquierda
-                if (actionBtn.contains(xI, yI) && (character.x > ladderInteract.left - (ladderInteract.right - ladderInteract.left))) {
-
-                    // Subir
-                    if (ladderUpDown && (character.y > ladderInteract.top)) {
-                        character.y = 400;
-                        colisionD = false;
-                        colSwitch = true;
+                    if (playBtn.contains(xI, yI)) {
+                        menuPrincipal = false;
+                        pauseMenu = false;
+                        gameRunning = true;
                     }
 
-                    // Bajar
-                    if (ladderUpDown && (character.y < ladderInteract.top)) {
-                        character.y = ladderInteract.bottom - spriteRef.getHeight();
-                        colisionI = false;
-                        colSwitch = false;
+                } else {
+
+                    if (backOptsBtn.contains(xI, yI)) {
+                        pauseMenu = true;
+                        menuPrincipal = true;
+                        gameRunning = false;
                     }
 
-                    if (boxPush) {
-                        boxMove = true;
-                        boxColSwitch = false;
+
+                    // Boton Movimiento Izquierda y Derecha
+                    if (dialog == false) {
+                        if (rMoveBtn.contains(xI, yI)) {
+                            movementD = true;
+                        }
+                        if (lMoveBtn.contains(xI, yI)) {
+                            movementI = true;
+                        }
+                    }
+
+
+                    //Interacción con escalera izquierda
+                    if (actionBtn.contains(xI, yI) && (character.x > ladderInteract.left - (ladderInteract.right - ladderInteract.left))) {
+
+                        // Subir
+                        if (ladderUpDown && (character.y > ladderInteract.top)) {
+                            character.y = 400;
+                            colisionD = false;
+                            colSwitch = true;
+                        }
+
+                        // Bajar
+                        if (ladderUpDown && (character.y < ladderInteract.top)) {
+                            character.y = ladderInteract.bottom - spriteRef.getHeight();
+                            colisionI = false;
+                            colSwitch = false;
+                        }
+
+                        if (boxPush) {
+
+                            boxMove = true;
+                            boxColSwitch = false;
 //                                            dialog = !dialog;
+                        }
                     }
-
-
                 }
+
+
                 return true;
 
             case MotionEvent.ACTION_MOVE:
@@ -338,8 +383,6 @@ backOptsBtn= new Rect(anchoPantalla-botonL.getWidth(), 0 , anchoPantalla, botonL
         inicializao();
 
     }
-
-
 
 
     @Override
