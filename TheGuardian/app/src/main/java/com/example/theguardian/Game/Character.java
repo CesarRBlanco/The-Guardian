@@ -1,15 +1,11 @@
-package com.example.theguardian;
+package com.example.theguardian.Game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.Rect;
-import android.util.Log;
-
-import java.util.Random;
 
 public class Character {
 

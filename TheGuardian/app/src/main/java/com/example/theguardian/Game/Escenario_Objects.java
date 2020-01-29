@@ -1,4 +1,4 @@
-package com.example.theguardian;
+package com.example.theguardian.Game;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

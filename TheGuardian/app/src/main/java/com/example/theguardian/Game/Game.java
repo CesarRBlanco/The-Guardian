@@ -1,4 +1,4 @@
-package com.example.theguardian;
+package com.example.theguardian.Game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,11 +16,14 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.theguardian.Game.Menus.MainMenu;
+import com.example.theguardian.R;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-class Game extends SurfaceView implements SurfaceHolder.Callback {
+public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     //LLaves
     boolean movementD = false;
@@ -53,12 +56,16 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     int charEnd;
     Escenario_Objects iniEO, boxObj;
 
+    MainMenu mainMenu;
+
+
     public Game(Context context) {
         super(context);
         this.context = context;
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameThread = new GameThread();
+        mainMenu=new MainMenu(this.context);
 
 //        DisplayMetrics dm = new DisplayMetrics();
 //        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -142,15 +149,16 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void dibujar(Canvas c) {
 
         if (menuPrincipal) {
-            c.drawBitmap(menuBackground, 0, 0, null);
-            c.drawRect(playBtn, textPaint);
-            c.drawText(getResources().getString(R.string.play), anchoPantalla / 3, (altoPantalla / 3 + 20) + 100, blackPaint);
-            c.drawRect(optionsBtn, textPaint);
-            c.drawText(getResources().getString(R.string.options), anchoPantalla / 3, (altoPantalla / 2 + 20) + 100, blackPaint);
-            c.drawRect(creditsBtn, textPaint);
-            c.drawText(getResources().getString(R.string.credits), anchoPantalla / 3, (altoPantalla - (altoPantalla / 3) + 20) + 100, blackPaint);
-            c.drawRect(helpBtn, textPaint);
-            c.drawText(getResources().getString(R.string.help), 20, altoPantalla - 20 - botonL.getHeight() + 100, blackPaint);
+
+//            c.drawBitmap(menuBackground, 0, 0, null);
+//            c.drawRect(playBtn, textPaint);
+//            c.drawText(getResources().getString(R.string.play), anchoPantalla / 3, (altoPantalla / 3 + 20) + 100, blackPaint);
+//            c.drawRect(optionsBtn, textPaint);
+//            c.drawText(getResources().getString(R.string.options), anchoPantalla / 3, (altoPantalla / 2 + 20) + 100, blackPaint);
+//            c.drawRect(creditsBtn, textPaint);
+//            c.drawText(getResources().getString(R.string.credits), anchoPantalla / 3, (altoPantalla - (altoPantalla / 3) + 20) + 100, blackPaint);
+//            c.drawRect(helpBtn, textPaint);
+//            c.drawText(getResources().getString(R.string.help), 20, altoPantalla - 20 - botonL.getHeight() + 100, blackPaint);
 
         } else {
             c.drawBitmap(fondo1, 0, 0, null);
@@ -226,14 +234,13 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void collisionSystem() {
 
 
-
         //Columna de escaleras - ARRIBA
 
-        if(charEnd>ladderInteract.left){
-            showActionBlack=true;
+        if (charEnd > ladderInteract.left && character.x<ladderInteract.right) {
+            showActionBlack = true;
 
-        }else{
-            showActionBlack=false;
+        } else {
+            showActionBlack = false;
         }
 
         if (charEnd > ladderInteract.right && colSwitch == true) {
@@ -241,25 +248,24 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
 //            showActionBlack = true;
             ladderUpDown = true;
             colisionI = true;
-        }else{
+        } else {
 //            showActionBlack=false;
         }
 
         //Columna de escaleras - ABAJO
-//        if (character.x < ladderInteract.left && colSwitch == false) {
-//           ladderUpDown=true;
-//            colisionD = true;
-//        }
+        if (character.x < ladderInteract.left && colSwitch == false) {
+           ladderUpDown=true;
+            colisionD = true;
+        }
 
 
         //Caja arrastrable
         if (charEnd > boxObj.left && boxColSwitch == true) {
-//            showActionBlack = true;
+            showActionBlack = true;
             colisionI = true;
             boxPush = true;
         } else {
-//            showActionBlack = false;
-            boxPush = false;
+ boxPush = false;
         }
 
 
@@ -425,9 +431,13 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
                         c = surfaceHolder.lockCanvas();
                     }
                     synchronized (surfaceHolder) {
+                        if(c!=null){
+
                         actualizaFisica();
-                        dibujar(c);
-                    }
+                        mainMenu.draw(c);
+//                        dibujar(c);
+                    }}
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -440,6 +450,21 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     //Métodos para imágenes
+
+
+//    public void getImagenes(Bitmap img, int numPerX, int numPerY, int numFramesH, int numFramesV) {
+//        int sizeX = img.getWidth() / numFramesH;
+//        int sizeY = img.getHeight() / numFramesV;
+//        for (int i = (numPerX -1)* 3; i <(numPerX-1)*3+3; i++) {
+//
+//        }
+//
+//    for(int i=numPerY-1)*4;i<(numPerY-1)*4+4;i++){
+//
+//    }
+//    }
+
+
     public Bitmap getBitmapFromAssets(String fichero) {
         try {
             InputStream is = context.getAssets().open(fichero);
@@ -447,11 +472,6 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         } catch (IOException e) {
             return null;
         }
-    }
-
-    public Bitmap escalaAltura(int res, int nuevoAlto) {
-        Bitmap bitmapAux = BitmapFactory.decodeResource(context.getResources(), res);
-        return escalaAltura(bitmapAux, nuevoAlto);
     }
 
     public Bitmap escalaAltura(Bitmap bitmapAux, int nuevoAlto) {

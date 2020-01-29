@@ -1,12 +1,9 @@
-package com.example.theguardian;
+package com.example.theguardian.Game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
