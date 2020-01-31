@@ -16,17 +16,16 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.theguardian.Game.Menus.Escena;
-import com.example.theguardian.Game.Menus.EscenaGame;
-import com.example.theguardian.Game.Menus.MainMenu;
+import com.example.theguardian.Game.Scenes.Menus.Scene_Control;
+import com.example.theguardian.Game.Scenes.Menus.Menu_Scene;
 import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
+public class Game_Control extends SurfaceView implements SurfaceHolder.Callback {
     //LLaves
     boolean movementD = false;
     boolean movementI = false;
@@ -38,10 +37,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     boolean boxMove = false;
     boolean boxColSwitch = true;
     boolean ladderUpDown = true;
-    boolean menuPrincipal = true;
     boolean pauseMenu = false;
     boolean gameRunning = false;
     boolean showActionBlack = false;
+    boolean menuPrincipal = true;
 
 
     int anchoPantalla = 0, altoPantalla = 0;
@@ -58,16 +57,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     int charEnd;
     Escenario_Objects iniEO, boxObj;
 
-    Escena escenaActual;
+    Scene_Control escenaActual;
 
 
-    public Game(Context context) {
+    public Game_Control(Context context) {
         super(context);
         this.context = context;
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameThread = new GameThread();
-        escenaActual = new Escena(context,anchoPantalla,altoPantalla);
 
 //        DisplayMetrics dm = new DisplayMetrics();
 //        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -145,22 +143,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Auxiliares
         iniEO = new Escenario_Objects(altoPantalla, anchoPantalla);
 
+        escenaActual = new Menu_Scene(context, altoPantalla, anchoPantalla);
+
 
     }
 
     public void dibujar(Canvas c) {
 
         if (menuPrincipal) {
-
-//            c.drawBitmap(menuBackground, 0, 0, null);
-//            c.drawRect(playBtn, textPaint);
-//            c.drawText(getResources().getString(R.string.play), anchoPantalla / 3, (altoPantalla / 3 + 20) + 100, blackPaint);
-//            c.drawRect(optionsBtn, textPaint);
-//            c.drawText(getResources().getString(R.string.options), anchoPantalla / 3, (altoPantalla / 2 + 20) + 100, blackPaint);
-//            c.drawRect(creditsBtn, textPaint);
-//            c.drawText(getResources().getString(R.string.credits), anchoPantalla / 3, (altoPantalla - (altoPantalla / 3) + 20) + 100, blackPaint);
-//            c.drawRect(helpBtn, textPaint);
-//            c.drawText(getResources().getString(R.string.help), 20, altoPantalla - 20 - botonL.getHeight() + 100, blackPaint);
 
         } else {
             c.drawBitmap(fondo1, 0, 0, null);
@@ -269,8 +259,27 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         } else {
             boxPush = false;
         }
+    }
 
 
+    public void cambioEscena(int escena) {
+        switch (escena) {
+            case 1:
+                break;
+            case 2:
+
+                Log.i("escenaSelec", "Scene_Control 2");
+                break;
+            case 3:
+                Log.i("escenaSelec", "Scene_Control 3");
+                break;
+            case 4:
+                Log.i("escenaSelec", "Scene_Control 4");
+                break;
+            case 5:
+                Log.i("escenaSelec", "Scene_Control 5");
+                break;
+        }
     }
 
     @Override
@@ -278,98 +287,99 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         int accion = event.getActionMasked();
         int indice = event.getActionIndex();
         int id = event.getPointerId(indice);
-        float x = event.getX(indice);
-        float y = event.getY(indice);
         int xI = (int) event.getX(indice);
         int yI = (int) event.getY(indice);
-
-        escenaActual=new MainMenu(context);
-
-        switch (accion) {
-            case MotionEvent.ACTION_DOWN:
+        int nuevaEscena;
+        nuevaEscena = escenaActual.onTouchEvent(event);
+        cambioEscena(nuevaEscena);
 
 
-                if (!gameRunning) {
+//        switch (accion) {
+//            case MotionEvent.ACTION_DOWN:
+//
+//
+//                if (!gameRunning) {
+//
+//                    if (playBtn.contains(xI, yI)) {
+//                        menuPrincipal = false;
+//                        pauseMenu = false;
+//                        gameRunning = true;
+//                    }
+//
+//                } else {
+//
+//                    if (backOptsBtn.contains(xI, yI)) {
+//                        pauseMenu = true;
+//                        menuPrincipal = true;
+//                        gameRunning = false;
+//                    }
+//
+//
+//                    // Boton Movimiento Izquierda y Derecha
+//                    if (dialog == false) {
+//                        if (rMoveBtn.contains(xI, yI)) {
+//                            movementD = true;
+//                        }
+//                        if (lMoveBtn.contains(xI, yI)) {
+//                            movementI = true;
+//                        }
+//                    }
+//
+//
+//                    //Interacción con escalera izquierda
+//                    if (actionBtn.contains(xI, yI) && (character.x > ladderInteract.left - (ladderInteract.right - ladderInteract.left))) {
+//
+//                        // Subir
+//                        if (ladderUpDown && (character.y > ladderInteract.top)) {
+//                            character.y = 400;
+//                            colisionD = false;
+//                            colSwitch = true;
+//                        }
+//
+//                        // Bajar
+//                        if (ladderUpDown && (character.y < ladderInteract.top)) {
+//                            character.y = ladderInteract.bottom - spriteRef.getHeight();
+//                            colisionI = false;
+//                            colSwitch = false;
+//                        }
+//
+//                        if (boxPush) {
+//
+//                            boxMove = true;
+//                            boxColSwitch = false;
+////                                            dialog = !dialog;
+//                        }
+//                    }
+//                }
+//
+//
+//                return true;
+//
+//            case MotionEvent.ACTION_MOVE:
+//                // Movimiento y desplazamiento Izquierda y Derecha
+//                if (dialog == false) {
+//                    if (!rMoveBtn.contains(xI, yI)) {
+//                        movementD = false;
+//                    }
+//                    if (!lMoveBtn.contains(xI, yI)) {
+//                        movementI = false;
+//                    }
+//                    if (rMoveBtn.contains(xI, yI)) {
+//                        movementD = true;
+//                    }
+//                    if (lMoveBtn.contains(xI, yI)) {
+//                        movementI = true;
+//                    }
+//                }
+//                return true;
+//
+//            case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_POINTER_UP:
+//                movementD = false;
+//                movementI = false;
+//                return true;
+//        }
 
-                    if (playBtn.contains(xI, yI)) {
-                        menuPrincipal = false;
-                        pauseMenu = false;
-                        gameRunning = true;
-                    }
-
-                } else {
-
-                    if (backOptsBtn.contains(xI, yI)) {
-                        pauseMenu = true;
-                        menuPrincipal = true;
-                        gameRunning = false;
-                    }
-
-
-                    // Boton Movimiento Izquierda y Derecha
-                    if (dialog == false) {
-                        if (rMoveBtn.contains(xI, yI)) {
-                            movementD = true;
-                        }
-                        if (lMoveBtn.contains(xI, yI)) {
-                            movementI = true;
-                        }
-                    }
-
-
-                    //Interacción con escalera izquierda
-                    if (actionBtn.contains(xI, yI) && (character.x > ladderInteract.left - (ladderInteract.right - ladderInteract.left))) {
-
-                        // Subir
-                        if (ladderUpDown && (character.y > ladderInteract.top)) {
-                            character.y = 400;
-                            colisionD = false;
-                            colSwitch = true;
-                        }
-
-                        // Bajar
-                        if (ladderUpDown && (character.y < ladderInteract.top)) {
-                            character.y = ladderInteract.bottom - spriteRef.getHeight();
-                            colisionI = false;
-                            colSwitch = false;
-                        }
-
-                        if (boxPush) {
-
-                            boxMove = true;
-                            boxColSwitch = false;
-//                                            dialog = !dialog;
-                        }
-                    }
-                }
-
-
-                return true;
-
-            case MotionEvent.ACTION_MOVE:
-                // Movimiento y desplazamiento Izquierda y Derecha
-                if (dialog == false) {
-                    if (!rMoveBtn.contains(xI, yI)) {
-                        movementD = false;
-                    }
-                    if (!lMoveBtn.contains(xI, yI)) {
-                        movementI = false;
-                    }
-                    if (rMoveBtn.contains(xI, yI)) {
-                        movementD = true;
-                    }
-                    if (lMoveBtn.contains(xI, yI)) {
-                        movementI = true;
-                    }
-                }
-                return true;
-
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-                movementD = false;
-                movementI = false;
-                return true;
-        }
         return super.onTouchEvent(event);
     }
 

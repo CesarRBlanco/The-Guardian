@@ -11,9 +11,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Game game = new Game(this);
-        game.setKeepScreenOn(true);
-        setContentView(game);
+        Game_Control gameControl = new Game_Control(this);
+        gameControl.setKeepScreenOn(true);
+        setContentView(gameControl);
         View decorView = getWindow().getDecorView();
         int opciones = View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Oculta la barra de navegación

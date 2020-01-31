@@ -1,4 +1,4 @@
-package com.example.theguardian.Game.Menus;
+package com.example.theguardian.Game.Scenes.Menus;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,31 +8,28 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 
-import com.example.theguardian.Game.Game;
 import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 
-public class MainMenu extends Escena {
+public class Credits_Scene extends Scene_Control {
 
-    int widthScreen = 100, heightScreen = 100;
+    int widthScreen = 0, heightScreen = 0;
     Context context;
     Paint textPaint, blackPaint;
     Bitmap botonL, menuBackground;
     Rect playBtn, optionsBtn, creditsBtn, helpBtn;
 
 
-    public MainMenu(Context context) {
+    public Credits_Scene(Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
-        widthScreen=super.widhtScreen;
-        heightScreen=super.heightScreen;
-
+        widthScreen = anchoPantalla;
+        heightScreen = altoPantalla;
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
@@ -41,27 +38,23 @@ public class MainMenu extends Escena {
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
 
-
-       // Imagenes
+        // Imagenes
         botonL = getBitmapFromAssets("movement.png");
         botonL = escalaAltura(botonL, heightScreen / 6);
         botonL = espejo(botonL, true);
         menuBackground = getBitmapFromAssets("menu.png");
         menuBackground = Bitmap.createScaledBitmap(menuBackground, widthScreen, heightScreen, false);
 
-
         // Rectangulos
-        playBtn = new Rect(widthScreen / 3, heightScreen / 3 + 20, widthScreen - (widthScreen / 3), widthScreen / 2);
+        playBtn = new Rect(widthScreen / 3, heightScreen / 3 + 20, widthScreen - (widthScreen / 3), heightScreen / 2);
         optionsBtn = new Rect(widthScreen / 3, heightScreen / 2 + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 3));
         creditsBtn = new Rect(widthScreen / 3, heightScreen - (heightScreen / 3) + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 6));
         helpBtn = new Rect(20, heightScreen - 20 - botonL.getHeight(), botonL.getWidth() + 20, heightScreen - 20);
-
     }
 
 
     public void draw(Canvas c) {
         super.draw(c);
-
         c.drawBitmap(menuBackground, 0, 0, null);
         c.drawRect(playBtn, textPaint);
         c.drawText(context.getResources().getString(R.string.play), widthScreen / 3, (heightScreen / 3 + 20) + 100, blackPaint);
@@ -71,13 +64,35 @@ public class MainMenu extends Escena {
         c.drawText(context.getResources().getString(R.string.credits), widthScreen / 3, (heightScreen - (heightScreen / 3) + 20) + 100, blackPaint);
         c.drawRect(helpBtn, textPaint);
         c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
-        Log.i("tamaño",heightScreen+""+widthScreen);
+    }
 
+    public void actualizaFisica() {
 
     }
 
-    public void actualizaFisica(){
+    public int onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        int action = event.getActionMasked();
+        int indice = event.getActionIndex();
+        int x = (int) event.getX(indice);
+        int y = (int) event.getY(indice);
 
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                if (playBtn.contains(x, y)) {
+                    return 2;
+                }
+                if (optionsBtn.contains(x, y)) {
+                    return 3;
+                }
+                if (creditsBtn.contains(x, y)) {
+                    return 4;
+                }
+                if (helpBtn.contains(x, y)) {
+                    return 5;
+                }
+        }
+        return 0;
     }
 
 
