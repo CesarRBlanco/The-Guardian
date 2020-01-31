@@ -8,30 +8,23 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
-import android.view.MotionEvent;
-
-import com.example.theguardian.Game.Game;
-import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 
-public class MainMenu extends Escena {
+public class EscenaGame extends Escena {
 
-    int widthScreen = 100, heightScreen = 100;
+    int widthScreen = 0, heightScreen = 0;
     Context context;
     Paint textPaint, blackPaint;
     Bitmap botonL, menuBackground;
     Rect playBtn, optionsBtn, creditsBtn, helpBtn;
 
 
-    public MainMenu(Context context) {
+    public EscenaGame(Context context) {
         super(context);
         this.context = context;
-        widthScreen=super.widhtScreen;
-        heightScreen=super.heightScreen;
 
 
         textPaint = new Paint();
@@ -42,7 +35,7 @@ public class MainMenu extends Escena {
         blackPaint.setTextSize(60);
 
 
-       // Imagenes
+    /*    // Imagenes
         botonL = getBitmapFromAssets("movement.png");
         botonL = escalaAltura(botonL, heightScreen / 6);
         botonL = espejo(botonL, true);
@@ -55,24 +48,24 @@ public class MainMenu extends Escena {
         optionsBtn = new Rect(widthScreen / 3, heightScreen / 2 + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 3));
         creditsBtn = new Rect(widthScreen / 3, heightScreen - (heightScreen / 3) + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 6));
         helpBtn = new Rect(20, heightScreen - 20 - botonL.getHeight(), botonL.getWidth() + 20, heightScreen - 20);
-
+*/
     }
 
 
     public void draw(Canvas c) {
-        super.draw(c);
+//        super.draw(c);
 
-        c.drawBitmap(menuBackground, 0, 0, null);
-        c.drawRect(playBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.play), widthScreen / 3, (heightScreen / 3 + 20) + 100, blackPaint);
-        c.drawRect(optionsBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.options), widthScreen / 3, (heightScreen / 2 + 20) + 100, blackPaint);
-        c.drawRect(creditsBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.credits), widthScreen / 3, (heightScreen - (heightScreen / 3) + 20) + 100, blackPaint);
-        c.drawRect(helpBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
-        Log.i("tamaño",heightScreen+""+widthScreen);
-
+//        c.drawBitmap(menuBackground, 0, 0, null);
+        c.drawColor(Color.BLUE);
+//        c.drawRect(playBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.play), widthScreen / 3, (heightScreen / 3 + 20) + 100, blackPaint);
+//        c.drawRect(optionsBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.options), widthScreen / 3, (heightScreen / 2 + 20) + 100, blackPaint);
+//        c.drawRect(creditsBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.credits), widthScreen / 3, (heightScreen - (heightScreen / 3) + 20) + 100, blackPaint);
+//        c.drawRect(helpBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
+//
 
     }
 

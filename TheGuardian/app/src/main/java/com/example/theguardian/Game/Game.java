@@ -16,6 +16,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.theguardian.Game.Menus.Escena;
+import com.example.theguardian.Game.Menus.EscenaGame;
 import com.example.theguardian.Game.Menus.MainMenu;
 import com.example.theguardian.R;
 
@@ -56,7 +58,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     int charEnd;
     Escenario_Objects iniEO, boxObj;
 
-    MainMenu mainMenu;
+    Escena escenaActual;
 
 
     public Game(Context context) {
@@ -65,7 +67,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameThread = new GameThread();
-        mainMenu=new MainMenu(this.context);
+        escenaActual = new Escena(context,anchoPantalla,altoPantalla);
 
 //        DisplayMetrics dm = new DisplayMetrics();
 //        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -236,7 +238,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         //Columna de escaleras - ARRIBA
 
-        if (charEnd > ladderInteract.left && character.x<ladderInteract.right) {
+        if (charEnd > ladderInteract.left && character.x < ladderInteract.right) {
             showActionBlack = true;
 
         } else {
@@ -254,7 +256,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         //Columna de escaleras - ABAJO
         if (character.x < ladderInteract.left && colSwitch == false) {
-           ladderUpDown=true;
+            ladderUpDown = true;
             colisionD = true;
         }
 
@@ -265,7 +267,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             colisionI = true;
             boxPush = true;
         } else {
- boxPush = false;
+            boxPush = false;
         }
 
 
@@ -280,6 +282,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         float y = event.getY(indice);
         int xI = (int) event.getX(indice);
         int yI = (int) event.getY(indice);
+
+        escenaActual=new MainMenu(context);
 
         switch (accion) {
             case MotionEvent.ACTION_DOWN:
@@ -431,12 +435,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                         c = surfaceHolder.lockCanvas();
                     }
                     synchronized (surfaceHolder) {
-                        if(c!=null){
+                        if (c != null) {
 
-                        actualizaFisica();
-                        mainMenu.draw(c);
-//                        dibujar(c);
-                    }}
+                            escenaActual.actualizaFisica();
+                            escenaActual.draw(c);
+                            //                        dibujar(c);
+                        }
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
