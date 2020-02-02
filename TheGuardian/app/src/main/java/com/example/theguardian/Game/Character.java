@@ -199,14 +199,14 @@ public class Character {
 
 //           if (System.currentTimeMillis() - tiempoVelocidad > tickVelocidad) {
 //        this.x += velocidad;
-//        if (this.x+this.frames[frameActual].getWidth() > anchoPantalla) {
-//            this.x=anchoPantalla-this.frames[frameActual].getWidth();
-//            this.x = anchoPantalla;
+//        if (this.x+this.frames[frameActual].getWidth() > screenWidth) {
+//            this.x=screenWidth-this.frames[frameActual].getWidth();
+//            this.x = screenWidth;
 //            velocidad *= -1 * 1.5f;
 //            frames = framesI;
 //        }
-//        if(this.y>altoPantalla)this.y=0;
-//        if(this.y<0)this.y=altoPantalla;
+//        if(this.y>screenHeight)this.y=0;
+//        if(this.y<0)this.y=screenHeight;
 //        if (this.x < 0) {
 //            this.x = 0;
 //            velocidad *= -1*1.5f;

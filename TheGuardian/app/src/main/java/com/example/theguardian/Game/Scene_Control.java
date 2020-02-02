@@ -1,4 +1,4 @@
-package com.example.theguardian.Game.Scenes.Menus;
+package com.example.theguardian.Game;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,20 +9,14 @@ public class Scene_Control {
     public Scene_Control(Context context) {
 
     }
-
-
     public void draw(Canvas c) {
 
     }
-
-    public void actualizaFisica() {
+    public void updatePhysics() {
 
     }
-
     public int onTouchEvent(MotionEvent event) {
 
         return 1;
     }
-
-
 }

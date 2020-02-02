@@ -1,4 +1,4 @@
-package com.example.theguardian.Game.Scenes.Menus;
+package com.example.theguardian.Game.Menus;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,13 +10,14 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 
-public class Credits_Scene extends Scene_Control {
+public class Menu_Scene extends Scene_Control {
 
     int widthScreen = 0, heightScreen = 0;
     Context context;
@@ -25,7 +26,7 @@ public class Credits_Scene extends Scene_Control {
     Rect playBtn, optionsBtn, creditsBtn, helpBtn;
 
 
-    public Credits_Scene(Context context, int altoPantalla, int anchoPantalla) {
+    public Menu_Scene(Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
         widthScreen = anchoPantalla;
@@ -66,7 +67,7 @@ public class Credits_Scene extends Scene_Control {
         c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
     }
 
-    public void actualizaFisica() {
+    public void updatePhysics() {
 
     }
 

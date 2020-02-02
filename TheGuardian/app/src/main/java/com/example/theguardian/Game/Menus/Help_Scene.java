@@ -1,4 +1,4 @@
-package com.example.theguardian.Game.Scenes.Menus;
+package com.example.theguardian.Game.Menus;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,13 +10,13 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
-import com.example.theguardian.R;
+import com.example.theguardian.Game.Scene_Control;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 
-public class Menu_Scene extends Scene_Control {
+public class Help_Scene extends Scene_Control {
 
     int widthScreen = 0, heightScreen = 0;
     Context context;
@@ -25,7 +25,7 @@ public class Menu_Scene extends Scene_Control {
     Rect playBtn, optionsBtn, creditsBtn, helpBtn;
 
 
-    public Menu_Scene(Context context, int altoPantalla, int anchoPantalla) {
+    public Help_Scene(Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
         widthScreen = anchoPantalla;
@@ -55,18 +55,19 @@ public class Menu_Scene extends Scene_Control {
 
     public void draw(Canvas c) {
         super.draw(c);
-        c.drawBitmap(menuBackground, 0, 0, null);
-        c.drawRect(playBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.play), widthScreen / 3, (heightScreen / 3 + 20) + 100, blackPaint);
-        c.drawRect(optionsBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.options), widthScreen / 3, (heightScreen / 2 + 20) + 100, blackPaint);
-        c.drawRect(creditsBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.credits), widthScreen / 3, (heightScreen - (heightScreen / 3) + 20) + 100, blackPaint);
-        c.drawRect(helpBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
+        c.drawColor(Color.BLUE);
+//        c.drawBitmap(menuBackground, 0, 0, null);
+//        c.drawRect(playBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.play), widthScreen / 3, (heightScreen / 3 + 20) + 100, blackPaint);
+//        c.drawRect(optionsBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.options), widthScreen / 3, (heightScreen / 2 + 20) + 100, blackPaint);
+//        c.drawRect(creditsBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.credits), widthScreen / 3, (heightScreen - (heightScreen / 3) + 20) + 100, blackPaint);
+//        c.drawRect(helpBtn, textPaint);
+//        c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
     }
 
-    public void actualizaFisica() {
+    public void updatePhysics() {
 
     }
 
