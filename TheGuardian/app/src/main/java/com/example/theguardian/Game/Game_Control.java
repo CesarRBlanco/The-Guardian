@@ -2,6 +2,7 @@ package com.example.theguardian.Game;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -10,6 +11,8 @@ import android.view.SurfaceView;
 
 import com.example.theguardian.Game.Levels.Level_0;
 import com.example.theguardian.Game.Menus.Menu_Scene;
+import com.example.theguardian.Game.Menus.Options_Scene;
+import com.example.theguardian.R;
 
 
 public class Game_Control extends SurfaceView implements SurfaceHolder.Callback {
@@ -31,10 +34,12 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
 
     int screenWidth = 0, screenHeight = 0;
+    int newScene;
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread gameThread;
     Scene_Control actualScene;
+
 
     public Game_Control(Context context) {
         super(context);
@@ -42,7 +47,6 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameThread = new GameThread();
-
     }
 
 //    public void inicializao() {
@@ -155,39 +159,39 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 //        }
 //    }
 
-    public void updatePhysics() {
-
-
-//        if (pauseMenu || menuPrincipal) {
+//    public void updatePhysics() {
 //
 //
-//        } else {
-//            collisionSystem();
-//
-//            if (movementD) {
-//                character.cambiaFrame();
-//                if (colisionI == false) {
-//                    character.setVelocidad(20);
-//                    character.moverR();
-//
-//                }
-//                colisionD = false;
-//            }
-//
-//            if (movementI) {
-//                character.cambiaFrame();
-//                if (colisionD == false) {
-//                    character.setVelocidad(-20);
-//                    character.moverL();
-//                }
-//                colisionI = false;
-//            }
-//
-//            if (boxMove) {
-//                boxObj.move();
-//            }
-//        }
-    }
+////        if (pauseMenu || menuPrincipal) {
+////
+////
+////        } else {
+////            collisionSystem();
+////
+////            if (movementD) {
+////                character.cambiaFrame();
+////                if (colisionI == false) {
+////                    character.setVelocidad(20);
+////                    character.moverR();
+////
+////                }
+////                colisionD = false;
+////            }
+////
+////            if (movementI) {
+////                character.cambiaFrame();
+////                if (colisionD == false) {
+////                    character.setVelocidad(-20);
+////                    character.moverL();
+////                }
+////                colisionI = false;
+////            }
+////
+////            if (boxMove) {
+////                boxObj.move();
+////            }
+////        }
+//    }
 
 //    public void collisionSystem() {
 //
@@ -237,6 +241,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                 Log.i("escenaSelec", "Scene_Control 2");
                 break;
             case 3:
+                actualScene=new Options_Scene(context,screenHeight,screenWidth);
                 Log.i("escenaSelec", "Scene_Control 3");
                 break;
             case 4:
@@ -250,12 +255,6 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int accion = event.getActionMasked();
-        int indice = event.getActionIndex();
-        int id = event.getPointerId(indice);
-        int x = (int) event.getX(indice);
-        int y = (int) event.getY(indice);
-        int newScene;
         newScene = actualScene.onTouchEvent(event);
         sceneChange(newScene);
 //        switch (accion) {
@@ -354,10 +353,10 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
             this.gameThread = new GameThread();
             this.gameThread.start();
         }
-        //Musica en base a escena igual que el draw y el fisica
-//        mp = MediaPlayer.create(context, R.raw.music);
-//        mp.start();
+
+
     }
+
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         this.screenWidth = width;
@@ -368,6 +367,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
 
     }
+
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         this.gameThread.setRunning(false);
@@ -409,7 +409,6 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                     }
                     synchronized (surfaceHolder) {
                         if (c != null) {
-
 
 
                             actualScene.updatePhysics();

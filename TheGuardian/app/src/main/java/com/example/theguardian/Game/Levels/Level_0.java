@@ -37,13 +37,10 @@ public class Level_0 extends Scene_Control {
     Paint invisiblePaint;
     Character character;
     Bitmap fondo1, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box,  backOptions;
-    HashMap<Integer, Point> dedos = new HashMap<>();
-    Background f1, f2;
-    MediaPlayer mp;
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn;
     int charEnd;
     Escenario_Objects iniEO, boxObj;
-
+    MediaPlayer mp;
     Scene_Control escenaActual;
 
 
@@ -52,7 +49,8 @@ public class Level_0 extends Scene_Control {
         this.context = context;
         widthScreen = anchoPantalla;
         heightScreen = altoPantalla;
-
+        mp = MediaPlayer.create(context, R.raw.music);
+        mp.start();
         invisiblePaint = new Paint();
         //Color.argb(0,0,0,0)
         invisiblePaint.setColor(Color.argb(0, 0, 0, 0));

@@ -11,7 +11,6 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 import com.example.theguardian.Game.Scene_Control;
-import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,18 +18,18 @@ import java.io.InputStream;
 
 public class Options_Scene extends Scene_Control {
 
-    int widthScreen = 0, heightScreen = 0;
+    int screenWidth = 0, screenHeight = 0;
     Context context;
     Paint textPaint, blackPaint;
     Bitmap botonL, menuBackground;
-    Rect playBtn, optionsBtn, creditsBtn, helpBtn;
+    Rect vibrationBtn, soundBtn, musicBtn,languajeBtn, backBtn;
 
 
     public Options_Scene(Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
-        widthScreen = anchoPantalla;
-        heightScreen = altoPantalla;
+        screenWidth = anchoPantalla;
+        screenHeight = altoPantalla;
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
@@ -40,32 +39,22 @@ public class Options_Scene extends Scene_Control {
         blackPaint.setTextSize(60);
 
         // Imagenes
-        botonL = getBitmapFromAssets("movement.png");
-        botonL = escalaAltura(botonL, heightScreen / 6);
-        botonL = espejo(botonL, true);
-        menuBackground = getBitmapFromAssets("menu.png");
-        menuBackground = Bitmap.createScaledBitmap(menuBackground, widthScreen, heightScreen, false);
 
         // Rectangulos
-        playBtn = new Rect(widthScreen / 3, heightScreen / 3 + 20, widthScreen - (widthScreen / 3), heightScreen / 2);
-        optionsBtn = new Rect(widthScreen / 3, heightScreen / 2 + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 3));
-        creditsBtn = new Rect(widthScreen / 3, heightScreen - (heightScreen / 3) + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 6));
-        helpBtn = new Rect(20, heightScreen - 20 - botonL.getHeight(), botonL.getWidth() + 20, heightScreen - 20);
+        vibrationBtn=new Rect(screenWidth/3,50,screenWidth/2,screenHeight/5+50);
+        soundBtn=new Rect(screenWidth/3,vibrationBtn.bottom+50,screenWidth/2,vibrationBtn.bottom+50+screenHeight/5);
+        musicBtn=new Rect(screenWidth/3,soundBtn.bottom+50,screenWidth/2,soundBtn.bottom+50+screenHeight/5);
+languajeBtn=new Rect(screenWidth/3,musicBtn.bottom+50,screenWidth/2,musicBtn.bottom+50+screenHeight/5);
+backBtn=new Rect(0,0,60,60);//right y bottom de la imagen que va por encima
     }
 
 
     public void draw(Canvas c) {
         super.draw(c);
-        c.drawBitmap(menuBackground, 0, 0, null);
-        c.drawRect(playBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.play), widthScreen / 3, (heightScreen / 3 + 20) + 100, blackPaint);
-        c.drawRect(optionsBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.options), widthScreen / 3, (heightScreen / 2 + 20) + 100, blackPaint);
-        c.drawRect(creditsBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.credits), widthScreen / 3, (heightScreen - (heightScreen / 3) + 20) + 100, blackPaint);
-        c.drawRect(helpBtn, textPaint);
-        c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
-    }
+        c.drawRect(vibrationBtn,textPaint);
+        c.drawRect(soundBtn,textPaint);
+        c.drawRect(musicBtn,textPaint);
+     }
 
     public void updatePhysics() {
 
@@ -80,18 +69,7 @@ public class Options_Scene extends Scene_Control {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                if (playBtn.contains(x, y)) {
-                    return 2;
-                }
-                if (optionsBtn.contains(x, y)) {
-                    return 3;
-                }
-                if (creditsBtn.contains(x, y)) {
-                    return 4;
-                }
-                if (helpBtn.contains(x, y)) {
-                    return 5;
-                }
+
         }
         return 0;
     }
