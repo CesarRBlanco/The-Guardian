@@ -22,7 +22,7 @@ public class Options_Scene extends Scene_Control {
     Context context;
     Paint textPaint, blackPaint;
     Bitmap botonL, menuBackground;
-    Rect vibrationBtn, soundBtn, musicBtn,languajeBtn, backBtn;
+    Rect vibrationBtn, soundBtn, musicBtn, languajeBtn, backBtn;
 
 
     public Options_Scene(Context context, int altoPantalla, int anchoPantalla) {
@@ -41,20 +41,22 @@ public class Options_Scene extends Scene_Control {
         // Imagenes
 
         // Rectangulos
-        vibrationBtn=new Rect(screenWidth/3,50,screenWidth/2,screenHeight/5+50);
-        soundBtn=new Rect(screenWidth/3,vibrationBtn.bottom+50,screenWidth/2,vibrationBtn.bottom+50+screenHeight/5);
-        musicBtn=new Rect(screenWidth/3,soundBtn.bottom+50,screenWidth/2,soundBtn.bottom+50+screenHeight/5);
-languajeBtn=new Rect(screenWidth/3,musicBtn.bottom+50,screenWidth/2,musicBtn.bottom+50+screenHeight/5);
-backBtn=new Rect(0,0,60,60);//right y bottom de la imagen que va por encima
+        vibrationBtn = new Rect(screenWidth / 3, 50, screenWidth / 2, screenHeight / 5 + 50);
+        soundBtn = new Rect(screenWidth / 3, vibrationBtn.bottom + 50, screenWidth / 2, vibrationBtn.bottom + 50 + screenHeight / 5);
+        musicBtn = new Rect(screenWidth / 3, soundBtn.bottom + 50, screenWidth / 2, soundBtn.bottom + 50 + screenHeight / 5);
+        languajeBtn = new Rect(screenWidth / 3, musicBtn.bottom + 50, screenWidth / 2, musicBtn.bottom + 50 + screenHeight / 5);
+        backBtn = new Rect(0, 0, 200, 200);//right y bottom de la imagen que va por encima
     }
 
 
     public void draw(Canvas c) {
         super.draw(c);
-        c.drawRect(vibrationBtn,textPaint);
-        c.drawRect(soundBtn,textPaint);
-        c.drawRect(musicBtn,textPaint);
-     }
+        c.drawColor(Color.BLACK );
+        c.drawRect(vibrationBtn, textPaint);
+        c.drawRect(soundBtn, textPaint);
+        c.drawRect(musicBtn, textPaint);
+        c.drawRect(backBtn,textPaint);
+    }
 
     public void updatePhysics() {
 
