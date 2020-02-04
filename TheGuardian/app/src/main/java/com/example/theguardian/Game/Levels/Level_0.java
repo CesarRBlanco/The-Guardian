@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -38,7 +39,7 @@ public class Level_0 extends Scene_Control {
     Character character;
     Bitmap fondo1, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box,  backOptions;
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn;
-    int charEnd;
+    int charEnd,musicVol;
     Escenario_Objects iniEO, boxObj;
     MediaPlayer mp;
     Scene_Control escenaActual;
@@ -49,8 +50,10 @@ public class Level_0 extends Scene_Control {
         this.context = context;
         widthScreen = anchoPantalla;
         heightScreen = altoPantalla;
-        mp = MediaPlayer.create(context, R.raw.music);
-        mp.setVolume(1,1);
+        musicVol=preferences.getInt("MusicVolume",0);
+        mp = MediaPlayer.create(context, R.raw.music2);
+        Log.i("VOLGAME",musicVol+"");
+        mp.setVolume(musicVol,musicVol);
         mp.start();
         invisiblePaint = new Paint();
         //Color.argb(0,0,0,0)

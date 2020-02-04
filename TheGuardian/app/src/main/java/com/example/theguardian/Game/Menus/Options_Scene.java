@@ -1,7 +1,8 @@
 package com.example.theguardian.Game.Menus;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,13 +10,17 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
+import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 
 public class Options_Scene extends Scene_Control {
@@ -24,7 +29,7 @@ public class Options_Scene extends Scene_Control {
     Context context;
     Paint textPaint, blackPaint;
     Bitmap botonL, backImg;
-    Rect vibrationBtn, soundBtn, musicBtn, languajeBtn, backBtn;
+    Rect vibrationBtn, soundBtn, musicBtn, languageBtn, backBtn;
 
 
     public Options_Scene(Context context, int altoPantalla, int anchoPantalla) {
@@ -48,8 +53,8 @@ public class Options_Scene extends Scene_Control {
         vibrationBtn = new Rect(screenWidth / 3, 50, screenWidth / 2, screenHeight / 5 + 50);
         soundBtn = new Rect(screenWidth / 3, vibrationBtn.bottom + 50, screenWidth / 2, vibrationBtn.bottom + 50 + screenHeight / 5);
         musicBtn = new Rect(screenWidth / 3, soundBtn.bottom + 50, screenWidth / 2, soundBtn.bottom + 50 + screenHeight / 5);
-        languajeBtn = new Rect(screenWidth / 3, musicBtn.bottom + 50, screenWidth / 2, musicBtn.bottom + 50 + screenHeight / 5);
-        languajeBtn = new Rect(screenWidth - (screenWidth / 3), musicBtn.bottom + 50, screenWidth - (screenWidth / 5), musicBtn.bottom + 50 + screenHeight / 5);
+        languageBtn = new Rect(screenWidth / 3, musicBtn.bottom + 50, screenWidth / 2, musicBtn.bottom + 50 + screenHeight / 5);
+        languageBtn = new Rect(screenWidth - (screenWidth / 3), musicBtn.bottom + 50, screenWidth - (screenWidth / 5), musicBtn.bottom + 50 + screenHeight / 5);
         backBtn = new Rect(0, 0, backImg.getWidth(), backImg.getHeight());//right y bottom de la imagen que va por encima
     }
 
@@ -60,13 +65,13 @@ public class Options_Scene extends Scene_Control {
         c.drawRect(vibrationBtn, textPaint);
         c.drawRect(soundBtn, textPaint);
         c.drawRect(musicBtn, textPaint);
-        c.drawRect(languajeBtn, textPaint);
+        c.drawRect(languageBtn, textPaint);
         c.drawRect(backBtn, textPaint);
         c.drawBitmap(backImg, 0, 0, null);
-        c.drawText("Vibration", screenWidth / 3, 100, blackPaint);
-        c.drawText("Sound", screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
-        c.drawText("Music", screenWidth / 3, soundBtn.bottom + 100, blackPaint);
-        c.drawText("Languaje", languajeBtn.left, languajeBtn.top + 100, blackPaint);
+        c.drawText(context.getResources().getString(R.string.vibration), screenWidth / 3, 100, blackPaint);
+        c.drawText(context.getResources().getString(R.string.sound), screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
+        c.drawText(context.getResources().getString(R.string.music), screenWidth / 3, soundBtn.bottom + 100, blackPaint);
+        c.drawText(context.getResources().getString(R.string.language), languageBtn.left, languageBtn.top + 100, blackPaint);
     }
 
     public void updatePhysics() {
@@ -95,11 +100,52 @@ public class Options_Scene extends Scene_Control {
                         Game_Control.v.vibrate(500);
                     }
                 }
-        if(soundBtn.contains(x,y)){
-            //Guardar sonido
-        }
+                if (soundBtn.contains(x, y)) {
+                    editor = preferences.edit();
+                    if (preferences.getInt("SoundVolume", 0) == 0) {
+                        editor.putInt("SoundVolume", 1);
+                    } else {
+                        editor.putInt("SoundVolume", 0);
+                    }
+                    editor.commit();
+                }
+
+                if (musicBtn.contains(x, y)) {
+                    editor = preferences.edit();
+                    if (preferences.getInt("MusicVolume", 0) == 0) {
+                        editor.putInt("MusicVolume", 1);
+                    } else {
+                        editor.putInt("MusicVolume", 0);
+                    }
+                    editor.commit();
+                }
+
+                if (languageBtn.contains(x, y)) {
+                    editor = preferences.edit();
+                    if (preferences.getString("LanguageConfig", "es").equals( "es")) {
+                        setLocale("en");
+                        editor.putString("LanguageConfig", "en");
+//                        Log.i("IDIOMA",preferences.getString("LanguageConfig",""));
+                    } else {
+                        setLocale("es");
+                        editor.putString("LanguageConfig", "es");
+//                        Log.i("IDIOMA",preferences.getString("LanguageConfig",""));
+                    }
+                    editor.commit();
+                }
+
         }
         return 0;
+    }
+
+    public void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+//        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+            Toast.makeText(context, locale+"", Toast.LENGTH_LONG).show();
+
     }
 
 
