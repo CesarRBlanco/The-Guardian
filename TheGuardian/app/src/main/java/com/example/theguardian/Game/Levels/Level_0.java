@@ -50,6 +50,7 @@ public class Level_0 extends Scene_Control {
         widthScreen = anchoPantalla;
         heightScreen = altoPantalla;
         mp = MediaPlayer.create(context, R.raw.music);
+        mp.setVolume(1,1);
         mp.start();
         invisiblePaint = new Paint();
         //Color.argb(0,0,0,0)

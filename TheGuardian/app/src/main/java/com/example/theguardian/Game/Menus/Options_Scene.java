@@ -1,6 +1,7 @@
 package com.example.theguardian.Game.Menus;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class Options_Scene extends Scene_Control {
     int screenWidth = 0, screenHeight = 0;
     Context context;
     Paint textPaint, blackPaint;
-    Bitmap botonL, menuBackground;
+    Bitmap botonL, backImg;
     Rect vibrationBtn, soundBtn, musicBtn, languajeBtn, backBtn;
 
 
@@ -39,23 +41,32 @@ public class Options_Scene extends Scene_Control {
         blackPaint.setTextSize(60);
 
         // Imagenes
+        backImg = getBitmapFromAssets("back.png");
+        backImg = escalaAltura(backImg, screenHeight / 6);
 
         // Rectangulos
         vibrationBtn = new Rect(screenWidth / 3, 50, screenWidth / 2, screenHeight / 5 + 50);
         soundBtn = new Rect(screenWidth / 3, vibrationBtn.bottom + 50, screenWidth / 2, vibrationBtn.bottom + 50 + screenHeight / 5);
         musicBtn = new Rect(screenWidth / 3, soundBtn.bottom + 50, screenWidth / 2, soundBtn.bottom + 50 + screenHeight / 5);
         languajeBtn = new Rect(screenWidth / 3, musicBtn.bottom + 50, screenWidth / 2, musicBtn.bottom + 50 + screenHeight / 5);
-        backBtn = new Rect(0, 0, 200, 200);//right y bottom de la imagen que va por encima
+        languajeBtn = new Rect(screenWidth - (screenWidth / 3), musicBtn.bottom + 50, screenWidth - (screenWidth / 5), musicBtn.bottom + 50 + screenHeight / 5);
+        backBtn = new Rect(0, 0, backImg.getWidth(), backImg.getHeight());//right y bottom de la imagen que va por encima
     }
 
 
     public void draw(Canvas c) {
         super.draw(c);
-        c.drawColor(Color.BLACK );
+        c.drawColor(Color.BLUE);
         c.drawRect(vibrationBtn, textPaint);
         c.drawRect(soundBtn, textPaint);
         c.drawRect(musicBtn, textPaint);
-        c.drawRect(backBtn,textPaint);
+        c.drawRect(languajeBtn, textPaint);
+        c.drawRect(backBtn, textPaint);
+        c.drawBitmap(backImg, 0, 0, null);
+        c.drawText("Vibration", screenWidth / 3, 100, blackPaint);
+        c.drawText("Sound", screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
+        c.drawText("Music", screenWidth / 3, soundBtn.bottom + 100, blackPaint);
+        c.drawText("Languaje", languajeBtn.left, languajeBtn.top + 100, blackPaint);
     }
 
     public void updatePhysics() {
@@ -69,9 +80,24 @@ public class Options_Scene extends Scene_Control {
         int x = (int) event.getX(indice);
         int y = (int) event.getY(indice);
 
+
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-
+                if (backBtn.contains(x, y)) {
+                    return 1;
+                }
+                if (vibrationBtn.contains(x, y)) {
+                    Game_Control.vibrationOn = !Game_Control.vibrationOn;
+                    editor = preferences.edit();
+                    editor.putBoolean("Vibration", Game_Control.vibrationOn);
+                    editor.commit();
+                    if (Game_Control.vibrationOn) {
+                        Game_Control.v.vibrate(500);
+                    }
+                }
+        if(soundBtn.contains(x,y)){
+            //Guardar sonido
+        }
         }
         return 0;
     }

@@ -1,9 +1,12 @@
 package com.example.theguardian.Game;
 
+import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -16,6 +19,7 @@ import com.example.theguardian.R;
 
 
 public class Game_Control extends SurfaceView implements SurfaceHolder.Callback {
+
     //LLaves
 //    boolean movementD = false;
 //    boolean movementI = false;
@@ -32,11 +36,18 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 //    boolean showActionBlack = false;
 //    boolean menuPrincipal = true;
 
+    public static boolean vibrationOn = true;
+ public static   Vibrator v;
+
+
+
+
+
 
     int screenWidth = 0, screenHeight = 0;
     int newScene;
     SurfaceHolder surfaceHolder;
-    Context context;
+    static Context context;
     GameThread gameThread;
     Scene_Control actualScene;
 
@@ -47,6 +58,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameThread = new GameThread();
+    v  = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
 //    public void inicializao() {
@@ -235,13 +247,14 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     public void sceneChange(int escena) {
         switch (escena) {
             case 1:
+                actualScene = new Menu_Scene(context, screenHeight, screenWidth);
                 break;
             case 2:
                 actualScene = new Level_0(context, screenHeight, screenWidth);
                 Log.i("escenaSelec", "Scene_Control 2");
                 break;
             case 3:
-                actualScene=new Options_Scene(context,screenHeight,screenWidth);
+                actualScene = new Options_Scene(context, screenHeight, screenWidth);
                 Log.i("escenaSelec", "Scene_Control 3");
                 break;
             case 4:
