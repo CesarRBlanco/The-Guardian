@@ -1,8 +1,8 @@
 package com.example.theguardian.Game.Menus;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,14 +10,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
-
 import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
@@ -78,6 +75,7 @@ public class Options_Scene extends Scene_Control {
 
     }
 
+
     public int onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         int action = event.getActionMasked();
@@ -92,16 +90,22 @@ public class Options_Scene extends Scene_Control {
                     return 1;
                 }
                 if (vibrationBtn.contains(x, y)) {
-                    Game_Control.vibrationOn = !Game_Control.vibrationOn;
-                    editor = preferences.edit();
-                    editor.putBoolean("Vibration", Game_Control.vibrationOn);
-                    editor.commit();
-                    if (Game_Control.vibrationOn) {
-                        Game_Control.v.vibrate(500);
+                    if (preferences.getBoolean("Vibration",true)) {
+                        editor = preferences.edit();
+                        editor.putBoolean("Vibration", false);
+                        editor.commit();
+                    }  else{
+                        editor = preferences.edit();
+                        editor.putBoolean("Vibration", true);
+                        editor.commit();
+                        Game_Control.v.vibrate(300);
+
+                    }
+                    if (preferences.getBoolean("Vibration",true)) {
                     }
                 }
                 if (soundBtn.contains(x, y)) {
-                    editor = preferences.edit();
+                editor=preferences.edit();
                     if (preferences.getInt("SoundVolume", 0) == 0) {
                         editor.putInt("SoundVolume", 1);
                     } else {
@@ -122,7 +126,7 @@ public class Options_Scene extends Scene_Control {
 
                 if (languageBtn.contains(x, y)) {
                     editor = preferences.edit();
-                    if (preferences.getString("LanguageConfig", "es").equals( "es")) {
+                    if (preferences.getString("LanguageConfig", "en").equals("es")) {
                         setLocale("en");
                         editor.putString("LanguageConfig", "en");
 //                        Log.i("IDIOMA",preferences.getString("LanguageConfig",""));
@@ -143,8 +147,8 @@ public class Options_Scene extends Scene_Control {
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.setLocale(locale);
-//        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-            Toast.makeText(context, locale+"", Toast.LENGTH_LONG).show();
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+        Toast.makeText(context, locale + "", Toast.LENGTH_LONG).show();
 
     }
 

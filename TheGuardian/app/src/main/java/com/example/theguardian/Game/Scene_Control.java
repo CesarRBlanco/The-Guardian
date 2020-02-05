@@ -6,11 +6,13 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 public class Scene_Control {
+
+
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
 
-
     public Scene_Control(Context context) {
+
         preferences = context.getSharedPreferences("config", Context.MODE_PRIVATE);
     }
 

@@ -1,10 +1,9 @@
 package com.example.theguardian.Game;
 
-import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.media.MediaPlayer;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.view.SurfaceView;
 import com.example.theguardian.Game.Levels.Level_0;
 import com.example.theguardian.Game.Menus.Menu_Scene;
 import com.example.theguardian.Game.Menus.Options_Scene;
-import com.example.theguardian.R;
 
 
 public class Game_Control extends SurfaceView implements SurfaceHolder.Callback {
@@ -37,11 +35,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 //    boolean menuPrincipal = true;
 
     public static boolean vibrationOn = true;
- public static   Vibrator v;
-
-
-
-
+    public static Vibrator v;
 
 
     int screenWidth = 0, screenHeight = 0;
@@ -50,7 +44,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     static Context context;
     GameThread gameThread;
     Scene_Control actualScene;
-
+    Paint textPaint;
 
     public Game_Control(Context context) {
         super(context);
@@ -58,7 +52,12 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameThread = new GameThread();
-    v  = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+
+        textPaint = new Paint();
+        textPaint.setColor(Color.RED);
+        textPaint.setTextSize(60);
     }
 
 //    public void inicializao() {
@@ -130,46 +129,14 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 //
 //    }
 
-//    public void dibujar(Canvas c) {
-//
-//        if (menuPrincipal) {
-//
-//        } else {
-//            c.drawBitmap(fondo1, 0, 0, null);
-////            c.drawRect(lMoveBtn, invisiblePaint);
-////            c.drawRect(rMoveBtn, invisiblePaint);
-////            c.drawRect(actionBtn, textPaint);
-////            c.drawRect(ladderInteract, textPaint);
-////            c.drawRect(backOptsBtn, textPaint);
-//
-//            if (dialog == false) {
-//                c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
-//                c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
-//                if (showActionBlack) {
-//                    c.drawBitmap(actionButton_B, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
-//                } else {
-//
-//                    c.drawBitmap(actionButton_W, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
-//                }
-//                c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
-//
-//
-//            } else {
-//                c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
-//                c.drawBitmap(dialogImg, -100, screenHeight - dialogImg.getHeight(), null);
-//                c.drawBitmap(dialogArrow, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
-//                c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
-//            }
-//
-////        c.drawBitmap(box, screenWidth / 2, 1100 - box.getHeight(), null);
-//            boxObj.draw(c);
-//            charEnd = character.x + spriteRef.getWidth();
-//            c.drawText("" + charEnd + " // " + ladderInteract.left, 10, 50 + invisiblePaint.getTextSize(), textPaint);
-////        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
-//            character.dibuja(c);
-//            c.drawBitmap(luces, 0, 0, null);
-//        }
-//    }
+    public void drawM(Canvas c) {
+
+        c.drawText("" + Scene_Control.preferences.getInt("SoundVolume", 0), screenWidth / 3, screenHeight / 4, textPaint);
+        c.drawText("" + Scene_Control.preferences.getInt("MusicVolume", 0), screenWidth / 3, screenHeight / 3, textPaint);
+        c.drawText("" + Scene_Control.preferences.getBoolean("Vibration", false), screenWidth / 3, screenHeight / 5, textPaint);
+        c.drawText("" + Scene_Control.preferences.getString("LanguageConfig", ""), screenWidth / 3, screenHeight / 2, textPaint);
+
+    }
 
 //    public void updatePhysics() {
 //
@@ -423,9 +390,10 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                     synchronized (surfaceHolder) {
                         if (c != null) {
 
-
                             actualScene.updatePhysics();
                             actualScene.draw(c);
+                            drawM(c);
+
                         }
                     }
 
