@@ -23,7 +23,7 @@ public class Menu_Scene extends Scene_Control {
     Context context;
     Paint textPaint, blackPaint;
     Bitmap botonL, menuBackground;
-    Rect playBtn, optionsBtn, creditsBtn, helpBtn;
+    Rect playBtn, optionsBtn, creditsBtn, helpBtn, exitBtn;
 
 
     public Menu_Scene(Context context, int altoPantalla, int anchoPantalla) {
@@ -38,6 +38,7 @@ public class Menu_Scene extends Scene_Control {
         blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
+        super.musicChange(1 );
 
         // Imagenes
         botonL = getBitmapFromAssets("movement.png");
@@ -51,6 +52,7 @@ public class Menu_Scene extends Scene_Control {
         optionsBtn = new Rect(widthScreen / 3, heightScreen / 2 + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 3));
         creditsBtn = new Rect(widthScreen / 3, heightScreen - (heightScreen / 3) + 20, widthScreen - (widthScreen / 3), heightScreen - (heightScreen / 6));
         helpBtn = new Rect(20, heightScreen - 20 - botonL.getHeight(), botonL.getWidth() + 20, heightScreen - 20);
+        exitBtn = new Rect(widthScreen - botonL.getWidth(), heightScreen - 20 - botonL.getHeight(), widthScreen, heightScreen);
     }
 
 
@@ -65,10 +67,13 @@ public class Menu_Scene extends Scene_Control {
         c.drawText(context.getResources().getString(R.string.credits), widthScreen / 3, (heightScreen - (heightScreen / 3) + 20) + 100, blackPaint);
         c.drawRect(helpBtn, textPaint);
         c.drawText(context.getResources().getString(R.string.help), 20, heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
+        c.drawRect(exitBtn, textPaint);
+        c.drawText(context.getResources().getString(R.string.exit), widthScreen - botonL.getWidth(), heightScreen - 20 - botonL.getHeight() + 100, blackPaint);
+
     }
 
     public void updatePhysics() {
-
+        super.updatePhysics();
     }
 
     public int onTouchEvent(MotionEvent event) {
@@ -91,6 +96,9 @@ public class Menu_Scene extends Scene_Control {
                 }
                 if (helpBtn.contains(x, y)) {
                     return 5;
+                }
+                if (exitBtn.contains(x, y)) {
+                    return 6;
                 }
         }
         return 0;

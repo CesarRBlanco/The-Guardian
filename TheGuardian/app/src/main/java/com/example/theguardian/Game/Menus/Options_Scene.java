@@ -12,9 +12,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.widget.Toast;
+
 import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
@@ -69,10 +71,15 @@ public class Options_Scene extends Scene_Control {
         c.drawText(context.getResources().getString(R.string.sound), screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.music), screenWidth / 3, soundBtn.bottom + 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.language), languageBtn.left, languageBtn.top + 100, blackPaint);
+        c.drawText("" + preferences.getInt("SoundVolume", 0), screenWidth / 3, screenHeight / 4, textPaint);
+        c.drawText("" + preferences.getInt("MusicVolume", 0), screenWidth / 3, screenHeight / 3, textPaint);
+        c.drawText("" + preferences.getBoolean("Vibration", false), screenWidth / 3, screenHeight / 5, textPaint);
+        c.drawText("" + preferences.getString("LanguageConfig", ""), screenWidth / 3, screenHeight / 2, textPaint);
+
     }
 
     public void updatePhysics() {
-
+        super.updatePhysics();
     }
 
 
@@ -90,22 +97,22 @@ public class Options_Scene extends Scene_Control {
                     return 1;
                 }
                 if (vibrationBtn.contains(x, y)) {
-                    if (preferences.getBoolean("Vibration",true)) {
+                    if (preferences.getBoolean("Vibration", true)) {
                         editor = preferences.edit();
                         editor.putBoolean("Vibration", false);
                         editor.commit();
-                    }  else{
+                    } else {
                         editor = preferences.edit();
                         editor.putBoolean("Vibration", true);
                         editor.commit();
                         Game_Control.v.vibrate(300);
 
                     }
-                    if (preferences.getBoolean("Vibration",true)) {
+                    if (preferences.getBoolean("Vibration", true)) {
                     }
                 }
                 if (soundBtn.contains(x, y)) {
-                editor=preferences.edit();
+                    editor = preferences.edit();
                     if (preferences.getInt("SoundVolume", 0) == 0) {
                         editor.putInt("SoundVolume", 1);
                     } else {
@@ -126,6 +133,8 @@ public class Options_Scene extends Scene_Control {
 
                 if (languageBtn.contains(x, y)) {
                     editor = preferences.edit();
+
+
                     if (preferences.getString("LanguageConfig", "en").equals("es")) {
                         setLocale("en");
                         editor.putString("LanguageConfig", "en");

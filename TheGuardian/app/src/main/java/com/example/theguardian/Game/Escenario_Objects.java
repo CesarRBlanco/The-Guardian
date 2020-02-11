@@ -48,13 +48,13 @@ pincelRect=new Paint();
     public void move() {
 
 
-    this.x=2000;
-    hitboxRefresh();
+        this.x=2000;
+        hitboxRefresh();
     }
 
 
     public void draw(Canvas c) {
-        c.drawBitmap(sprite, x, top, null);
+        c.drawBitmap(sprite, x, y, null);
         c.drawRect(hitbox,pincelRect);
     }
 }

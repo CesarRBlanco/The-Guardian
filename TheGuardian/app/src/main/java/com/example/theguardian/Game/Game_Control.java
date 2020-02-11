@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
 import android.util.Log;
@@ -12,8 +13,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.example.theguardian.Game.Levels.Level_0;
+import com.example.theguardian.Game.Levels.Level_1;
 import com.example.theguardian.Game.Menus.Menu_Scene;
 import com.example.theguardian.Game.Menus.Options_Scene;
+import com.example.theguardian.R;
+
+import static com.example.theguardian.Game.Scene_Control.preferences;
 
 
 public class Game_Control extends SurfaceView implements SurfaceHolder.Callback {
@@ -45,6 +50,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     GameThread gameThread;
     Scene_Control actualScene;
     Paint textPaint;
+    MediaPlayer mediaPlayer;
 
     public Game_Control(Context context) {
         super(context);
@@ -131,11 +137,6 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
     public void drawM(Canvas c) {
 
-        c.drawText("" + Scene_Control.preferences.getInt("SoundVolume", 0), screenWidth / 3, screenHeight / 4, textPaint);
-        c.drawText("" + Scene_Control.preferences.getInt("MusicVolume", 0), screenWidth / 3, screenHeight / 3, textPaint);
-        c.drawText("" + Scene_Control.preferences.getBoolean("Vibration", false), screenWidth / 3, screenHeight / 5, textPaint);
-        c.drawText("" + Scene_Control.preferences.getString("LanguageConfig", ""), screenWidth / 3, screenHeight / 2, textPaint);
-
     }
 
 //    public void updatePhysics() {
@@ -217,7 +218,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                 actualScene = new Menu_Scene(context, screenHeight, screenWidth);
                 break;
             case 2:
-                actualScene = new Level_0(context, screenHeight, screenWidth);
+                actualScene = new Level_1(context, screenHeight, screenWidth);
                 Log.i("escenaSelec", "Scene_Control 2");
                 break;
             case 3:
@@ -228,7 +229,12 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                 Log.i("escenaSelec", "Scene_Control 4");
                 break;
             case 5:
+                actualScene = new Level_0(context, screenHeight, screenWidth);
                 Log.i("escenaSelec", "Scene_Control 5");
+                break;
+            case 6:
+                Log.i("escenaSelec", "Scene_Control 6");
+                System.exit(0);
                 break;
         }
     }
