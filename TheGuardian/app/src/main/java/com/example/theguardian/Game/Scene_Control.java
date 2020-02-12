@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.example.theguardian.R;
 
@@ -28,6 +29,10 @@ public class Scene_Control {
     }
 
     public void updatePhysics() {
+
+        int newScene = preferences.getInt("actualScene",1);
+        Game_Control.sceneChange(newScene);
+
         int musicVol = preferences.getInt("MusicVolume", 1);
         Log.i("VOLGAME", musicVol + "");
         mediaPlayer.setVolume(musicVol, musicVol);
@@ -35,22 +40,23 @@ public class Scene_Control {
 
 
     public void musicChange(int song) {
-        Log.i("mucadasd", "musicChange: "+song);
+        Log.i("mucadasd", "musicChange: " + song);
         switch (song) {
             case 1:
-                if (mediaPlayer!=null && mediaPlayer.isPlaying())mediaPlayer.stop();
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
                 mediaPlayer = MediaPlayer.create(context, R.raw.music2);
                 break;
             case 2:
-                if (mediaPlayer!=null && mediaPlayer.isPlaying())mediaPlayer.stop();
-                mediaPlayer=MediaPlayer.create(context,R.raw.music);
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+                mediaPlayer = MediaPlayer.create(context, R.raw.music);
                 break;
         }
         mediaPlayer.start();
     }
 
-    public int onTouchEvent(MotionEvent event) {
-
-        return 1;
+    public boolean onTouchEvent(MotionEvent event) {
+return true;
     }
+
+
 }

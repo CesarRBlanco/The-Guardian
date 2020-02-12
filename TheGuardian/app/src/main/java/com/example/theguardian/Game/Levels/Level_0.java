@@ -169,7 +169,7 @@ Log.i("musicChange","escena0");
 super.updatePhysics();
     }
 
-    public int onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         int action = event.getActionMasked();
         int indice = event.getActionIndex();
@@ -179,19 +179,19 @@ super.updatePhysics();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (playBtn.contains(x, y)) {
-                    return 2;
+                    return true;
                 }
                 if (optionsBtn.contains(x, y)) {
-                    return 3;
+                    return true;
                 }
                 if (creditsBtn.contains(x, y)) {
-                    return 4;
+                    return true;
                 }
                 if (helpBtn.contains(x, y)) {
-                    return 5;
+                    return true;
                 }
         }
-        return 0;
+        return true;
     }
 
 

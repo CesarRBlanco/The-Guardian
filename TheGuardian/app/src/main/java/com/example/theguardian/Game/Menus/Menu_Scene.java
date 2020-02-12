@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
@@ -38,7 +39,7 @@ public class Menu_Scene extends Scene_Control {
         blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
-        super.musicChange(1 );
+        super.musicChange(1);
 
         // Imagenes
         botonL = getBitmapFromAssets("movement.png");
@@ -76,7 +77,8 @@ public class Menu_Scene extends Scene_Control {
         super.updatePhysics();
     }
 
-    public int onTouchEvent(MotionEvent event) {
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         int action = event.getActionMasked();
         int indice = event.getActionIndex();
@@ -86,22 +88,24 @@ public class Menu_Scene extends Scene_Control {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (playBtn.contains(x, y)) {
-                    return 2;
+                    Toast.makeText(context, "hey", Toast.LENGTH_SHORT).show();
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 2);
+                    editor.commit();
+
                 }
                 if (optionsBtn.contains(x, y)) {
-                    return 3;
+
                 }
                 if (creditsBtn.contains(x, y)) {
-                    return 4;
                 }
                 if (helpBtn.contains(x, y)) {
-                    return 5;
                 }
                 if (exitBtn.contains(x, y)) {
-                    return 6;
                 }
+                return true;
         }
-        return 0;
+        return super.onTouchEvent(event);
     }
 
 

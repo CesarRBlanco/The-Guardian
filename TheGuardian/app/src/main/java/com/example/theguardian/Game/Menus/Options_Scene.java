@@ -83,7 +83,7 @@ public class Options_Scene extends Scene_Control {
     }
 
 
-    public int onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         int action = event.getActionMasked();
         int indice = event.getActionIndex();
@@ -94,7 +94,7 @@ public class Options_Scene extends Scene_Control {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (backBtn.contains(x, y)) {
-                    return 1;
+                    return true;
                 }
                 if (vibrationBtn.contains(x, y)) {
                     if (preferences.getBoolean("Vibration", true)) {
@@ -148,7 +148,7 @@ public class Options_Scene extends Scene_Control {
                 }
 
         }
-        return 0;
+        return true;
     }
 
     public void setLocale(String lang) {

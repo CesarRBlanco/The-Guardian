@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.example.theguardian.Game.Character;
 import com.example.theguardian.Game.Escenario_Objects;
@@ -39,9 +40,9 @@ public class Level_1 extends Scene_Control {
     Scene_Control escenaActual;
     boolean showActionBlack = true;
     boolean dialog = false;
-    boolean movementD= false;
+    boolean movementD = false;
     boolean movementI = false;
-    boolean colisionI= false;
+    boolean colisionI = false;
     boolean colisionD = false;
 
 
@@ -116,13 +117,11 @@ public class Level_1 extends Scene_Control {
         c.drawRect(lMoveBtn, invisiblePaint);
         c.drawRect(rMoveBtn, invisiblePaint);
         c.drawRect(actionBtn, textPaint);
-        c.drawRect(ladderInteract, textPaint);
         c.drawRect(backOptsBtn, textPaint);
 
         if (dialog == false) {
             c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
-
             if (showActionBlack) {
                 c.drawBitmap(actionButton_B, screenHeight - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             } else {
@@ -130,20 +129,12 @@ public class Level_1 extends Scene_Control {
                 c.drawBitmap(actionButton_W, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             }
             c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
-
-
         } else {
             c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
             c.drawBitmap(dialogImg, -100, screenHeight - dialogImg.getHeight(), null);
             c.drawBitmap(dialogArrow, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             c.drawText(context.getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
         }
-
-//        c.drawBitmap(box, anchoPantalla / 2, 1100 - box.getHeight(), null);
-        boxObj.draw(c);
-//            charEnd = character.x + spriteRef.getWidth();
-        c.drawText("" + charEnd + " // " + ladderInteract.left, 10, 50 + invisiblePaint.getTextSize(), textPaint);
-//        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
         character.dibuja(c);
         c.drawBitmap(luces, 0, 0, null);
 
@@ -154,24 +145,24 @@ public class Level_1 extends Scene_Control {
 
         collisionSystem();
 
-
-        if (movementD) {
-            character.cambiaFrame();
-            if (colisionI == false) {
-                character.setVelocidad(20);
-                character.moverR();
-
-            }
-            colisionD = false;
-        }
-        if (movementI) {
-            character.cambiaFrame();
-            if (colisionD == false) {
-                character.setVelocidad(-20);
-                character.moverL();
-            }
-            colisionI = false;
-        }
+//
+//        if (movementD) {
+//            character.cambiaFrame();
+//            if (colisionI == false) {
+//                character.setVelocidad(20);
+//                character.moverR();
+//
+//            }
+//            colisionD = false;
+//        }
+//        if (movementI) {
+//            character.cambiaFrame();
+//            if (colisionD == false) {
+//                character.setVelocidad(-20);
+//                character.moverL();
+//            }
+//            colisionI = false;
+//        }
 
 
     }
@@ -182,56 +173,8 @@ public class Level_1 extends Scene_Control {
 
     }
 
-    public int onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
-        int action = event.getActionMasked();
-        int indice = event.getActionIndex();
-        int x = (int) event.getX(indice);
-        int y = (int) event.getY(indice);
-
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-
-
-                // Boton Movimiento Izquierda y Derecha
-                if (dialog == false) {
-                    if (rMoveBtn.contains(x, y)) {
-                        movementD = true;
-                    }
-                    if (lMoveBtn.contains(x, y)) {
-                        movementI = true;
-                    }
-                }
-
-
-
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                // Movimiento y desplazamiento Izquierda y Derecha
-                if (dialog == false) {
-                    if (!rMoveBtn.contains(x, y)) {
-                        movementD = false;
-                    }
-                    if (!lMoveBtn.contains(x, y)) {
-                        movementI = false;
-                    }
-                    if (rMoveBtn.contains(x, y)) {
-                        movementD = true;
-                    }
-                    if (lMoveBtn.contains(x, y)) {
-                        movementI = true;
-                    }
-                }
-               break;
-
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-                movementD = false;
-                movementI = false;
-                break;
-        }
-        return 0;
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 
 

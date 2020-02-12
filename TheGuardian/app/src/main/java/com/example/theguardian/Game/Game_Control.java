@@ -43,12 +43,12 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     public static Vibrator v;
 
 
-    int screenWidth = 0, screenHeight = 0;
+ static    int screenWidth = 0, screenHeight = 0;
     int newScene;
     SurfaceHolder surfaceHolder;
     static Context context;
     GameThread gameThread;
-    Scene_Control actualScene;
+   static Scene_Control actualScene;
     Paint textPaint;
     MediaPlayer mediaPlayer;
 
@@ -212,7 +212,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 //    }
 
 
-    public void sceneChange(int escena) {
+    public static void sceneChange(int escena) {
         switch (escena) {
             case 1:
                 actualScene = new Menu_Scene(context, screenHeight, screenWidth);
@@ -241,8 +241,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        newScene = actualScene.onTouchEvent(event);
-        sceneChange(newScene);
+
 //        switch (accion) {
 //            case MotionEvent.ACTION_DOWN:
 //
