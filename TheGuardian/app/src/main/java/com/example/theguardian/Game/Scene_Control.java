@@ -31,7 +31,14 @@ public class Scene_Control {
     public void updatePhysics() {
 
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
         int newScene = preferences.getInt("actualScene",1);
+=======
+
+
+
+        int newScene = preferences.getInt("actualScene", 1);
+>>>>>>> [Movement works and Gravity 0.1]
         Game_Control.sceneChange(newScene);
 
         int musicVol = preferences.getInt("MusicVolume", 1);
@@ -67,7 +74,7 @@ public class Scene_Control {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-return true;
+        return true;
     }
 
 

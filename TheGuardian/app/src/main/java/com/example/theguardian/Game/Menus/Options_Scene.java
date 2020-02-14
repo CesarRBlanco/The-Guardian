@@ -100,11 +100,17 @@ public class Options_Scene extends Scene_Control {
             case MotionEvent.ACTION_DOWN:
                 if (backBtn.contains(x, y)) {
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
                     return true;
 =======
 
                     Game_Control.sceneChange(preferences.getInt("lastScene",1));
 >>>>>>> [Level 1 almost complete]**
+=======
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 1);
+                    editor.commit();
+>>>>>>> [Movement works and Gravity 0.1]
                 }
                 if (vibrationBtn.contains(x, y)) {
                     if (preferences.getBoolean("Vibration", true)) {

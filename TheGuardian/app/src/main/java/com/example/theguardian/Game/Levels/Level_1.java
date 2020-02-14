@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 
 import com.example.theguardian.Game.Character;
 import com.example.theguardian.Game.Escenario_Objects;
+import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
@@ -33,10 +34,14 @@ public class Level_1 extends Scene_Control {
     Character character;
     Bitmap background, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box, backOptions;
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn;
 =======
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn, floor, stoneDoor;
 >>>>>>> [Level 1 almost complete]**
+=======
+    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn,floor;
+>>>>>>> [Movement works and Gravity 0.1]
     int charEnd, musicVol;
     Escenario_Objects iniEO, boxObj;
     MediaPlayer mp;
@@ -71,22 +76,30 @@ public class Level_1 extends Scene_Control {
         for (int i = 0; i < bitmaps.length; i++) {
             bitmaps[i] = getBitmapFromAssets("sprite" + i + ".png");
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
             bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 6);
 =======
             bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 4);
 >>>>>>> [Level 1 almost complete]**
+=======
+            bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 5);
+>>>>>>> [Movement works and Gravity 0.1]
         }
 stoneClose=preferences.getBoolean("door_1_state",true);
 
         // Imagenes
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
         character = new Character(bitmaps, 1, 400, anchoPantalla, altoPantalla);
 =======
         character = new Character(bitmaps, preferences.getInt("playerX", 0), preferences.getInt("playerY", screenHeight / 2), screenWidth, screenHeight);
 >>>>>>> [Level 1 almost complete]**
+=======
+        character = new Character(bitmaps, 1, 900, anchoPantalla, altoPantalla);
+>>>>>>> [Movement works and Gravity 0.1]
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
-        background = getBitmapFromAssets("fondo.png");
+        background = getBitmapFromAssets("bg_Level1.png");
         background = Bitmap.createScaledBitmap(background, anchoPantalla, altoPantalla, false);
         luces = getBitmapFromAssets("sombras.png");
         luces = Bitmap.createScaledBitmap(luces, anchoPantalla, altoPantalla, false);
@@ -116,10 +129,14 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
         backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
 =======
         floor = new Rect(0, character.getY() + spriteRef.getHeight(), anchoPantalla - (anchoPantalla / 4), altoPantalla);
         stoneDoor = new Rect(anchoPantalla/2+(anchoPantalla/11), altoPantalla / 3, anchoPantalla - (anchoPantalla / 4), altoPantalla - (altoPantalla / 4));
 >>>>>>> [Level 1 almost complete]**
+=======
+        floor= new Rect(0, character.getY()+spriteRef.getHeight(), anchoPantalla-(anchoPantalla/4), altoPantalla);
+>>>>>>> [Movement works and Gravity 0.1]
 
 
         // Auxiliares
@@ -134,6 +151,7 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         c.drawRect(lMoveBtn, invisiblePaint);
         c.drawRect(rMoveBtn, invisiblePaint);
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
         c.drawRect(actionBtn, textPaint);
         c.drawRect(backOptsBtn, textPaint);
 =======
@@ -142,17 +160,26 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         c.drawRect(floor, invisiblePaint);
         c.drawRect(stoneDoor, textPaint);
 >>>>>>> [Level 1 almost complete]**
+=======
+        c.drawRect(actionBtn, invisiblePaint);
+        c.drawRect(backOptsBtn, invisiblePaint);
+        c.drawRect(floor, textPaint);
+>>>>>>> [Movement works and Gravity 0.1]
 
         if (dialog == false) {
             c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
             if (showActionBlack) {
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
                 c.drawBitmap(actionButton_B, screenHeight - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
 =======
             if (showActionRed) {
                 c.drawBitmap(actionButton_B, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
 >>>>>>> [Level 1 almost complete]**
+=======
+                c.drawBitmap(actionButton_B, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
+>>>>>>> [Movement works and Gravity 0.1]
             } else {
                 c.drawBitmap(actionButton_W, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             }
@@ -171,32 +198,39 @@ stoneClose=preferences.getBoolean("door_1_state",true);
     }
 
     public void updatePhysics() {
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
         super.updatePhysics();
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
+=======
+
+>>>>>>> [Movement works and Gravity 0.1]
 
 =======
 >>>>>>> [Level 1 almost complete]**
         collisionSystem();
+        if (character.stance) {
+            character.cambiaFrame();
+        } else {
 
-//
-//        if (movementD) {
-//            character.cambiaFrame();
-//            if (colisionI == false) {
-//                character.setVelocidad(20);
-//                character.moverR();
-//
-//            }
-//            colisionD = false;
-//        }
-//        if (movementI) {
-//            character.cambiaFrame();
-//            if (colisionD == false) {
-//                character.setVelocidad(-20);
-//                character.moverL();
-//            }
-//            colisionI = false;
-//        }
 
+            if (movementD) {
+                character.cambiaFrame();
+                if (colisionI == false) {
+                    character.setVelocidad(15);
+                    character.moverR();
+                }
+                colisionD = false;
+            }
+            if (movementI) {
+                character.cambiaFrame();
+                if (colisionD == false) {
+                    character.setVelocidad(-15);
+                    character.moverL();
+                }
+                colisionI = false;
+            }
+
+        }
 
 
     }
@@ -204,6 +238,7 @@ stoneClose=preferences.getBoolean("door_1_state",true);
 
     public void collisionSystem() {
 
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
 
     }
@@ -225,14 +260,29 @@ stoneClose=preferences.getBoolean("door_1_state",true);
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
 
+=======
+if(character.getY()+spriteRef.getHeight()<floor.top || character.getX()+spriteRef.getWidth()>floor.right){
+    character.moverY();
+}
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+>>>>>>> [Movement works and Gravity 0.1]
         int action = event.getActionMasked();
         int indice = event.getActionIndex();
         int x = (int) event.getX(indice);
         int y = (int) event.getY(indice);
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (rMoveBtn.contains(x, y)) {
                     Log.i("pulso ", "onTouchEvent: abajo");
+=======
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                if (rMoveBtn.contains(x, y)) {
+>>>>>>> [Movement works and Gravity 0.1]
                     movementD = true;
                     character.stance = false;
                 }
@@ -240,6 +290,7 @@ stoneClose=preferences.getBoolean("door_1_state",true);
                     movementI = true;
                     character.stance = false;
                 }
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
                 if (backOptsBtn.contains(x, y)) {
                     editor = preferences.edit();
                     editor.putInt("lastScene", 2);
@@ -271,6 +322,23 @@ stoneClose=preferences.getBoolean("door_1_state",true);
 
         return true;
 >>>>>>> [Level 1 almost complete]**
+=======
+
+                return true;
+            case MotionEvent.ACTION_MOVE:
+
+                Toast.makeText(context, "slide", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case MotionEvent.ACTION_UP:
+                movementD = false;
+                movementI = false;
+                character.stance = true;
+                Toast.makeText(context, "arriba", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return true;
+>>>>>>> [Movement works and Gravity 0.1]
     }
 
 
