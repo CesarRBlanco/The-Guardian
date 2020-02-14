@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -87,25 +88,37 @@ public class Menu_Scene extends Scene_Control {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+
                 if (playBtn.contains(x, y)) {
-                    Toast.makeText(context, "hey", Toast.LENGTH_SHORT).show();
                     editor = preferences.edit();
                     editor.putInt("actualScene", 2);
                     editor.commit();
-
                 }
                 if (optionsBtn.contains(x, y)) {
-
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 3);
+                    editor.commit();
                 }
                 if (creditsBtn.contains(x, y)) {
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 4);
+                    editor.commit();
                 }
                 if (helpBtn.contains(x, y)) {
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 5);
+                    editor.commit();
                 }
                 if (exitBtn.contains(x, y)) {
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 6);
+                    editor.commit();
                 }
+
+
                 return true;
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
 

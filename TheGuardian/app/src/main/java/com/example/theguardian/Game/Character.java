@@ -10,7 +10,6 @@ import android.graphics.Rect;
 public class Character {
 
 
-
     int anchoPantalla = 0, altoPantalla = 0;
     Bitmap[] frames, framesD, framesI;
     int frameActual = 0;
@@ -26,6 +25,9 @@ public class Character {
 
     Rect cuadrado;
     Paint pincelRect;
+
+
+    public static boolean stance;
 
     public Character(Bitmap[] frames, int x, int y, int anchoPantalla, int altoPantalla) {
 
@@ -64,7 +66,7 @@ public class Character {
         if (System.currentTimeMillis() - tiempoVelocidad > tickVelocidad) {
 
             this.x += velocidad;
-            if (this.x  > anchoPantalla- this.frames[frameActual].getWidth()) {
+            if (this.x > anchoPantalla - this.frames[frameActual].getWidth()) {
                 this.x = anchoPantalla - this.frames[frameActual].getWidth();
 
                 velocidad = 0;
@@ -94,11 +96,35 @@ public class Character {
         }
     }
 
+    public void moverY() {
+        if (System.currentTimeMillis() - tiempoVelocidad > tickVelocidad) {
+
+            this.y += velocidad;
+
+            if (this.y > altoPantalla) {
+                this.y = altoPantalla - this.frames[frameActual].getWidth();
+                this.y = 0;
+                velocidad = 0;
+            }
+
+//            if (this.y > altoPantalla) this.y = 0;
+//            if (this.y < 0) this.y = altoPantalla;
+            this.tiempoVelocidad = System.currentTimeMillis();
+            hitbox();
+        }
+
+
+    }
+
     public void cambiaFrame() {
-        if (System.currentTimeMillis() - tiempoFrame > tickFrame) {
-            cont++;
-            frameActual = cont % frames.length;
-            tiempoFrame = System.currentTimeMillis();
+        if (stance) {
+            frameActual = 0;
+        } else {
+            if (System.currentTimeMillis() - tiempoFrame > tickFrame) {
+                cont++;
+                frameActual = cont % frames.length;
+                tiempoFrame = System.currentTimeMillis();
+            }
         }
     }
 
@@ -189,9 +215,6 @@ public class Character {
         return Bitmap.createBitmap(imagen, 0, 0, imagen.getWidth(),
                 imagen.getHeight(), matrix, false);
     }
-
-
-
 
 
 }

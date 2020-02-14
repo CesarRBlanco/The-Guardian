@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.theguardian.Game.Character;
 import com.example.theguardian.Game.Escenario_Objects;
+import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
@@ -33,7 +34,7 @@ public class Level_1 extends Scene_Control {
     Paint invisiblePaint;
     Character character;
     Bitmap background, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box, backOptions;
-    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn;
+    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn,floor;
     int charEnd, musicVol;
     Escenario_Objects iniEO, boxObj;
     MediaPlayer mp;
@@ -66,15 +67,15 @@ public class Level_1 extends Scene_Control {
         Bitmap[] bitmaps = new Bitmap[3];
         for (int i = 0; i < bitmaps.length; i++) {
             bitmaps[i] = getBitmapFromAssets("sprite" + i + ".png");
-            bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 6);
+            bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 5);
         }
 
 
         // Imagenes
-        character = new Character(bitmaps, 1, 400, anchoPantalla, altoPantalla);
+        character = new Character(bitmaps, 1, 900, anchoPantalla, altoPantalla);
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
-        background = getBitmapFromAssets("fondo.png");
+        background = getBitmapFromAssets("bg_Level1.png");
         background = Bitmap.createScaledBitmap(background, anchoPantalla, altoPantalla, false);
         luces = getBitmapFromAssets("sombras.png");
         luces = Bitmap.createScaledBitmap(luces, anchoPantalla, altoPantalla, false);
@@ -103,6 +104,7 @@ public class Level_1 extends Scene_Control {
         actionBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
         backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
+        floor= new Rect(0, character.getY()+spriteRef.getHeight(), anchoPantalla-(anchoPantalla/4), altoPantalla);
 
 
         // Auxiliares
@@ -116,14 +118,15 @@ public class Level_1 extends Scene_Control {
         c.drawBitmap(background, 0, 0, null);
         c.drawRect(lMoveBtn, invisiblePaint);
         c.drawRect(rMoveBtn, invisiblePaint);
-        c.drawRect(actionBtn, textPaint);
-        c.drawRect(backOptsBtn, textPaint);
+        c.drawRect(actionBtn, invisiblePaint);
+        c.drawRect(backOptsBtn, invisiblePaint);
+        c.drawRect(floor, textPaint);
 
         if (dialog == false) {
             c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
             if (showActionBlack) {
-                c.drawBitmap(actionButton_B, screenHeight - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
+                c.drawBitmap(actionButton_B, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             } else {
 
                 c.drawBitmap(actionButton_W, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
@@ -141,40 +144,74 @@ public class Level_1 extends Scene_Control {
     }
 
     public void updatePhysics() {
-        super.updatePhysics();
+
 
         collisionSystem();
+        if (character.stance) {
+            character.cambiaFrame();
+        } else {
 
-//
-//        if (movementD) {
-//            character.cambiaFrame();
-//            if (colisionI == false) {
-//                character.setVelocidad(20);
-//                character.moverR();
-//
-//            }
-//            colisionD = false;
-//        }
-//        if (movementI) {
-//            character.cambiaFrame();
-//            if (colisionD == false) {
-//                character.setVelocidad(-20);
-//                character.moverL();
-//            }
-//            colisionI = false;
-//        }
 
+            if (movementD) {
+                character.cambiaFrame();
+                if (colisionI == false) {
+                    character.setVelocidad(15);
+                    character.moverR();
+                }
+                colisionD = false;
+            }
+            if (movementI) {
+                character.cambiaFrame();
+                if (colisionD == false) {
+                    character.setVelocidad(-15);
+                    character.moverL();
+                }
+                colisionI = false;
+            }
+
+        }
 
     }
 
 
     public void collisionSystem() {
 
-
+if(character.getY()+spriteRef.getHeight()<floor.top || character.getX()+spriteRef.getWidth()>floor.right){
+    character.moverY();
+}
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
+        int action = event.getActionMasked();
+        int indice = event.getActionIndex();
+        int x = (int) event.getX(indice);
+        int y = (int) event.getY(indice);
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                if (rMoveBtn.contains(x, y)) {
+                    movementD = true;
+                    character.stance = false;
+                }
+                if (lMoveBtn.contains(x, y)) {
+                    movementI = true;
+                    character.stance = false;
+                }
+
+                return true;
+            case MotionEvent.ACTION_MOVE:
+
+                Toast.makeText(context, "slide", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case MotionEvent.ACTION_UP:
+                movementD = false;
+                movementI = false;
+                character.stance = true;
+                Toast.makeText(context, "arriba", Toast.LENGTH_SHORT).show();
+                return true;
+        }
+        return true;
     }
 
 

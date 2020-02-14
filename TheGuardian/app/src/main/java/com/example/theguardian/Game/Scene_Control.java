@@ -30,7 +30,10 @@ public class Scene_Control {
 
     public void updatePhysics() {
 
-        int newScene = preferences.getInt("actualScene",1);
+
+
+
+        int newScene = preferences.getInt("actualScene", 1);
         Game_Control.sceneChange(newScene);
 
         int musicVol = preferences.getInt("MusicVolume", 1);
@@ -55,7 +58,7 @@ public class Scene_Control {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-return true;
+        return true;
     }
 
 

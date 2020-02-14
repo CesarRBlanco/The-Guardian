@@ -94,7 +94,9 @@ public class Options_Scene extends Scene_Control {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (backBtn.contains(x, y)) {
-                    return true;
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 1);
+                    editor.commit();
                 }
                 if (vibrationBtn.contains(x, y)) {
                     if (preferences.getBoolean("Vibration", true)) {

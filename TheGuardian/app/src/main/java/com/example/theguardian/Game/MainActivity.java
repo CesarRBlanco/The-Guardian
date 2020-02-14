@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         Configuration config = new Configuration();
         config.setLocale(locale);
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+        editor.putInt("actualScene", 1);
+        editor.commit();
 
     }
 
