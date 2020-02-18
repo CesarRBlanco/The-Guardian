@@ -30,12 +30,24 @@ public class Scene_Control {
 
     public void updatePhysics() {
 
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
         int newScene = preferences.getInt("actualScene",1);
         Game_Control.sceneChange(newScene);
 
         int musicVol = preferences.getInt("MusicVolume", 1);
         Log.i("VOLGAME", musicVol + "");
         mediaPlayer.setVolume(musicVol, musicVol);
+=======
+
+
+
+//        int newScene = preferences.getInt("actualScene", 1);
+//        Game_Control.sceneChange(newScene);
+//
+//        int musicVol = preferences.getInt("MusicVolume", 1);
+//        Log.i("VOLGAME", musicVol + "");
+//        mediaPlayer.setVolume(musicVol, musicVol);
+>>>>>>> [Level 1 almost complete]**
     }
 
 

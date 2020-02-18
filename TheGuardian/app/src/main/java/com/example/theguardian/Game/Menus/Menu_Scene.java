@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
@@ -88,6 +89,7 @@ public class Menu_Scene extends Scene_Control {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (playBtn.contains(x, y)) {
+<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
                     Toast.makeText(context, "hey", Toast.LENGTH_SHORT).show();
                     editor = preferences.edit();
                     editor.putInt("actualScene", 2);
@@ -102,6 +104,37 @@ public class Menu_Scene extends Scene_Control {
                 if (helpBtn.contains(x, y)) {
                 }
                 if (exitBtn.contains(x, y)) {
+=======
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 2);
+//                    editor.commit();
+
+                    Game_Control.sceneChange(2);
+                }
+                if (optionsBtn.contains(x, y)) {
+                    editor = preferences.edit();
+                    editor.putInt("lastScene", 1);
+                    editor.commit();
+                    Game_Control.sceneChange(3);
+                }
+                if (creditsBtn.contains(x, y)) {
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 4);
+//                    editor.commit();
+                    Game_Control.sceneChange(4);
+                }
+                if (helpBtn.contains(x, y)) {
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 5);
+//                    editor.commit();
+                    Game_Control.sceneChange(5);
+                }
+                if (exitBtn.contains(x, y)) {
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 6);
+//                    editor.commit();
+                    Game_Control.sceneChange(6);
+>>>>>>> [Level 1 almost complete]**
                 }
                 return true;
         }
