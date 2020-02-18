@@ -50,6 +50,7 @@ public class Scene_Control {
 
 
 
+<<<<<<< HEAD
 //        int newScene = preferences.getInt("actualScene", 1);
 //        Game_Control.sceneChange(newScene);
 //
@@ -62,6 +63,14 @@ public class Scene_Control {
 
     public void updatePhysics() {
 
+=======
+        int newScene = preferences.getInt("actualScene", 1);
+        Game_Control.sceneChange(newScene);
+
+        int musicVol = preferences.getInt("MusicVolume", 1);
+        Log.i("VOLGAME", musicVol + "");
+        mediaPlayer.setVolume(musicVol, musicVol);
+>>>>>>> parent of 66d1783... [Level 1 almost complete]**
     }
 
 

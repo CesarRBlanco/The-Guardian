@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
@@ -91,6 +90,7 @@ public class Menu_Scene extends Scene_Control {
             case MotionEvent.ACTION_DOWN:
 
                 if (playBtn.contains(x, y)) {
+<<<<<<< HEAD
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
                     Toast.makeText(context, "hey", Toast.LENGTH_SHORT).show();
@@ -123,26 +123,29 @@ public class Menu_Scene extends Scene_Control {
 //                    editor.commit();
 
                     Game_Control.sceneChange(2);
+=======
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 2);
+                    editor.commit();
+>>>>>>> parent of 66d1783... [Level 1 almost complete]**
                 }
                 if (optionsBtn.contains(x, y)) {
                     editor = preferences.edit();
-                    editor.putInt("lastScene", 1);
+                    editor.putInt("actualScene", 3);
                     editor.commit();
-                    Game_Control.sceneChange(3);
                 }
                 if (creditsBtn.contains(x, y)) {
-//                    editor = preferences.edit();
-//                    editor.putInt("actualScene", 4);
-//                    editor.commit();
-                    Game_Control.sceneChange(4);
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 4);
+                    editor.commit();
                 }
                 if (helpBtn.contains(x, y)) {
-//                    editor = preferences.edit();
-//                    editor.putInt("actualScene", 5);
-//                    editor.commit();
-                    Game_Control.sceneChange(5);
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 5);
+                    editor.commit();
                 }
                 if (exitBtn.contains(x, y)) {
+<<<<<<< HEAD
 //                    editor = preferences.edit();
 //                    editor.putInt("actualScene", 6);
 //                    editor.commit();
@@ -153,6 +156,11 @@ public class Menu_Scene extends Scene_Control {
                     editor.putInt("actualScene", 6);
                     editor.commit();
 >>>>>>> [Movement works and Gravity 0.1]
+=======
+                    editor = preferences.edit();
+                    editor.putInt("actualScene", 6);
+                    editor.commit();
+>>>>>>> parent of 66d1783... [Level 1 almost complete]**
                 }
 
 
