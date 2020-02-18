@@ -75,8 +75,8 @@ public class Menu_Scene extends Scene_Control {
 
     }
 
-    public void updatePhysics() {
-        super.updatePhysics();
+    public void updateConfig() {
+        super.updateConfig();
     }
 
     @Override

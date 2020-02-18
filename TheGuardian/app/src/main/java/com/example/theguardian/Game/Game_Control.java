@@ -170,6 +170,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                     synchronized (surfaceHolder) {
                         if (c != null) {
 
+                            actualScene.updateConfig();
                             actualScene.updatePhysics();
                             actualScene.draw(c);
                         }

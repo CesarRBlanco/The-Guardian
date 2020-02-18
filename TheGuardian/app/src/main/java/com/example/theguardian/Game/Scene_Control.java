@@ -28,7 +28,9 @@ public class Scene_Control {
 
     }
 
-    public void updatePhysics() {
+
+
+    public void updateConfig() {
 
 
 
@@ -39,6 +41,11 @@ public class Scene_Control {
 //        int musicVol = preferences.getInt("MusicVolume", 1);
 //        Log.i("VOLGAME", musicVol + "");
 //        mediaPlayer.setVolume(musicVol, musicVol);
+    }
+
+
+    public void updatePhysics() {
+
     }
 
 
