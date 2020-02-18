@@ -28,7 +28,9 @@ public class Scene_Control {
 
     }
 
-    public void updatePhysics() {
+
+
+    public void updateConfig() {
 
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
 <<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
@@ -55,6 +57,11 @@ public class Scene_Control {
 //        Log.i("VOLGAME", musicVol + "");
 //        mediaPlayer.setVolume(musicVol, musicVol);
 >>>>>>> [Level 1 almost complete]**
+    }
+
+
+    public void updatePhysics() {
+
     }
 
 

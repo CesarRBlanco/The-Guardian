@@ -99,6 +99,7 @@ stoneClose=preferences.getBoolean("door_1_state",true);
 >>>>>>> [Movement works and Gravity 0.1]
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
+        character = new Character(bitmaps, 1, altoPantalla-(altoPantalla/3)-spriteRef.getHeight(), anchoPantalla, altoPantalla);
         background = getBitmapFromAssets("bg_Level1.png");
         background = Bitmap.createScaledBitmap(background, anchoPantalla, altoPantalla, false);
         luces = getBitmapFromAssets("sombras.png");
@@ -195,6 +196,12 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         charEnd=character.getX()+spriteRef.getWidth();
             c.drawText(charEnd+" // "+stoneDoor.left, 100, 100, textPaint);
 
+    }
+
+
+
+    public void updateConfig(){
+        super.updateConfig();
     }
 
     public void updatePhysics() {
