@@ -26,7 +26,7 @@ public class Options_Scene extends Scene_Control {
 
     int screenWidth = 0, screenHeight = 0;
     Context context;
-    Paint textPaint, blackPaint;
+    Paint textPaint, blackPaint, boxtPaint;
     Bitmap botonL, backImg;
     Rect vibrationBtn, soundBtn, musicBtn, languageBtn, backBtn;
 
@@ -37,9 +37,14 @@ public class Options_Scene extends Scene_Control {
         screenWidth = anchoPantalla;
         screenHeight = altoPantalla;
 
+        boxtPaint = new Paint();
+        boxtPaint.setColor(Color.WHITE);
+        boxtPaint.setTextSize(60);
+
         textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
+        textPaint.setColor(Color.RED);
         textPaint.setTextSize(60);
+
         blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
@@ -71,10 +76,10 @@ public class Options_Scene extends Scene_Control {
         c.drawText(context.getResources().getString(R.string.sound), screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.music), screenWidth / 3, soundBtn.bottom + 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.language), languageBtn.left, languageBtn.top + 100, blackPaint);
-        c.drawText("" + preferences.getInt("SoundVolume", 0), screenWidth / 3, screenHeight / 4, textPaint);
-        c.drawText("" + preferences.getInt("MusicVolume", 0), screenWidth / 3, screenHeight / 3, textPaint);
-        c.drawText("" + preferences.getBoolean("Vibration", false), screenWidth / 3, screenHeight / 5, textPaint);
-        c.drawText("" + preferences.getString("LanguageConfig", ""), screenWidth / 3, screenHeight / 2, textPaint);
+        c.drawText("" + preferences.getInt("SoundVolume", 0), screenWidth / 3, screenHeight / 4, boxtPaint);
+        c.drawText("" + preferences.getInt("MusicVolume", 0), screenWidth / 3, screenHeight / 3, boxtPaint);
+        c.drawText("" + preferences.getBoolean("Vibration", false), screenWidth / 3, screenHeight / 5, boxtPaint);
+        c.drawText("" + preferences.getString("LanguageConfig", ""), screenWidth / 3, screenHeight / 2, boxtPaint);
 
     }
 
@@ -94,24 +99,8 @@ public class Options_Scene extends Scene_Control {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (backBtn.contains(x, y)) {
-<<<<<<< HEAD
-<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
-<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
-                    return true;
-=======
 
                     Game_Control.sceneChange(preferences.getInt("lastScene",1));
->>>>>>> [Level 1 almost complete]**
-=======
-                    editor = preferences.edit();
-                    editor.putInt("actualScene", 1);
-                    editor.commit();
->>>>>>> [Movement works and Gravity 0.1]
-=======
-                    editor = preferences.edit();
-                    editor.putInt("actualScene", 1);
-                    editor.commit();
->>>>>>> parent of 66d1783... [Level 1 almost complete]**
                 }
                 if (vibrationBtn.contains(x, y)) {
                     if (preferences.getBoolean("Vibration", true)) {
@@ -163,7 +152,7 @@ public class Options_Scene extends Scene_Control {
                     }
                     editor.commit();
                 }
-
+                return true;
         }
         return true;
     }
