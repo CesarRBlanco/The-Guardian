@@ -13,7 +13,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.theguardian.Game.Character;
-import com.example.theguardian.Game.Escenario_Objects;
+import com.example.theguardian.Game.Scenario_Objects;
 import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
@@ -27,24 +27,23 @@ public class Level_1 extends Scene_Control {
     int screenWidth = 0, screenHeight = 0;
     Context context;
     Paint textPaint, blackPaint;
-    Bitmap botonL, menuBackground;
-    Rect playBtn, optionsBtn, creditsBtn, helpBtn;
+    Bitmap botonL;
 
     Paint invisiblePaint;
     Character character;
     Bitmap background, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box, backOptions;
-    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn, floor, stoneDoor;
-    int charEnd, musicVol;
-    Escenario_Objects iniEO, boxObj;
-    MediaPlayer mp;
-    Scene_Control escenaActual;
+    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn, floor, stoneDoorR;
+    int charEnd;
+    Scenario_Objects stoneDoor;
     boolean showActionRed = false;
-    boolean dialog = false;
+    boolean dialogStart = false;
+    boolean dialogEnd = false;
     boolean movementD = false;
     boolean movementI = false;
     boolean colisionI = false;
     boolean colisionD = false;
     boolean stoneClose = true;
+    boolean buttonsEnabled = true;
 
 
     public Level_1(Context context, int altoPantalla, int anchoPantalla) {
@@ -69,13 +68,13 @@ public class Level_1 extends Scene_Control {
             bitmaps[i] = getBitmapFromAssets("sprite" + i + ".png");
             bitmaps[i] = escalaAltura(bitmaps[i], altoPantalla / 4);
         }
-stoneClose=preferences.getBoolean("door_1_state",true);
+
 
         // Imagenes
         character = new Character(bitmaps, preferences.getInt("playerX", 0), preferences.getInt("playerY", screenHeight / 2), screenWidth, screenHeight);
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
-        character = new Character(bitmaps, 1, altoPantalla-(altoPantalla/3)-spriteRef.getHeight(), anchoPantalla, altoPantalla);
+        character = new Character(bitmaps, 1, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
         background = getBitmapFromAssets("bg_Level1.png");
         background = Bitmap.createScaledBitmap(background, anchoPantalla, altoPantalla, false);
         luces = getBitmapFromAssets("sombras.png");
@@ -98,6 +97,12 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         backOptions = getBitmapFromAssets("backOptions.png");
         backOptions = escalaAltura(backOptions, altoPantalla / 6);
 
+box=getBitmapFromAssets("box.png");
+box=escalaAltura(box,altoPantalla/5);
+
+
+        stoneDoor = new Scenario_Objects(anchoPantalla / 2 + (anchoPantalla / 11), altoPantalla / 3,
+                anchoPantalla - (anchoPantalla / 4), altoPantalla - (altoPantalla / 4), box);
 
         // Rectangulos
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
@@ -105,8 +110,8 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         actionBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
         backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
-        floor = new Rect(0, character.getY() + spriteRef.getHeight(), anchoPantalla - (anchoPantalla / 4), altoPantalla);
-        stoneDoor = new Rect(anchoPantalla/2+(anchoPantalla/11), altoPantalla / 3, anchoPantalla - (anchoPantalla / 4), altoPantalla - (altoPantalla / 4));
+        floor = new Rect(0, character.getY() + spriteRef.getHeight(), anchoPantalla - (anchoPantalla / 5), altoPantalla);
+      //  stoneDoorR = new Rect(anchoPantalla / 2 + (anchoPantalla / 11), altoPantalla / 3, anchoPantalla - (anchoPantalla / 4), altoPantalla - (altoPantalla / 4));
 
 
         // Auxiliares
@@ -123,9 +128,21 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         c.drawRect(actionBtn, invisiblePaint);
         c.drawRect(backOptsBtn, invisiblePaint);
         c.drawRect(floor, invisiblePaint);
-        c.drawRect(stoneDoor, textPaint);
+//        c.drawRect(stoneDoorR, invisiblePaint);
+        c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
+        character.dibuja(c);
+        c.drawBitmap(luces, 0, 0, null);
+        charEnd = character.getX() + spriteRef.getWidth();
+        c.drawText(charEnd + " // " + stoneDoor.getLeft(), 100, 100, textPaint);
 
-        if (dialog == false) {
+        if (dialogStart == true && dialogEnd == false) {
+            buttonsEnabled = false;
+            c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
+            c.drawBitmap(dialogImg, -100, screenHeight - dialogImg.getHeight(), null);
+            c.drawBitmap(dialogArrow, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
+            c.drawText(context.getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
+        } else {
+            buttonsEnabled = true;
             c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
             if (showActionRed) {
@@ -133,29 +150,13 @@ stoneClose=preferences.getBoolean("door_1_state",true);
             } else {
                 c.drawBitmap(actionButton_W, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             }
-        } else {
-            c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
-            c.drawBitmap(dialogImg, -100, screenHeight - dialogImg.getHeight(), null);
-            c.drawBitmap(dialogArrow, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
-            c.drawText(context.getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
         }
-            c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
-        character.dibuja(c);
-        c.drawBitmap(luces, 0, 0, null);
-        charEnd=character.getX()+spriteRef.getWidth();
-            c.drawText(charEnd+" // "+stoneDoor.left, 100, 100, textPaint);
 
+        stoneDoor.draw(c);
     }
 
-
-
-    public void updateConfig(){
-        super.updateConfig();
-    }
 
     public void updatePhysics() {
-<<<<<<< HEAD
-<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
         super.updatePhysics();
         collisionSystem();
         if (character.stance) {
@@ -189,13 +190,14 @@ stoneClose=preferences.getBoolean("door_1_state",true);
     public void collisionSystem() {
 
         if (character.getY() + spriteRef.getHeight() < floor.top || character.getX() + spriteRef.getWidth() > floor.right) {
+            character.setVelocidad(40);
             character.moverY();
         }
-        if(charEnd>=stoneDoor.left&&stoneClose==true){
-            colisionI=true;
-            showActionRed =true;
-        }else{
-            showActionRed =false;
+        if (charEnd >= stoneDoor.getLeft() && stoneClose == true) {
+            colisionI = true;
+            showActionRed = true;
+        } else {
+            showActionRed = false;
         }
     }
 
@@ -208,29 +210,39 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         int y = (int) event.getY(indice);
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                if (rMoveBtn.contains(x, y)) {
-                    Log.i("pulso ", "onTouchEvent: abajo");
-                    movementD = true;
-                    character.stance = false;
+                if (buttonsEnabled) {
+                    if (rMoveBtn.contains(x, y)) {
+                        Log.i("pulso ", "onTouchEvent: abajo");
+                        movementD = true;
+                        character.stance = false;
+                    }
+                    if (lMoveBtn.contains(x, y)) {
+                        movementI = true;
+                        character.stance = false;
+                    }
+                    if (backOptsBtn.contains(x, y)) {
+                        editor = preferences.edit();
+                        editor.putInt("lastScene", 2);
+                        editor.putBoolean("door_1_state", stoneClose);
+                        editor.putInt("playerX", character.getX());
+                        editor.putInt("playerY", character.getY());
+                        editor.commit();
+                        Game_Control.sceneChange(3);
+                    }
                 }
-                if (lMoveBtn.contains(x, y)) {
-                    movementI = true;
-                    character.stance = false;
-                }
-                if (backOptsBtn.contains(x, y)) {
-                    editor = preferences.edit();
-                    editor.putInt("lastScene", 2);
-                    editor.putBoolean("door_1_state",stoneClose);
-                    editor.putInt("playerX", character.getX());
-                    editor.putInt("playerY", character.getY());
-                    editor.commit();
-                    Game_Control.sceneChange(3);
-                }
-                if(actionBtn.contains(x,y)&&showActionRed==true){
-                    Log.i("doorOpen","yes");
-                    colisionI=false;
-                    stoneClose=false;
-                    stoneDoor=new Rect(0,0,0,0);
+                if (actionBtn.contains(x, y) && showActionRed == true) {
+                    if (dialogStart) {
+                        dialogEnd = true;
+                    }
+                    dialogStart = true;
+
+                    if (dialogEnd) {
+
+                        Log.i("doorOpen", "yes");
+                        colisionI = false;
+                        stoneClose = false;
+                        stoneDoor = new Scenario_Objects(0, 0, 0, 0,null);
+                    }
                 }
                 return true;
 
@@ -247,109 +259,6 @@ stoneClose=preferences.getBoolean("door_1_state",true);
         }
 
         return true;
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
-
-=======
-if(character.getY()+spriteRef.getHeight()<floor.top || character.getX()+spriteRef.getWidth()>floor.right){
-    character.moverY();
-}
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
->>>>>>> [Movement works and Gravity 0.1]
-=======
-if(character.getY()+spriteRef.getHeight()<floor.top || character.getX()+spriteRef.getWidth()>floor.right){
-    character.moverY();
-}
-    }
-
-    public boolean onTouchEvent(MotionEvent event) {
->>>>>>> parent of 66d1783... [Level 1 almost complete]**
-        int action = event.getActionMasked();
-        int indice = event.getActionIndex();
-        int x = (int) event.getX(indice);
-        int y = (int) event.getY(indice);
-<<<<<<< HEAD
-<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                if (rMoveBtn.contains(x, y)) {
-                    Log.i("pulso ", "onTouchEvent: abajo");
-=======
-
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                if (rMoveBtn.contains(x, y)) {
->>>>>>> [Movement works and Gravity 0.1]
-=======
-
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                if (rMoveBtn.contains(x, y)) {
->>>>>>> parent of 66d1783... [Level 1 almost complete]**
-                    movementD = true;
-                    character.stance = false;
-                }
-                if (lMoveBtn.contains(x, y)) {
-                    movementI = true;
-                    character.stance = false;
-                }
-<<<<<<< HEAD
-<<<<<<< 5c6b95f90e38d7f9c98dd4efbec2f9c92f6a3c01
-                if (backOptsBtn.contains(x, y)) {
-                    editor = preferences.edit();
-                    editor.putInt("lastScene", 2);
-                    editor.putBoolean("door_1_state",stoneClose);
-                    editor.putInt("playerX", character.getX());
-                    editor.putInt("playerY", character.getY());
-                    editor.commit();
-                    Game_Control.sceneChange(3);
-                }
-                if(actionBtn.contains(x,y)&&showActionRed==true){
-                    Log.i("doorOpen","yes");
-                    colisionI=false;
-                    stoneClose=false;
-                    stoneDoor=new Rect(0,0,0,0);
-                }
-                return true;
-=======
->>>>>>> parent of 66d1783... [Level 1 almost complete]**
-
-                return true;
-            case MotionEvent.ACTION_MOVE:
-
-                Toast.makeText(context, "slide", Toast.LENGTH_SHORT).show();
-                return true;
-
-            case MotionEvent.ACTION_UP:
-                movementD = false;
-                movementI = false;
-                character.stance = true;
-                Toast.makeText(context, "arriba", Toast.LENGTH_SHORT).show();
-                return true;
-        }
-        return true;
->>>>>>> [Level 1 almost complete]**
-=======
-
-                return true;
-            case MotionEvent.ACTION_MOVE:
-
-                Toast.makeText(context, "slide", Toast.LENGTH_SHORT).show();
-                return true;
-
-            case MotionEvent.ACTION_UP:
-                movementD = false;
-                movementI = false;
-                character.stance = true;
-                Toast.makeText(context, "arriba", Toast.LENGTH_SHORT).show();
-                return true;
-        }
-        return true;
->>>>>>> [Movement works and Gravity 0.1]
     }
 
 

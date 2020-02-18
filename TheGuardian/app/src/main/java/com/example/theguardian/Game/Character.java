@@ -71,8 +71,12 @@ public class Character {
 
                 velocidad = 0;
             }
-            if (this.y > altoPantalla) this.y = 0;
-            if (this.y < 0) this.y = altoPantalla;
+//            if (this.y > altoPantalla){
+//                this.y = 0;
+//            }
+//            if (this.y < 0){
+//                this.y = altoPantalla;
+//            }
             this.tiempoVelocidad = System.currentTimeMillis();
             hitbox();
         }
@@ -89,8 +93,8 @@ public class Character {
                 velocidad = 0;
             }
 
-            if (this.y > altoPantalla) this.y = 0;
-            if (this.y < 0) this.y = altoPantalla;
+//            if (this.y > altoPantalla) this.y = 0;
+//            if (this.y < 0) this.y = altoPantalla;
             this.tiempoVelocidad = System.currentTimeMillis();
             hitbox();
         }
@@ -101,11 +105,11 @@ public class Character {
 
             this.y += velocidad;
 
-            if (this.y > altoPantalla) {
-                this.y = altoPantalla - this.frames[frameActual].getWidth();
-                this.y = 0;
-                velocidad = 0;
-            }
+//            if (this.y > altoPantalla) {
+//                this.y = altoPantalla - this.frames[frameActual].getWidth();
+//                this.y = 0;
+//                velocidad = 0;
+//            }
 
 //            if (this.y > altoPantalla) this.y = 0;
 //            if (this.y < 0) this.y = altoPantalla;

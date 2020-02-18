@@ -7,24 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 
-import com.example.theguardian.Game.Background;
 import com.example.theguardian.Game.Character;
-import com.example.theguardian.Game.Escenario_Objects;
-import com.example.theguardian.Game.Game_Control;
-import com.example.theguardian.Game.Menus.Menu_Scene;
+import com.example.theguardian.Game.Scenario_Objects;
 import com.example.theguardian.Game.Scene_Control;
-import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 
 public class Level_0 extends Scene_Control {
@@ -40,7 +33,7 @@ public class Level_0 extends Scene_Control {
     Bitmap fondo1, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box,  backOptions;
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn;
     int charEnd,musicVol;
-    Escenario_Objects iniEO, boxObj;
+    Scenario_Objects iniEO, boxObj;
     MediaPlayer mp;
     Scene_Control escenaActual;
 
@@ -109,7 +102,7 @@ super.musicChange(2);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
 
 
-        boxObj = new Escenario_Objects(anchoPantalla / 2, altoPantalla - box.getHeight(), anchoPantalla / 2+box.getWidth(), altoPantalla, box);
+        boxObj = new Scenario_Objects(anchoPantalla / 2, altoPantalla - box.getHeight(), anchoPantalla / 2+box.getWidth(), altoPantalla, box);
 
 
         playBtn = new Rect(anchoPantalla / 3, altoPantalla / 3 + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla / 2);
@@ -120,7 +113,7 @@ super.musicChange(2);
 
 
         // Auxiliares
-        iniEO = new Escenario_Objects(altoPantalla, anchoPantalla);
+        iniEO = new Scenario_Objects(altoPantalla, anchoPantalla);
 
       //  escenaActual = new Menu_Scene(context, altoPantalla, anchoPantalla);
     }
@@ -136,7 +129,7 @@ Log.i("musicChange","escena0");
 //            c.drawRect(ladderInteract, textPaint);
 //            c.drawRect(backOptsBtn, textPaint);
 //
-//            if (dialog == false) {
+//            if (dialogStart == false) {
 //                c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
 //                c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
 //                if (showActionRed) {
