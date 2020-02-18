@@ -139,7 +139,7 @@ Log.i("musicChange","escena0");
 //            if (dialog == false) {
 //                c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
 //                c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
-//                if (showActionBlack) {
+//                if (showActionRed) {
 //                    c.drawBitmap(actionButton_B, anchoPantalla - actionButton_W.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
 //                } else {
 //

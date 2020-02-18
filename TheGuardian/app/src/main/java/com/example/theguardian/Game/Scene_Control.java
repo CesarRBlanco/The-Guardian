@@ -33,12 +33,12 @@ public class Scene_Control {
 
 
 
-        int newScene = preferences.getInt("actualScene", 1);
-        Game_Control.sceneChange(newScene);
-
-        int musicVol = preferences.getInt("MusicVolume", 1);
-        Log.i("VOLGAME", musicVol + "");
-        mediaPlayer.setVolume(musicVol, musicVol);
+//        int newScene = preferences.getInt("actualScene", 1);
+//        Game_Control.sceneChange(newScene);
+//
+//        int musicVol = preferences.getInt("MusicVolume", 1);
+//        Log.i("VOLGAME", musicVol + "");
+//        mediaPlayer.setVolume(musicVol, musicVol);
     }
 
 

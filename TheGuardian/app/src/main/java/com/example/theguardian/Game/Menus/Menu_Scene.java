@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
@@ -90,29 +91,35 @@ public class Menu_Scene extends Scene_Control {
             case MotionEvent.ACTION_DOWN:
 
                 if (playBtn.contains(x, y)) {
-                    editor = preferences.edit();
-                    editor.putInt("actualScene", 2);
-                    editor.commit();
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 2);
+//                    editor.commit();
+
+                    Game_Control.sceneChange(2);
                 }
                 if (optionsBtn.contains(x, y)) {
                     editor = preferences.edit();
-                    editor.putInt("actualScene", 3);
+                    editor.putInt("lastScene", 1);
                     editor.commit();
+                    Game_Control.sceneChange(3);
                 }
                 if (creditsBtn.contains(x, y)) {
-                    editor = preferences.edit();
-                    editor.putInt("actualScene", 4);
-                    editor.commit();
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 4);
+//                    editor.commit();
+                    Game_Control.sceneChange(4);
                 }
                 if (helpBtn.contains(x, y)) {
-                    editor = preferences.edit();
-                    editor.putInt("actualScene", 5);
-                    editor.commit();
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 5);
+//                    editor.commit();
+                    Game_Control.sceneChange(5);
                 }
                 if (exitBtn.contains(x, y)) {
-                    editor = preferences.edit();
-                    editor.putInt("actualScene", 6);
-                    editor.commit();
+//                    editor = preferences.edit();
+//                    editor.putInt("actualScene", 6);
+//                    editor.commit();
+                    Game_Control.sceneChange(6);
                 }
 
 

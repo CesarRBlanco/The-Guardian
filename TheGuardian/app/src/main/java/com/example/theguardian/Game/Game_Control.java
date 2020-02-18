@@ -18,6 +18,7 @@ import com.example.theguardian.Game.Menus.Menu_Scene;
 import com.example.theguardian.Game.Menus.Options_Scene;
 import com.example.theguardian.R;
 
+import static com.example.theguardian.Game.Scene_Control.editor;
 import static com.example.theguardian.Game.Scene_Control.preferences;
 
 
@@ -25,7 +26,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
 
     public static Vibrator v;
-
+    static Scene_Control old;
 
     static int screenWidth = 0, screenHeight = 0;
     int newScene;
@@ -35,6 +36,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     static Scene_Control actualScene;
     Paint textPaint;
     MediaPlayer mediaPlayer;
+ static    boolean firstTime = true;
 
     public Game_Control(Context context) {
         super(context);
@@ -57,17 +59,32 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
 
     public static void sceneChange(int escena) {
+        Log.i("escenaSelec", "Scene_Control " + escena);
+        if (actualScene instanceof Level_1){
+            old=actualScene;
+        }
+
         switch (escena) {
             case 1:
                 actualScene = new Menu_Scene(context, screenHeight, screenWidth);
                 break;
             case 2:
-                actualScene = new Level_1(context, screenHeight, screenWidth);
-                Log.i("escenaSelec", "Scene_Control 2");
+                if (actualScene instanceof Options_Scene && old!=null){
+                    actualScene=old;
+                }else {
+                    if (firstTime) {
+//                        editor = preferences.edit();
+//                        editor.putInt("playerX", 0);
+//                        editor.putInt("playerY", screenHeight / 2);
+//                        editor.commit();
+                        firstTime = false;
+                    }
+                    actualScene = new Level_1(context, screenHeight, screenWidth);
+                }Log.i("escenaSelec", "Scene_Control 2");
                 break;
             case 3:
                 actualScene = new Options_Scene(context, screenHeight, screenWidth);
-                Log.i("escenaSelec", "Scene_Control 3");
+                Log.i("escenaSelec", "Scene_Control 2");
                 break;
             case 4:
                 Log.i("escenaSelec", "Scene_Control 4");
@@ -85,7 +102,6 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.i("Click", "clasicasic");
         actualScene.onTouchEvent(event);
         return true;
     }
