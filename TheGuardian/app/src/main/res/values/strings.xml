@@ -10,4 +10,6 @@
     <string name="music">Music</string>
     <string name="language">Language</string>
     <string name="exit">Exit</string>
+    <string name="dialog_01_01">I feel like I know this simbol...</string>
+    <string name="dialog_01_02">The stone... Is glowing...</string>
 </resources>

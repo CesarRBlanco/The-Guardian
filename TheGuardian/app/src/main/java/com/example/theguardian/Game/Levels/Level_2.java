@@ -8,13 +8,13 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.theguardian.Game.Background;
 import com.example.theguardian.Game.Character;
-import com.example.theguardian.Game.Scenario_Objects;
 import com.example.theguardian.Game.Game_Control;
+import com.example.theguardian.Game.Scenario_Objects;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-public class Level_1 extends Scene_Control {
+public class Level_2 extends Scene_Control {
 
     int screenWidth = 0, screenHeight = 0;
     Context context;
@@ -35,6 +35,8 @@ public class Level_1 extends Scene_Control {
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn, floor, stoneDoorR;
     int charEnd, dialogCont = 0;
     Scenario_Objects stoneDoor;
+    Background background_level2;
+
     boolean showActionRed = false;
     boolean dialogStart = false;
     boolean dialogEnd = false;
@@ -46,7 +48,7 @@ public class Level_1 extends Scene_Control {
     boolean buttonsEnabled = true;
 
 
-    public Level_1(Context context, int altoPantalla, int anchoPantalla) {
+    public Level_2(Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
         screenWidth = anchoPantalla;
@@ -75,8 +77,8 @@ public class Level_1 extends Scene_Control {
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
         character = new Character(bitmaps, 1, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
-        background = getBitmapFromAssets("bg_Level1.png");
-        background = Bitmap.createScaledBitmap(background, anchoPantalla, altoPantalla, false);
+        background = getBitmapFromAssets("back2.png");
+        background = ajustaAltura(background, screenHeight);
         luces = getBitmapFromAssets("sombras.png");
         luces = Bitmap.createScaledBitmap(luces, anchoPantalla, altoPantalla, false);
         botonL = getBitmapFromAssets("movement.png");
@@ -101,6 +103,8 @@ public class Level_1 extends Scene_Control {
         box = escalaAltura(box, altoPantalla / 5);
 
 
+        background_level2 = new Background(background, 0, -30, screenWidth);
+
         stoneDoor = new Scenario_Objects(anchoPantalla / 2 + (anchoPantalla / 11), altoPantalla / 3,
                 anchoPantalla - (anchoPantalla / 4), altoPantalla - (altoPantalla / 4), box);
 
@@ -122,7 +126,8 @@ public class Level_1 extends Scene_Control {
     public void draw(Canvas c) {
         super.draw(c);
         Log.i("musicChange", "escena0");
-        c.drawBitmap(background, 0, 0, null);
+//        c.drawBitmap(background, 0, 0, null);
+        background_level2.dibuja(c);
         c.drawRect(lMoveBtn, invisiblePaint);
         c.drawRect(rMoveBtn, invisiblePaint);
         c.drawRect(actionBtn, invisiblePaint);
@@ -140,12 +145,12 @@ public class Level_1 extends Scene_Control {
             c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
             c.drawBitmap(dialogImg, -100, screenHeight - dialogImg.getHeight(), null);
             c.drawBitmap(dialogArrow, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
-            switch (dialogCont){
+            switch (dialogCont) {
                 case 1:
-                c.drawText(context.getResources().getString(R.string.dialog_01_01), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
+                    c.drawText(context.getResources().getString(R.string.dialog_01_01), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
                     break;
                 case 2:
-                c.drawText(context.getResources().getString(R.string.dialog_01_02), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
+                    c.drawText(context.getResources().getString(R.string.dialog_01_02), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
                     break;
             }
         } else {
@@ -166,6 +171,14 @@ public class Level_1 extends Scene_Control {
     public void updatePhysics() {
         super.updatePhysics();
         collisionSystem();
+
+if(background_level2.getX1()+background.getWidth()<0){
+    background_level2.setVelocidad(30);
+    background_level2.move();
+
+}else {
+    background_level2.move();
+}
         if (character.stance) {
             character.cambiaFrame();
         } else {
@@ -203,7 +216,7 @@ public class Level_1 extends Scene_Control {
         } else {
             showActionRed = false;
         }
-        if(character.getY()>screenHeight){
+        if (character.getY() > screenHeight) {
             Game_Control.sceneChange(11);
         }
 
@@ -230,7 +243,7 @@ public class Level_1 extends Scene_Control {
                     }
                     if (backOptsBtn.contains(x, y)) {
                         editor = preferences.edit();
-                        editor.putInt("lastScene", 10);
+                        editor.putInt("lastScene", 11);
 //                        editor.putBoolean("door_1_state", stoneClose);
 //                        editor.putInt("playerX", character.getX());
 //                        editor.putInt("playerY", character.getY());
@@ -245,8 +258,8 @@ public class Level_1 extends Scene_Control {
                     dialogCont++;
                     dialogStart = true;
                     if (dialogEnd) {
-                        if(preferences.getBoolean("Vibration",true)){
-                        Game_Control.v.vibrate(1000);
+                        if (preferences.getBoolean("Vibration", true)) {
+                            Game_Control.v.vibrate(1000);
                         }
                         Log.i("doorOpen", "yes");
                         colisionI = false;
@@ -281,13 +294,20 @@ public class Level_1 extends Scene_Control {
         }
     }
 
+
+    public Bitmap ajustaAltura(Bitmap bitmapAux, int nuevoAlto) {
+        if (nuevoAlto == bitmapAux.getHeight()) {
+            return bitmapAux;
+        }
+        return bitmapAux.createScaledBitmap(bitmapAux, bitmapAux.getWidth(), nuevoAlto, true);
+    }
+
+
     public Bitmap escalaAltura(Bitmap bitmapAux, int nuevoAlto) {
         if (nuevoAlto == bitmapAux.getHeight()) return bitmapAux;
         return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) /
                 bitmapAux.getHeight(), nuevoAlto, true);
     }
-
-
 
     public Bitmap escalaAncho(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho == bitmapAux.getWidth()) return bitmapAux;

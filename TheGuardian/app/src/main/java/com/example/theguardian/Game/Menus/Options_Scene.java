@@ -28,7 +28,7 @@ public class Options_Scene extends Scene_Control {
     Context context;
     Paint textPaint, blackPaint, boxtPaint;
     Bitmap botonL, backImg;
-    Rect vibrationBtn, soundBtn, musicBtn, languageBtn, backBtn;
+    Rect vibrationBtn, soundBtn, musicBtn, languageBtn, backBtn, menuBtn;
 
 
     public Options_Scene(Context context, int altoPantalla, int anchoPantalla) {
@@ -60,6 +60,9 @@ public class Options_Scene extends Scene_Control {
         languageBtn = new Rect(screenWidth / 3, musicBtn.bottom + 50, screenWidth / 2, musicBtn.bottom + 50 + screenHeight / 5);
         languageBtn = new Rect(screenWidth - (screenWidth / 3), musicBtn.bottom + 50, screenWidth - (screenWidth / 5), musicBtn.bottom + 50 + screenHeight / 5);
         backBtn = new Rect(0, 0, backImg.getWidth(), backImg.getHeight());//right y bottom de la imagen que va por encima
+        if (preferences.getInt("lastScene", 1) != 1) {
+            menuBtn = new Rect(0, screenHeight - backImg.getHeight(), backImg.getWidth(), screenHeight);
+        }
     }
 
 
@@ -71,6 +74,10 @@ public class Options_Scene extends Scene_Control {
         c.drawRect(musicBtn, textPaint);
         c.drawRect(languageBtn, textPaint);
         c.drawRect(backBtn, textPaint);
+        if (preferences.getInt("lastScene", 1) != 1) {
+            c.drawRect(menuBtn, textPaint);
+        }
+
         c.drawBitmap(backImg, 0, 0, null);
         c.drawText(context.getResources().getString(R.string.vibration), screenWidth / 3, 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.sound), screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
@@ -100,7 +107,7 @@ public class Options_Scene extends Scene_Control {
             case MotionEvent.ACTION_DOWN:
                 if (backBtn.contains(x, y)) {
 
-                    Game_Control.sceneChange(preferences.getInt("lastScene",1));
+                    Game_Control.sceneChange(preferences.getInt("lastScene", 1));
                 }
                 if (vibrationBtn.contains(x, y)) {
                     if (preferences.getBoolean("Vibration", true)) {
@@ -152,6 +159,13 @@ public class Options_Scene extends Scene_Control {
                     }
                     editor.commit();
                 }
+
+                if (preferences.getInt("lastScene", 1) != 1) {
+                    if (menuBtn.contains(x, y)) {
+                        Game_Control.sceneChange(1);
+                    }
+                }
+
                 return true;
         }
         return true;

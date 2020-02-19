@@ -95,36 +95,31 @@ public class Menu_Scene extends Scene_Control {
 //                    editor.putInt("actualScene", 2);
 //                    editor.commit();
 
-                    Game_Control.sceneChange(2);
+                    Game_Control.sceneChange(10);
                 }
                 if (optionsBtn.contains(x, y)) {
                     editor = preferences.edit();
                     editor.putInt("lastScene", 1);
                     editor.commit();
-                    Game_Control.sceneChange(3);
-                }
-                if (optionsBtn.contains(x, y)) {
-                    editor = preferences.edit();
-                    editor.putInt("actualScene", 3);
-                    editor.commit();
+                    Game_Control.sceneChange(2);
                 }
                 if (creditsBtn.contains(x, y)) {
 //                    editor = preferences.edit();
 //                    editor.putInt("actualScene", 4);
 //                    editor.commit();
-                    Game_Control.sceneChange(4);
+                    Game_Control.sceneChange(3);
                 }
                 if (helpBtn.contains(x, y)) {
 //                    editor = preferences.edit();
 //                    editor.putInt("actualScene", 5);
 //                    editor.commit();
-                    Game_Control.sceneChange(5);
+                    Game_Control.sceneChange(4);
                 }
                 if (exitBtn.contains(x, y)) {
 //                    editor = preferences.edit();
 //                    editor.putInt("actualScene", 6);
 //                    editor.commit();
-                    Game_Control.sceneChange(6);
+                    Game_Control.sceneChange(0);
                 }
 
 

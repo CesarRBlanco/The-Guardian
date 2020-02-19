@@ -11,4 +11,6 @@
     <string name="music">Música</string>
     <string name="language">Idioma</string>
     <string name="exit">Salir</string>
+    <string name="dialog_01_01">Tengo la sensación de conocer este simbolo...</string>
+    <string name="dialog_01_02">La piedra... Está brillando...</string>
 </resources>

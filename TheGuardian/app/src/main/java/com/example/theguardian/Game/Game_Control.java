@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 
 import com.example.theguardian.Game.Levels.Level_0;
 import com.example.theguardian.Game.Levels.Level_1;
+import com.example.theguardian.Game.Levels.Level_2;
 import com.example.theguardian.Game.Menus.Menu_Scene;
 import com.example.theguardian.Game.Menus.Options_Scene;
 import com.example.theguardian.R;
@@ -69,33 +70,36 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                 actualScene = new Menu_Scene(context, screenHeight, screenWidth);
                 break;
             case 2:
-                if (actualScene instanceof Options_Scene && old!=null){
-                    actualScene=old;
-                }else {
-                    if (firstTime) {
-//                        editor = preferences.edit();
-//                        editor.putInt("playerX", 0);
-//                        editor.putInt("playerY", screenHeight / 2);
-//                        editor.commit();
-                        firstTime = false;
-                    }
-                    actualScene = new Level_1(context, screenHeight, screenWidth);
-                }Log.i("escenaSelec", "Scene_Control 2");
-                break;
-            case 3:
+                actualScene=old;
                 actualScene = new Options_Scene(context, screenHeight, screenWidth);
                 Log.i("escenaSelec", "Scene_Control 2");
                 break;
-            case 4:
+            case 3:
                 Log.i("escenaSelec", "Scene_Control 4");
                 break;
-            case 5:
+            case 4:
                 actualScene = new Level_0(context, screenHeight, screenWidth);
                 Log.i("escenaSelec", "Scene_Control 5");
                 break;
-            case 6:
+            case 0:
                 Log.i("escenaSelec", "Scene_Control 6");
                 System.exit(0);
+                break;
+            case 10:
+                if (actualScene instanceof Options_Scene && old!=null){
+                    actualScene=old;
+                }else {
+                    actualScene = new Level_1(context, screenHeight, screenWidth);
+                }
+                Log.i("escenaSelec", "Scene_Control 10");
+                break;
+            case 11:
+
+                if (actualScene instanceof Options_Scene ){
+                    actualScene=old;
+                }else {
+                actualScene = new Level_2(context, screenHeight, screenWidth);
+                }
                 break;
         }
     }
