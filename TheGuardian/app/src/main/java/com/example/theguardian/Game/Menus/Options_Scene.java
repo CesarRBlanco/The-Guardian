@@ -27,13 +27,17 @@ public class Options_Scene extends Scene_Control {
     int screenWidth = 0, screenHeight = 0;
     Context context;
     Paint textPaint, blackPaint, boxtPaint;
-    Bitmap botonL, backImg;
-    Rect vibrationBtn, soundBtn, musicBtn, languageBtn, backBtn, menuBtn;
+    Bitmap botonL, backImg,backgroundImg;
+    Rect vibrationBtn, soundBtn, musicBtn, languageBtn, backBtn, menuBtn,fondo;
 
 
     public Options_Scene(Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
+
+
+
+
         screenWidth = anchoPantalla;
         screenHeight = altoPantalla;
 
@@ -50,10 +54,14 @@ public class Options_Scene extends Scene_Control {
         blackPaint.setTextSize(60);
 
         // Imagenes
+        backgroundImg = getBitmapFromAssets("pausa.png");
+
         backImg = getBitmapFromAssets("back.png");
-        backImg = escalaAltura(backImg, screenHeight / 6);
+        backImg = escalaAltura(backImg, screenHeight/6 );
+
 
         // Rectangulos
+        fondo=new Rect(0,0,screenWidth,screenHeight);
         vibrationBtn = new Rect(screenWidth / 3, 50, screenWidth / 2, screenHeight / 5 + 50);
         soundBtn = new Rect(screenWidth / 3, vibrationBtn.bottom + 50, screenWidth / 2, vibrationBtn.bottom + 50 + screenHeight / 5);
         musicBtn = new Rect(screenWidth / 3, soundBtn.bottom + 50, screenWidth / 2, soundBtn.bottom + 50 + screenHeight / 5);
@@ -68,17 +76,24 @@ public class Options_Scene extends Scene_Control {
 
     public void draw(Canvas c) {
         super.draw(c);
-        c.drawColor(Color.BLUE);
+
+
+            textPaint.setAlpha(200);
+            c.drawBitmap(backgroundImg, 0, 0, textPaint);
+            textPaint.setAlpha(255);
+
         c.drawRect(vibrationBtn, textPaint);
         c.drawRect(soundBtn, textPaint);
         c.drawRect(musicBtn, textPaint);
         c.drawRect(languageBtn, textPaint);
         c.drawRect(backBtn, textPaint);
+
+
         if (preferences.getInt("lastScene", 1) != 1) {
             c.drawRect(menuBtn, textPaint);
         }
 
-        c.drawBitmap(backImg, 0, 0, null);
+
         c.drawText(context.getResources().getString(R.string.vibration), screenWidth / 3, 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.sound), screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.music), screenWidth / 3, soundBtn.bottom + 100, blackPaint);

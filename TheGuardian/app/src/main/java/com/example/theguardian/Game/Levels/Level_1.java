@@ -54,6 +54,7 @@ public class Level_1 extends Scene_Control {
         super.musicChange(2);
 
 
+
         invisiblePaint = new Paint();
         //Color.argb(0,0,0,0)
         invisiblePaint.setColor(Color.argb(0, 0, 0, 0));

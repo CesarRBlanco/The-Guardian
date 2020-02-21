@@ -37,7 +37,8 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     static Scene_Control actualScene;
     Paint textPaint;
     MediaPlayer mediaPlayer;
- static    boolean firstTime = true;
+    static boolean firstTime = true;
+
 
     public Game_Control(Context context) {
         super(context);
@@ -61,8 +62,8 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
     public static void sceneChange(int escena) {
         Log.i("escenaSelec", "Scene_Control " + escena);
-        if (actualScene instanceof Level_1){
-            old=actualScene;
+        if (actualScene instanceof Level_1) {
+            old = actualScene;
         }
 
         switch (escena) {
@@ -70,7 +71,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                 actualScene = new Menu_Scene(context, screenHeight, screenWidth);
                 break;
             case 2:
-                actualScene=old;
+                actualScene = old;
                 actualScene = new Options_Scene(context, screenHeight, screenWidth);
                 Log.i("escenaSelec", "Scene_Control 2");
                 break;
@@ -86,19 +87,20 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                 System.exit(0);
                 break;
             case 10:
-                if (actualScene instanceof Options_Scene && old!=null){
-                    actualScene=old;
-                }else {
+                if (actualScene instanceof Options_Scene && old != null) {
+                    actualScene = old;
+                } else {
                     actualScene = new Level_1(context, screenHeight, screenWidth);
                 }
                 Log.i("escenaSelec", "Scene_Control 10");
                 break;
             case 11:
 
-                if (actualScene instanceof Options_Scene ){
-                    actualScene=old;
-                }else {
-                actualScene = new Level_2(context, screenHeight, screenWidth);
+                if (actualScene instanceof Options_Scene) {
+                    actualScene = old;
+                } else {
+                    actualScene = new Level_2(context, screenHeight, screenWidth);
+                    old = actualScene;
                 }
                 break;
         }
@@ -126,8 +128,9 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         this.screenWidth = width;
         this.screenHeight = height;
-
+old=actualScene;
         actualScene = new Menu_Scene(context, screenHeight, screenWidth);
+
         Log.i("dimensiones", width + ":" + height);
 
 
@@ -173,10 +176,13 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                     }
                     synchronized (surfaceHolder) {
                         if (c != null) {
-
-                            actualScene.updateConfig();
                             actualScene.updatePhysics();
+                            if (actualScene.modal ) {
+                                old.draw(c);
+                            }
+
                             actualScene.draw(c);
+
                         }
                     }
 

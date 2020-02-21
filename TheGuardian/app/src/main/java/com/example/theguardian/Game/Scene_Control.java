@@ -18,6 +18,8 @@ public class Scene_Control {
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
     public static MediaPlayer mediaPlayer;
+    public boolean modal=false;
+    public boolean menu=false;
 
     public Scene_Control(Context context) {
 

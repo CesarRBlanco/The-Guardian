@@ -46,6 +46,7 @@ public class Level_2 extends Scene_Control {
     boolean colisionD = false;
     boolean stoneClose = true;
     boolean buttonsEnabled = true;
+    boolean presente=true;
 
 
     public Level_2(Context context, int altoPantalla, int anchoPantalla) {
@@ -136,9 +137,13 @@ public class Level_2 extends Scene_Control {
 //        c.drawRect(stoneDoorR, invisiblePaint);
         c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
         character.dibuja(c);
+      if(presente){
         c.drawBitmap(luces, 0, 0, null);
+      }
         charEnd = character.getX() + spriteRef.getWidth();
-        c.drawText(charEnd + " // " + stoneDoor.getLeft(), 100, 100, textPaint);
+
+
+
 
         if (dialogStart == true && dialogEnd == false) {
             buttonsEnabled = false;
@@ -154,6 +159,9 @@ public class Level_2 extends Scene_Control {
                     break;
             }
         } else {
+
+
+
             buttonsEnabled = true;
             c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
@@ -244,9 +252,6 @@ if(background_level2.getX1()+background.getWidth()<0){
                     if (backOptsBtn.contains(x, y)) {
                         editor = preferences.edit();
                         editor.putInt("lastScene", 11);
-//                        editor.putBoolean("door_1_state", stoneClose);
-//                        editor.putInt("playerX", character.getX());
-//                        editor.putInt("playerY", character.getY());
                         editor.commit();
                         Game_Control.sceneChange(2);
                     }
@@ -267,6 +272,12 @@ if(background_level2.getX1()+background.getWidth()<0){
                         stoneDoor = new Scenario_Objects(0, 0, 0, 0, null);
                     }
                 }
+
+
+                if(actionBtn.contains(x,y)){
+                    presente=!presente;
+                }
+
                 return true;
 
             case MotionEvent.ACTION_MOVE:
