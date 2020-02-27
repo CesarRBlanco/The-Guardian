@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -18,12 +20,15 @@ public class Scene_Control {
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
     public static MediaPlayer mediaPlayer;
-    public boolean modal=false;
-    public boolean menu=false;
+    public boolean modal = false;
+    public boolean menu = false;
+    public static SoundPool sp;
+    public static int soundIds[];
 
     public Scene_Control(Context context) {
 
         preferences = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+
     }
 
     public void draw(Canvas c) {
@@ -31,10 +36,7 @@ public class Scene_Control {
     }
 
 
-
     public void updateConfig() {
-
-
 
 
 //        int newScene = preferences.getInt("actualScene", 1);
@@ -57,10 +59,12 @@ public class Scene_Control {
             case 1:
                 if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
                 mediaPlayer = MediaPlayer.create(context, R.raw.music2);
+                mediaPlayer.setVolume(preferences.getInt("MusicVolume", 1), preferences.getInt("MusicVolume", 1));
                 break;
             case 2:
                 if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
                 mediaPlayer = MediaPlayer.create(context, R.raw.music);
+                mediaPlayer.setVolume(preferences.getInt("MusicVolume", 1), preferences.getInt("MusicVolume", 1));
                 break;
         }
         mediaPlayer.start();

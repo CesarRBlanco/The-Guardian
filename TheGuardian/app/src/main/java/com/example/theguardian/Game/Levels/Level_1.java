@@ -8,7 +8,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -26,7 +28,7 @@ public class Level_1 extends Scene_Control {
 
     int screenWidth = 0, screenHeight = 0;
     Context context;
-    Paint textPaint, blackPaint;
+    Paint textPaint, blackPaint,testPaint;
     Bitmap botonL;
 
     Paint invisiblePaint;
@@ -44,6 +46,7 @@ public class Level_1 extends Scene_Control {
     boolean colisionD = false;
     boolean stoneClose = true;
     boolean buttonsEnabled = true;
+
 
 
     public Level_1(Context context, int altoPantalla, int anchoPantalla) {
@@ -64,6 +67,8 @@ public class Level_1 extends Scene_Control {
         blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
+        testPaint = new Paint();
+        testPaint.setColor(Color.BLACK);
         Bitmap[] bitmaps = new Bitmap[3];
         for (int i = 0; i < bitmaps.length; i++) {
             bitmaps[i] = getBitmapFromAssets("sprite" + i + ".png");
@@ -117,6 +122,18 @@ public class Level_1 extends Scene_Control {
 
         // Auxiliares
 
+        AudioAttributes attrs = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+     sp = new SoundPool.Builder()
+                .setMaxStreams(10)
+                .setAudioAttributes(attrs)
+                .build();
+        soundIds = new int[1];
+        soundIds[0] = sp.load(context, R.raw.effect, 1);
+
+
     }
 
 
@@ -161,6 +178,7 @@ public class Level_1 extends Scene_Control {
         }
 
         stoneDoor.draw(c);
+
     }
 
 
@@ -249,6 +267,7 @@ public class Level_1 extends Scene_Control {
                         if(preferences.getBoolean("Vibration",true)){
                         Game_Control.v.vibrate(1000);
                         }
+//                        sp.play(soundIds[0], preferences.getInt("SoundVolume",1), preferences.getInt("SoundVolume",1), 1, 0, 1);
                         Log.i("doorOpen", "yes");
                         colisionI = false;
                         stoneClose = false;

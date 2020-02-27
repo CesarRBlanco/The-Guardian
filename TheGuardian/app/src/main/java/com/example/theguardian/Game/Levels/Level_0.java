@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.theguardian.Game.Character;
+import com.example.theguardian.Game.Game_Control;
 import com.example.theguardian.Game.Scenario_Objects;
 import com.example.theguardian.Game.Scene_Control;
 
@@ -30,9 +31,9 @@ public class Level_0 extends Scene_Control {
 
     Paint invisiblePaint;
     Character character;
-    Bitmap fondo1, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box,  backOptions;
+    Bitmap fondo1, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box, backOptions;
     Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn;
-    int charEnd,musicVol;
+    int charEnd, musicVol;
     Scenario_Objects iniEO, boxObj;
     MediaPlayer mp;
     Scene_Control escenaActual;
@@ -43,7 +44,7 @@ public class Level_0 extends Scene_Control {
         this.context = context;
         widthScreen = anchoPantalla;
         heightScreen = altoPantalla;
-super.musicChange(2);
+        super.musicChange(2);
 
 
         invisiblePaint = new Paint();
@@ -93,8 +94,6 @@ super.musicChange(2);
         backOptions = escalaAltura(backOptions, altoPantalla / 6);
 
 
-
-
         // Rectangulos
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
@@ -102,7 +101,7 @@ super.musicChange(2);
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
 
 
-        boxObj = new Scenario_Objects(anchoPantalla / 2, altoPantalla - box.getHeight(), anchoPantalla / 2+box.getWidth(), altoPantalla, box);
+        boxObj = new Scenario_Objects(anchoPantalla / 2, altoPantalla - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla, box);
 
 
         playBtn = new Rect(anchoPantalla / 3, altoPantalla / 3 + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla / 2);
@@ -115,14 +114,14 @@ super.musicChange(2);
         // Auxiliares
         iniEO = new Scenario_Objects(altoPantalla, anchoPantalla);
 
-      //  escenaActual = new Menu_Scene(context, altoPantalla, anchoPantalla);
+        //  escenaActual = new Menu_Scene(context, altoPantalla, anchoPantalla);
     }
 
 
     public void draw(Canvas c) {
         super.draw(c);
-Log.i("musicChange","escena0");
-            c.drawBitmap(fondo1, 0, 0, null);
+        Log.i("musicChange", "escena0");
+        c.drawBitmap(fondo1, 0, 0, null);
 //            c.drawRect(lMoveBtn, invisiblePaint);
 //            c.drawRect(rMoveBtn, invisiblePaint);
 //            c.drawRect(actionBtn, textPaint);
@@ -149,17 +148,17 @@ Log.i("musicChange","escena0");
 //            }
 
 //        c.drawBitmap(box, anchoPantalla / 2, 1100 - box.getHeight(), null);
-            boxObj.draw(c);
+        boxObj.draw(c);
 //            charEnd = character.x + spriteRef.getWidth();
-            c.drawText("" + charEnd + " // " + ladderInteract.left, 10, 50 + invisiblePaint.getTextSize(), textPaint);
+        c.drawText("" + charEnd + " // " + ladderInteract.left, 10, 50 + invisiblePaint.getTextSize(), textPaint);
 //        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
-            character.dibuja(c);
-            c.drawBitmap(luces, 0, 0, null);
+        character.dibuja(c);
+        c.drawBitmap(luces, 0, 0, null);
 
     }
 
     public void updatePhysics() {
-super.updatePhysics();
+        super.updatePhysics();
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -171,6 +170,7 @@ super.updatePhysics();
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                Game_Control.sceneChange(1);
                 if (playBtn.contains(x, y)) {
                     return true;
                 }

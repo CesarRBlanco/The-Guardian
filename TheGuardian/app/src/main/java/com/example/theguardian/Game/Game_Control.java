@@ -54,12 +54,6 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
         textPaint.setTextSize(60);
     }
 
-
-    public void drawM(Canvas c) {
-
-    }
-
-
     public static void sceneChange(int escena) {
         Log.i("escenaSelec", "Scene_Control " + escena);
         if (actualScene instanceof Level_1) {
@@ -128,7 +122,8 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         this.screenWidth = width;
         this.screenHeight = height;
-old=actualScene;
+
+
         actualScene = new Menu_Scene(context, screenHeight, screenWidth);
 
         Log.i("dimensiones", width + ":" + height);
@@ -177,7 +172,7 @@ old=actualScene;
                     synchronized (surfaceHolder) {
                         if (c != null) {
                             actualScene.updatePhysics();
-                            if (actualScene.modal ) {
+                            if (actualScene.modal) {
                                 old.draw(c);
                             }
 

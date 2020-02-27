@@ -41,7 +41,7 @@ public class Menu_Scene extends Scene_Control {
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
         super.musicChange(1);
-
+modal=false;
 
         // Imagenes
         botonL = getBitmapFromAssets("movement.png");
@@ -94,7 +94,7 @@ public class Menu_Scene extends Scene_Control {
 //                    editor = preferences.edit();
 //                    editor.putInt("actualScene", 2);
 //                    editor.commit();
-                    modal=true;
+
                     Game_Control.sceneChange(10);
                 }
                 if (optionsBtn.contains(x, y)) {

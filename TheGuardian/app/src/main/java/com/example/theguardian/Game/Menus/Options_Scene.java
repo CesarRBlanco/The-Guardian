@@ -35,8 +35,10 @@ public class Options_Scene extends Scene_Control {
         super(context);
         this.context = context;
 
+        if (preferences.getInt("lastScene", 1) != 1) {
 
-
+        modal=true;
+        }
 
         screenWidth = anchoPantalla;
         screenHeight = altoPantalla;
@@ -77,10 +79,13 @@ public class Options_Scene extends Scene_Control {
     public void draw(Canvas c) {
         super.draw(c);
 
-
-            textPaint.setAlpha(200);
-            c.drawBitmap(backgroundImg, 0, 0, textPaint);
-            textPaint.setAlpha(255);
+        if (preferences.getInt("lastScene", 1) == 1) {
+            c.drawColor(Color.BLACK);
+        }else{
+            blackPaint.setAlpha(50);
+            c.drawBitmap(backgroundImg, 0, 0, blackPaint);
+            blackPaint.setAlpha(100);
+        }
 
         c.drawRect(vibrationBtn, textPaint);
         c.drawRect(soundBtn, textPaint);
@@ -92,8 +97,6 @@ public class Options_Scene extends Scene_Control {
         if (preferences.getInt("lastScene", 1) != 1) {
             c.drawRect(menuBtn, textPaint);
         }
-
-
         c.drawText(context.getResources().getString(R.string.vibration), screenWidth / 3, 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.sound), screenWidth / 3, vibrationBtn.bottom + 100, blackPaint);
         c.drawText(context.getResources().getString(R.string.music), screenWidth / 3, soundBtn.bottom + 100, blackPaint);
@@ -102,7 +105,6 @@ public class Options_Scene extends Scene_Control {
         c.drawText("" + preferences.getInt("MusicVolume", 0), screenWidth / 3, screenHeight / 3, boxtPaint);
         c.drawText("" + preferences.getBoolean("Vibration", false), screenWidth / 3, screenHeight / 5, boxtPaint);
         c.drawText("" + preferences.getString("LanguageConfig", ""), screenWidth / 3, screenHeight / 2, boxtPaint);
-
     }
 
     public void updatePhysics() {
@@ -153,8 +155,10 @@ public class Options_Scene extends Scene_Control {
                     editor = preferences.edit();
                     if (preferences.getInt("MusicVolume", 0) == 0) {
                         editor.putInt("MusicVolume", 1);
+                        mediaPlayer.setVolume(1,1);
                     } else {
                         editor.putInt("MusicVolume", 0);
+                        mediaPlayer.setVolume(0,0);
                     }
                     editor.commit();
                 }
