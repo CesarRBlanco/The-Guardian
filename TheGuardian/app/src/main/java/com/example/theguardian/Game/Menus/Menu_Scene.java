@@ -41,7 +41,7 @@ public class Menu_Scene extends Scene_Control {
         blackPaint.setColor(Color.BLACK);
         blackPaint.setTextSize(60);
         super.musicChange(1);
-modal=false;
+        modal = false;
 
         // Imagenes
         botonL = getBitmapFromAssets("movement.png");

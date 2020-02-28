@@ -268,7 +268,7 @@ public class Level_1 extends Scene_Control {
                         Game_Control.v.vibrate(1000);
                         }
 //                        sp.play(soundIds[0], preferences.getInt("SoundVolume",1), preferences.getInt("SoundVolume",1), 1, 0, 1);
-                        Log.i("doorOpen", "yes");
+
                         colisionI = false;
                         stoneClose = false;
                         stoneDoor = new Scenario_Objects(0, 0, 0, 0, null);

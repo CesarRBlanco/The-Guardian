@@ -32,10 +32,8 @@ public class Level_2 extends Scene_Control {
     Paint invisiblePaint;
     Character character;
     Bitmap background, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box, backOptions;
-    Rect lMoveBtn, rMoveBtn, actionBtn, ladderInteract, backOptsBtn, floor, stoneDoorR;
+    Rect lMoveBtn, rMoveBtn, actionBtn, backOptsBtn, floor, wall, pilar;
     int charEnd, dialogCont = 0;
-    Scenario_Objects stoneDoor;
-    Background background_level2;
 
     boolean showActionRed = false;
     boolean dialogStart = false;
@@ -46,7 +44,8 @@ public class Level_2 extends Scene_Control {
     boolean colisionD = false;
     boolean stoneClose = true;
     boolean buttonsEnabled = true;
-    boolean presente=true;
+    boolean presente = true;
+    boolean pilarInteract = false;
 
 
     public Level_2(Context context, int altoPantalla, int anchoPantalla) {
@@ -74,7 +73,7 @@ public class Level_2 extends Scene_Control {
 
 
         // Imagenes
-        character = new Character(bitmaps, preferences.getInt("playerX", 0), preferences.getInt("playerY", screenHeight / 2), screenWidth, screenHeight);
+
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
         character = new Character(bitmaps, 1, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
@@ -100,25 +99,15 @@ public class Level_2 extends Scene_Control {
         backOptions = getBitmapFromAssets("backOptions.png");
         backOptions = escalaAltura(backOptions, altoPantalla / 6);
 
-        box = getBitmapFromAssets("box.png");
-        box = escalaAltura(box, altoPantalla / 5);
-
-
-        background_level2 = new Background(background, 0, -30, screenWidth);
-
-        stoneDoor = new Scenario_Objects(anchoPantalla / 2 + (anchoPantalla / 11), altoPantalla / 3,
-                anchoPantalla - (anchoPantalla / 4), altoPantalla - (altoPantalla / 4), box);
 
         // Rectangulos
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
         actionBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
-        ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
         backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
-        floor = new Rect(0, character.getY() + spriteRef.getHeight(), anchoPantalla - (anchoPantalla / 5), altoPantalla);
-        //  stoneDoorR = new Rect(anchoPantalla / 2 + (anchoPantalla / 11), altoPantalla / 3, anchoPantalla - (anchoPantalla / 4), altoPantalla - (altoPantalla / 4));
-
-
+        floor = new Rect(0, altoPantalla - (altoPantalla / 3), anchoPantalla, altoPantalla);
+        wall = new Rect(screenWidth - spriteRef.getWidth(), 0, screenWidth, screenHeight);
+        pilar = new Rect((screenWidth / 2) - screenWidth / 15, (screenHeight / 2) - screenHeight / 8, (screenWidth / 2) + screenWidth / 15, screenHeight);
         // Auxiliares
 
     }
@@ -126,45 +115,52 @@ public class Level_2 extends Scene_Control {
 
     public void draw(Canvas c) {
         super.draw(c);
-        Log.i("musicChange", "escena0");
-//        c.drawBitmap(background, 0, 0, null);
-        background_level2.dibuja(c);
-        c.drawRect(lMoveBtn, invisiblePaint);
-        c.drawRect(rMoveBtn, invisiblePaint);
-        c.drawRect(actionBtn, invisiblePaint);
-        c.drawRect(backOptsBtn, invisiblePaint);
-        c.drawRect(floor, invisiblePaint);
-//        c.drawRect(stoneDoorR, invisiblePaint);
-        c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
-        character.dibuja(c);
-      if(presente){
-        c.drawBitmap(luces, 0, 0, null);
-      }
+        if (presente){
+            c.drawColor(Color.BLUE);
+            c.drawRect(lMoveBtn, invisiblePaint);
+            c.drawRect(rMoveBtn, invisiblePaint);
+            c.drawRect(actionBtn, invisiblePaint);
+            c.drawRect(backOptsBtn, invisiblePaint);
+            c.drawRect(floor, textPaint);
+            c.drawRect(wall, textPaint);
+            c.drawRect(pilar, textPaint);
+        }else{
+            c.drawColor(Color.BLUE);
+            c.drawRect(lMoveBtn, invisiblePaint);
+            c.drawRect(rMoveBtn, invisiblePaint);
+            c.drawRect(actionBtn, invisiblePaint);
+            c.drawRect(backOptsBtn, invisiblePaint);
+            c.drawRect(floor, textPaint);
+            c.drawRect(wall, textPaint);
+            c.drawRect(pilar, textPaint);
+        }
+
         charEnd = character.getX() + spriteRef.getWidth();
-
-
-
-
+        character.dibuja(c);
         if (dialogStart == true && dialogEnd == false) {
             buttonsEnabled = false;
             c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
-            c.drawBitmap(dialogImg, -100, screenHeight - dialogImg.getHeight(), null);
             c.drawBitmap(dialogArrow, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             switch (dialogCont) {
                 case 1:
-                    c.drawText(context.getResources().getString(R.string.dialog_01_01), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
+                    c.drawText(context.getResources().getString(R.string.dialog_02_01), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
                     break;
                 case 2:
-                    c.drawText(context.getResources().getString(R.string.dialog_01_02), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
+                    c.drawText(context.getResources().getString(R.string.dialog_02_02), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
+                    break;
+                case 3:
+                    c.drawText(context.getResources().getString(R.string.dialog_02_03), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
+                    break;
+                case 4:
+                    c.drawBitmap(dialogImg, -100, screenHeight - dialogImg.getHeight(), null);
+                    c.drawText(context.getResources().getString(R.string.dialog_02_04), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
                     break;
             }
         } else {
-
-
-
             buttonsEnabled = true;
             c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
+            c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
             if (showActionRed) {
                 c.drawBitmap(actionButton_B, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             } else {
@@ -172,7 +168,6 @@ public class Level_2 extends Scene_Control {
             }
         }
 
-        stoneDoor.draw(c);
     }
 
 
@@ -180,13 +175,6 @@ public class Level_2 extends Scene_Control {
         super.updatePhysics();
         collisionSystem();
 
-if(background_level2.getX1()+background.getWidth()<0){
-    background_level2.setVelocidad(30);
-    background_level2.move();
-
-}else {
-    background_level2.move();
-}
         if (character.stance) {
             character.cambiaFrame();
         } else {
@@ -218,14 +206,16 @@ if(background_level2.getX1()+background.getWidth()<0){
             character.setVelocidad(40);
             character.moverY();
         }
-        if (charEnd >= stoneDoor.getLeft() && stoneClose == true) {
-            colisionI = true;
-            showActionRed = true;
-        } else {
-            showActionRed = false;
-        }
+
         if (character.getY() > screenHeight) {
             Game_Control.sceneChange(11);
+        }
+
+        if (character.getX() + spriteRef.getWidth() > pilar.left && character.getX() + spriteRef.getWidth() < pilar.right) {
+            showActionRed = true;
+            pilarInteract = true;
+        } else {
+            showActionRed = false;
         }
 
     }
@@ -257,8 +247,9 @@ if(background_level2.getX1()+background.getWidth()<0){
                     }
                 }
                 if (actionBtn.contains(x, y) && showActionRed == true) {
-                    if (dialogStart && dialogCont == 2) {
+                    if (dialogStart && dialogCont == 4) {
                         dialogEnd = true;
+                        presente = false;
                     }
                     dialogCont++;
                     dialogStart = true;
@@ -269,14 +260,9 @@ if(background_level2.getX1()+background.getWidth()<0){
                         Log.i("doorOpen", "yes");
                         colisionI = false;
                         stoneClose = false;
-                        stoneDoor = new Scenario_Objects(0, 0, 0, 0, null);
                     }
                 }
 
-
-                if(actionBtn.contains(x,y)){
-                    presente=!presente;
-                }
 
                 return true;
 

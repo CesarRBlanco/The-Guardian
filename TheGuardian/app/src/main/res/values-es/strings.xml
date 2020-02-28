@@ -13,4 +13,8 @@
     <string name="exit">Salir</string>
     <string name="dialog_01_01">Tengo la sensación de conocer este simbolo...</string>
     <string name="dialog_01_02">La piedra... Está brillando...</string>
+    <string name="dialog_02_01">Dos eras dividen este lugar.</string>
+    <string name="dialog_02_02">Descubre cual es verdaderamente la tuya...</string>
+    <string name="dialog_02_03">Encuentra la verdad sobre tus origenes.</string>
+    <string name="dialog_02_04">Siento como si hablase de mi...</string>
 </resources>

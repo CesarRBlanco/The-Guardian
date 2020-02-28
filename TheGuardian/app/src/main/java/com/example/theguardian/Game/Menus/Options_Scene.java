@@ -34,11 +34,11 @@ public class Options_Scene extends Scene_Control {
     public Options_Scene(Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
-
+/*
         if (preferences.getInt("lastScene", 1) != 1) {
 
         modal=true;
-        }
+        }*/
 
         screenWidth = anchoPantalla;
         screenHeight = altoPantalla;

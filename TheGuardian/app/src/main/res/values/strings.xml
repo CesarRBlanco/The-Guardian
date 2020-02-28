@@ -12,4 +12,9 @@
     <string name="exit">Exit</string>
     <string name="dialog_01_01">I feel like I know this simbol...</string>
     <string name="dialog_01_02">The stone... Is glowing...</string>
+    <string name="dialog_02_01">Two eras divides this places.</string>
+    <string name="dialog_02_02">Discover which one is truly yours...</string>
+    <string name="dialog_02_03">Find the truth to your origins.</string>
+    <string name="dialog_02_04">It feels like if it was talking about me...</string>
+
 </resources>
