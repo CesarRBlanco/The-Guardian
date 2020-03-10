@@ -2,11 +2,23 @@ package com.example.theguardian.Game;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorEventListener2;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import com.example.theguardian.R;
 
 import java.util.Locale;
 
@@ -16,14 +28,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
-
-
-
+    public static SensorManager sensorManager;
+    public static Sensor sennsorA;
+    public static Sensor sennsorG;
+    public static SensorEventListener sensorEventListener;
+    int whip;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         Game_Control gameControl = new Game_Control(this);
         gameControl.setKeepScreenOn(true);
@@ -39,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("config", Context.MODE_PRIVATE);
         editor = preferences.edit();
-        Locale locale = new Locale(preferences.getString("LanguageConfig","es"));
+        Locale locale = new Locale(preferences.getString("LanguageConfig", "es"));
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.setLocale(locale);

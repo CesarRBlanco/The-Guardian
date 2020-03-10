@@ -8,18 +8,27 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.example.theguardian.Game.Background;
 import com.example.theguardian.Game.Character;
+import com.example.theguardian.Game.Enemy;
 import com.example.theguardian.Game.Game_Control;
+import com.example.theguardian.Game.MainActivity;
 import com.example.theguardian.Game.Scenario_Objects;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import static android.content.Context.SENSOR_SERVICE;
 
 
 public class Level_2 extends Scene_Control {
@@ -31,8 +40,9 @@ public class Level_2 extends Scene_Control {
 
     Paint invisiblePaint;
     Character character;
-    Bitmap background, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, box, backOptions;
-    Rect lMoveBtn, rMoveBtn, actionBtn, backOptsBtn, floor, wall, pilar;
+    Enemy enemy1;
+    Bitmap background, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, timeSkipPresent, timeSkipPast, backOptions;
+    Rect lMoveBtn, rMoveBtn, actionBtn, timeSkipBtn, backOptsBtn, floor, wall, pilar;
     int charEnd, dialogCont = 0;
 
     boolean showActionRed = false;
@@ -48,7 +58,7 @@ public class Level_2 extends Scene_Control {
     boolean pilarInteract = false;
 
 
-    public Level_2(Context context, int altoPantalla, int anchoPantalla) {
+    public Level_2(final Context context, int altoPantalla, int anchoPantalla) {
         super(context);
         this.context = context;
         screenWidth = anchoPantalla;
@@ -77,6 +87,7 @@ public class Level_2 extends Scene_Control {
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
         character = new Character(bitmaps, 1, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
+        enemy1 = new Enemy(bitmaps, 200, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
         background = getBitmapFromAssets("back2.png");
         background = ajustaAltura(background, screenHeight);
         luces = getBitmapFromAssets("sombras.png");
@@ -98,24 +109,31 @@ public class Level_2 extends Scene_Control {
         dialogArrow = escalaAltura(dialogArrow, altoPantalla / 6);
         backOptions = getBitmapFromAssets("backOptions.png");
         backOptions = escalaAltura(backOptions, altoPantalla / 6);
-
+        timeSkipPast = getBitmapFromAssets("time_red.png");
+        timeSkipPast = escalaAltura(timeSkipPast, altoPantalla / 6);
+        timeSkipPresent = getBitmapFromAssets("time_white.png");
+        timeSkipPresent = escalaAltura(timeSkipPresent, altoPantalla / 6);
 
         // Rectangulos
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
         actionBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
+        timeSkipBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20 - actionButton_B.getWidth(), altoPantalla - 20 - botonR.getHeight() - actionButton_B.getHeight(), anchoPantalla, altoPantalla);
         backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
         floor = new Rect(0, altoPantalla - (altoPantalla / 3), anchoPantalla, altoPantalla);
         wall = new Rect(screenWidth - spriteRef.getWidth(), 0, screenWidth, screenHeight);
         pilar = new Rect((screenWidth / 2) - screenWidth / 15, (screenHeight / 2) - screenHeight / 8, (screenWidth / 2) + screenWidth / 15, screenHeight);
         // Auxiliares
 
+
+
+
     }
 
 
     public void draw(Canvas c) {
         super.draw(c);
-        if (presente){
+        if (presente) {
             c.drawColor(Color.BLUE);
             c.drawRect(lMoveBtn, invisiblePaint);
             c.drawRect(rMoveBtn, invisiblePaint);
@@ -124,7 +142,7 @@ public class Level_2 extends Scene_Control {
             c.drawRect(floor, textPaint);
             c.drawRect(wall, textPaint);
             c.drawRect(pilar, textPaint);
-        }else{
+        } else {
             c.drawColor(Color.BLUE);
             c.drawRect(lMoveBtn, invisiblePaint);
             c.drawRect(rMoveBtn, invisiblePaint);
@@ -137,6 +155,7 @@ public class Level_2 extends Scene_Control {
 
         charEnd = character.getX() + spriteRef.getWidth();
         character.dibuja(c);
+        enemy1.dibuja(c);
         if (dialogStart == true && dialogEnd == false) {
             buttonsEnabled = false;
             c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
@@ -166,6 +185,11 @@ public class Level_2 extends Scene_Control {
             } else {
                 c.drawBitmap(actionButton_W, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             }
+            if (!presente) {
+                c.drawBitmap(timeSkipPast, screenWidth - actionButton_W.getWidth() - 20 - actionButton_B.getWidth(), screenHeight - 20 - botonR.getHeight() - actionButton_B.getHeight(), null);
+            } else {
+                c.drawBitmap(timeSkipPresent, screenWidth - actionButton_W.getWidth() - 20 - actionButton_B.getWidth(), screenHeight - 20 - botonR.getHeight() - actionButton_B.getHeight(), null);
+            }
         }
 
     }
@@ -174,6 +198,20 @@ public class Level_2 extends Scene_Control {
     public void updatePhysics() {
         super.updatePhysics();
         collisionSystem();
+
+
+
+
+
+        enemy1.cambiaFrame();
+
+        character.setVelocidad(-15);
+        character.moverL();
+
+        if (colisionD == false) {
+            character.setVelocidad(-15);
+            character.moverL();
+        }
 
         if (character.stance) {
             character.cambiaFrame();
@@ -261,6 +299,10 @@ public class Level_2 extends Scene_Control {
                         colisionI = false;
                         stoneClose = false;
                     }
+                }
+
+                if (timeSkipBtn.contains(x, y)) {
+                    presente = !presente;
                 }
 
 

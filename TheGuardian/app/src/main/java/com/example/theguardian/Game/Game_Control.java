@@ -4,6 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
@@ -17,10 +21,8 @@ import com.example.theguardian.Game.Levels.Level_1;
 import com.example.theguardian.Game.Levels.Level_2;
 import com.example.theguardian.Game.Menus.Menu_Scene;
 import com.example.theguardian.Game.Menus.Options_Scene;
-import com.example.theguardian.R;
 
-import static com.example.theguardian.Game.Scene_Control.editor;
-import static com.example.theguardian.Game.Scene_Control.preferences;
+import static android.content.Context.SENSOR_SERVICE;
 
 
 public class Game_Control extends SurfaceView implements SurfaceHolder.Callback {
@@ -39,6 +41,9 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     MediaPlayer mediaPlayer;
     static boolean firstTime = true;
 
+    public static SensorManager mSensorManager;
+    public static Sensor mAccelerometer;
+    public static SensorEventListener sensorEventListener;
 
     public Game_Control(Context context) {
         super(context);
@@ -52,6 +57,26 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
         textPaint = new Paint();
         textPaint.setColor(Color.RED);
         textPaint.setTextSize(60);
+
+
+        mSensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+Log.i("acelero","asd");
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+start();
+    }
+
+    private void start(){
+        mSensorManager.registerListener(sensorEventListener,mAccelerometer,SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public static void sceneChange(int escena) {
