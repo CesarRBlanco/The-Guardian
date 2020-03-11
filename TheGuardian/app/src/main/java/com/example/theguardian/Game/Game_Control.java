@@ -41,9 +41,8 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
     MediaPlayer mediaPlayer;
     static boolean firstTime = true;
 
-    public static SensorManager mSensorManager;
-    public static Sensor mAccelerometer;
-    public static SensorEventListener sensorEventListener;
+
+
 
     public Game_Control(Context context) {
         super(context);
@@ -59,25 +58,10 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
         textPaint.setTextSize(60);
 
 
-        mSensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorEventListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-Log.i("acelero","asd");
-            }
 
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-            }
-        };
-start();
     }
 
-    private void start(){
-        mSensorManager.registerListener(sensorEventListener,mAccelerometer,SensorManager.SENSOR_DELAY_NORMAL);
-    }
+
 
     public static void sceneChange(int escena) {
         Log.i("escenaSelec", "Scene_Control " + escena);

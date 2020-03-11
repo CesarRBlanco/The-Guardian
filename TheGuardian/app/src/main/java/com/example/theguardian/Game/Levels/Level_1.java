@@ -177,7 +177,6 @@ public class Level_1 extends Scene_Control {
         }
 
         stoneDoor.draw(c);
-
     }
 
 

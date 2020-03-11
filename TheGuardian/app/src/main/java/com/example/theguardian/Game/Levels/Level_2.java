@@ -14,14 +14,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.Toast;
 
-import com.example.theguardian.Game.Background;
 import com.example.theguardian.Game.Character;
 import com.example.theguardian.Game.Enemy;
 import com.example.theguardian.Game.Game_Control;
-import com.example.theguardian.Game.MainActivity;
-import com.example.theguardian.Game.Scenario_Objects;
 import com.example.theguardian.Game.Scene_Control;
 import com.example.theguardian.R;
 
@@ -41,8 +37,8 @@ public class Level_2 extends Scene_Control {
     Paint invisiblePaint;
     Character character;
     Enemy enemy1;
-    Bitmap background, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, timeSkipPresent, timeSkipPast, backOptions;
-    Rect lMoveBtn, rMoveBtn, actionBtn, timeSkipBtn, backOptsBtn, floor, wall, pilar;
+    Bitmap background_past, background_present, botonR, luces, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, timeSkipPresent, timeSkipPast, backOptions, pastFilter;
+    Rect lMoveBtn, rMoveBtn, actionBtn, timeSkip_Btn, backOptsBtn, floor, wallR, wallL, pilar;
     int charEnd, dialogCont = 0;
 
     boolean showActionRed = false;
@@ -54,8 +50,18 @@ public class Level_2 extends Scene_Control {
     boolean colisionD = false;
     boolean stoneClose = true;
     boolean buttonsEnabled = true;
-    boolean presente = true;
+    boolean presente = false;
     boolean pilarInteract = false;
+    boolean enemyColision = false;
+    boolean enemyTouch = false;
+    boolean enemyCatch = false;
+    public int cont = 0;
+
+    public static SensorManager mSensorManager;
+    public static Sensor mAccelerometer;
+    public static SensorEventListener sensorEventListener;
+    static boolean shakeUpDown = true;
+    int shake = 0;
 
 
     public Level_2(final Context context, int altoPantalla, int anchoPantalla) {
@@ -86,10 +92,14 @@ public class Level_2 extends Scene_Control {
 
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
-        character = new Character(bitmaps, 1, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
-        enemy1 = new Enemy(bitmaps, 200, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
-        background = getBitmapFromAssets("back2.png");
-        background = ajustaAltura(background, screenHeight);
+        character = new Character(bitmaps, spriteRef.getWidth() +20, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
+        enemy1 = new Enemy(bitmaps, -200, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
+        background_past = getBitmapFromAssets("level_2_past.jpg");
+        background_past = Bitmap.createScaledBitmap(background_past, screenWidth, screenHeight, false);
+        background_present = getBitmapFromAssets("level_2_present.jpg");
+        background_present = Bitmap.createScaledBitmap(background_present, screenWidth, screenHeight, false);
+        pastFilter = getBitmapFromAssets("pastFilter.png");
+        pastFilter = ajustaAltura(pastFilter, screenHeight);
         luces = getBitmapFromAssets("sombras.png");
         luces = Bitmap.createScaledBitmap(luces, anchoPantalla, altoPantalla, false);
         botonL = getBitmapFromAssets("movement.png");
@@ -109,24 +119,60 @@ public class Level_2 extends Scene_Control {
         dialogArrow = escalaAltura(dialogArrow, altoPantalla / 6);
         backOptions = getBitmapFromAssets("backOptions.png");
         backOptions = escalaAltura(backOptions, altoPantalla / 6);
-        timeSkipPast = getBitmapFromAssets("time_red.png");
-        timeSkipPast = escalaAltura(timeSkipPast, altoPantalla / 6);
-        timeSkipPresent = getBitmapFromAssets("time_white.png");
-        timeSkipPresent = escalaAltura(timeSkipPresent, altoPantalla / 6);
 
         // Rectangulos
         lMoveBtn = new Rect(20, altoPantalla - 20 - botonL.getHeight(), botonL.getWidth() + 20, altoPantalla - 20);
         rMoveBtn = new Rect(60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), botonR.getWidth() + 60 + botonL.getWidth(), altoPantalla - 20);
         actionBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
-        timeSkipBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20 - actionButton_B.getWidth(), altoPantalla - 20 - botonR.getHeight() - actionButton_B.getHeight(), anchoPantalla, altoPantalla);
         backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
         floor = new Rect(0, altoPantalla - (altoPantalla / 3), anchoPantalla, altoPantalla);
-        wall = new Rect(screenWidth - spriteRef.getWidth(), 0, screenWidth, screenHeight);
+        wallL = new Rect(0, 0, spriteRef.getWidth()-20, screenHeight);
+        wallR = new Rect(screenWidth - spriteRef.getWidth(), 0, screenWidth, screenHeight);
         pilar = new Rect((screenWidth / 2) - screenWidth / 15, (screenHeight / 2) - screenHeight / 8, (screenWidth / 2) + screenWidth / 15, screenHeight);
         // Auxiliares
 
 
+        mSensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float y = event.values[1];
+                float x = event.values[0];
+                float z = event.values[2];
+                Log.i("acele","x:"+x);
 
+                if (enemyCatch) {
+                    if (x > 2 && shakeUpDown) {
+                        shake++;
+//                    Log.i("acelero", "arriba");
+                        shakeUpDown = false;
+                    } else if (x < 0 && !shakeUpDown) {
+//                    Log.i("acelero", "abajo");
+                        shake++;
+                        shakeUpDown = true;
+                    }
+                    if (shake == 4) {
+                        Log.i("acelero", "shake");
+                        shake = 0;
+                        enemy1.setX(-2000);
+                        buttonsEnabled = true;
+                        enemyCatch = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
+    }
+
+    private void start() {
+
+        mSensorManager.registerListener(sensorEventListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
@@ -134,28 +180,24 @@ public class Level_2 extends Scene_Control {
     public void draw(Canvas c) {
         super.draw(c);
         if (presente) {
-            c.drawColor(Color.BLUE);
-            c.drawRect(lMoveBtn, invisiblePaint);
-            c.drawRect(rMoveBtn, invisiblePaint);
-            c.drawRect(actionBtn, invisiblePaint);
-            c.drawRect(backOptsBtn, invisiblePaint);
-            c.drawRect(floor, textPaint);
-            c.drawRect(wall, textPaint);
-            c.drawRect(pilar, textPaint);
+            c.drawBitmap(background_present, 0, 0, null);
         } else {
-            c.drawColor(Color.BLUE);
-            c.drawRect(lMoveBtn, invisiblePaint);
-            c.drawRect(rMoveBtn, invisiblePaint);
-            c.drawRect(actionBtn, invisiblePaint);
-            c.drawRect(backOptsBtn, invisiblePaint);
-            c.drawRect(floor, textPaint);
-            c.drawRect(wall, textPaint);
-            c.drawRect(pilar, textPaint);
+
+            c.drawBitmap(background_past, 0, 0, null);
         }
+
+//            c.drawRect(rMoveBtn, invisiblePaint);
+//            c.drawRect(actionBtn, invisiblePaint);
+//            c.drawRect(backOptsBtn, invisiblePaint);
+
+//            c.drawRect(floor, textPaint);
+//            c.drawRect(wallR, textPaint);
+//            c.drawRect(wallL, textPaint);
+
 
         charEnd = character.getX() + spriteRef.getWidth();
         character.dibuja(c);
-        enemy1.dibuja(c);
+
         if (dialogStart == true && dialogEnd == false) {
             buttonsEnabled = false;
             c.drawBitmap(dialogBack, 0, screenHeight - dialogBack.getHeight(), null);
@@ -175,8 +217,20 @@ public class Level_2 extends Scene_Control {
                     c.drawText(context.getResources().getString(R.string.dialog_02_04), dialogImg.getWidth() + 40, screenHeight - 150, textPaint);
                     break;
             }
+
+
         } else {
-            buttonsEnabled = true;
+
+            if (dialogEnd) {
+
+                enemy1.dibuja(c);
+            }
+
+            if (!presente) {
+
+                c.drawBitmap(pastFilter, 0, 0, null);
+            }
+
             c.drawBitmap(botonL, 20, screenHeight - 20 - botonL.getHeight(), null);
             c.drawBitmap(botonR, 60 + botonL.getWidth(), screenHeight - 20 - botonR.getHeight(), null);
             c.drawBitmap(backOptions, screenWidth - actionButton_W.getWidth(), 0, null);
@@ -185,13 +239,9 @@ public class Level_2 extends Scene_Control {
             } else {
                 c.drawBitmap(actionButton_W, screenWidth - actionButton_W.getWidth() - 20, screenHeight - 20 - botonR.getHeight(), null);
             }
-            if (!presente) {
-                c.drawBitmap(timeSkipPast, screenWidth - actionButton_W.getWidth() - 20 - actionButton_B.getWidth(), screenHeight - 20 - botonR.getHeight() - actionButton_B.getHeight(), null);
-            } else {
-                c.drawBitmap(timeSkipPresent, screenWidth - actionButton_W.getWidth() - 20 - actionButton_B.getWidth(), screenHeight - 20 - botonR.getHeight() - actionButton_B.getHeight(), null);
-            }
         }
-
+        int sum = enemy1.getX() + spriteRef.getWidth();
+        c.drawText("Enemy:" + sum + " Player" + character.getX(), 50, 50, textPaint);
     }
 
 
@@ -199,19 +249,23 @@ public class Level_2 extends Scene_Control {
         super.updatePhysics();
         collisionSystem();
 
+        start();
 
-
-
-
-        enemy1.cambiaFrame();
-
-        character.setVelocidad(-15);
-        character.moverL();
-
-        if (colisionD == false) {
-            character.setVelocidad(-15);
-            character.moverL();
+        if (enemyCatch) {
+            cont++;
+            Log.i("cont", "" + cont);
+            if (cont >= 200) {
+                Log.i("cont", "Moriste");
+            Game_Control.sceneChange(1);
+            }
         }
+
+        if (!enemyColision && dialogEnd) {
+            enemy1.setVelocidad(15);
+            enemy1.moverR();
+
+        }
+
 
         if (character.stance) {
             character.cambiaFrame();
@@ -249,6 +303,14 @@ public class Level_2 extends Scene_Control {
             Game_Control.sceneChange(11);
         }
 
+        if (charEnd >= wallR.left ) {
+            colisionI = true;
+        }
+
+        if (character.getX() <= wallL.right) {
+            colisionD = true;
+        }
+
         if (character.getX() + spriteRef.getWidth() > pilar.left && character.getX() + spriteRef.getWidth() < pilar.right) {
             showActionRed = true;
             pilarInteract = true;
@@ -256,6 +318,15 @@ public class Level_2 extends Scene_Control {
             showActionRed = false;
         }
 
+        if (enemy1.getX() + spriteRef.getWidth() > character.getX()) {
+            enemyColision = true;
+            buttonsEnabled = false;
+            enemyCatch = true;
+        }
+
+        if(character.getX()<=0){
+            Game_Control.sceneChange(1);
+        }
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -287,7 +358,7 @@ public class Level_2 extends Scene_Control {
                 if (actionBtn.contains(x, y) && showActionRed == true) {
                     if (dialogStart && dialogCont == 4) {
                         dialogEnd = true;
-                        presente = false;
+                        buttonsEnabled = true;
                     }
                     dialogCont++;
                     dialogStart = true;
@@ -298,12 +369,12 @@ public class Level_2 extends Scene_Control {
                         Log.i("doorOpen", "yes");
                         colisionI = false;
                         stoneClose = false;
+                        presente = true;
+                        wallL=new Rect(0,0,0,0);
                     }
                 }
 
-                if (timeSkipBtn.contains(x, y)) {
-                    presente = !presente;
-                }
+
 
 
                 return true;
