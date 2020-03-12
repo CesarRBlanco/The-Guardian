@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TheGuardian</string>
+    <string name="app_name">The Guardian</string>
     <string name="dialogTest">Test dialog. Does it work?</string>
     <string name="play">Play</string>
     <string name="options">Options</string>
@@ -16,5 +16,6 @@
     <string name="dialog_02_02">Discover which one is truly yours...</string>
     <string name="dialog_02_03">Find the truth to your origins.</string>
     <string name="dialog_02_04">It feels like if it was talking about me...</string>
+    <string name="dialog_03_01">This door is closed...</string>
 
 </resources>

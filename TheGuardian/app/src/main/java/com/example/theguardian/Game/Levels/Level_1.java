@@ -183,7 +183,7 @@ public class Level_1 extends Scene_Control {
     public void updatePhysics() {
         super.updatePhysics();
         collisionSystem();
-        if (character.stance) {
+        if (Character.stance) {
             character.cambiaFrame();
         } else {
             if (movementD) {
@@ -239,11 +239,11 @@ public class Level_1 extends Scene_Control {
                     if (rMoveBtn.contains(x, y)) {
                         Log.i("pulso ", "onTouchEvent: abajo");
                         movementD = true;
-                        character.stance = false;
+                        Character.stance = false;
                     }
                     if (lMoveBtn.contains(x, y)) {
                         movementI = true;
-                        character.stance = false;
+                        Character.stance = false;
                     }
                     if (backOptsBtn.contains(x, y)) {
                         editor = preferences.edit();
@@ -282,7 +282,7 @@ public class Level_1 extends Scene_Control {
                 Log.i("pulso ", "onTouchEvent: arriba");
                 movementD = false;
                 movementI = false;
-                character.stance = true;
+                Character.stance = true;
                 return true;
         }
 
@@ -301,7 +301,7 @@ public class Level_1 extends Scene_Control {
 
     public Bitmap escalaAltura(Bitmap bitmapAux, int nuevoAlto) {
         if (nuevoAlto == bitmapAux.getHeight()) return bitmapAux;
-        return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) /
+        return Bitmap.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) /
                 bitmapAux.getHeight(), nuevoAlto, true);
     }
 
@@ -309,7 +309,7 @@ public class Level_1 extends Scene_Control {
 
     public Bitmap escalaAncho(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho == bitmapAux.getWidth()) return bitmapAux;
-        return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
+        return Bitmap.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
     }
 
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {

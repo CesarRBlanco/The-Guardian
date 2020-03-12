@@ -4,10 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
@@ -19,10 +15,13 @@ import android.view.SurfaceView;
 import com.example.theguardian.Game.Levels.Level_0;
 import com.example.theguardian.Game.Levels.Level_1;
 import com.example.theguardian.Game.Levels.Level_2;
+import com.example.theguardian.Game.Levels.Level_3;
+import com.example.theguardian.Game.Levels.Level_4;
+import com.example.theguardian.Game.Levels.Level_5_1;
+import com.example.theguardian.Game.Levels.Level_5_2;
+import com.example.theguardian.Game.Levels.Level_6;
 import com.example.theguardian.Game.Menus.Menu_Scene;
 import com.example.theguardian.Game.Menus.Options_Scene;
-
-import static android.content.Context.SENSOR_SERVICE;
 
 
 public class Game_Control extends SurfaceView implements SurfaceHolder.Callback {
@@ -46,7 +45,7 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
     public Game_Control(Context context) {
         super(context);
-        this.context = context;
+        Game_Control.context = context;
         surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameThread = new GameThread();
@@ -106,6 +105,51 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                     old = actualScene;
                 }
                 break;
+            case 12:
+
+                if (actualScene instanceof Options_Scene) {
+                    actualScene = old;
+                } else {
+                    actualScene = new Level_3(context, screenHeight, screenWidth);
+                    old = actualScene;
+                }
+                break;
+            case 13:
+
+                if (actualScene instanceof Options_Scene) {
+                    actualScene = old;
+                } else {
+                    actualScene = new Level_4(context, screenHeight, screenWidth);
+                    old = actualScene;
+                }
+                break;
+            case 14:
+
+                if (actualScene instanceof Options_Scene) {
+                    actualScene = old;
+                } else {
+                    actualScene = new Level_5_1(context, screenHeight, screenWidth);
+                    old = actualScene;
+                }
+                break;
+            case 15:
+
+                if (actualScene instanceof Options_Scene) {
+                    actualScene = old;
+                } else {
+                    actualScene = new Level_5_2(context, screenHeight, screenWidth);
+                    old = actualScene;
+                }
+                break;
+            case 16:
+
+                if (actualScene instanceof Options_Scene) {
+                    actualScene = old;
+                } else {
+                    actualScene = new Level_6(context, screenHeight, screenWidth);
+                    old = actualScene;
+                }
+                break;
         }
     }
 
@@ -129,8 +173,8 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        this.screenWidth = width;
-        this.screenHeight = height;
+        screenWidth = width;
+        screenHeight = height;
 
 
         actualScene = new Menu_Scene(context, screenHeight, screenWidth);

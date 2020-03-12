@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TheGuardian</string>
+    <string name="app_name">The Guardian</string>
     <string name="dialogTest">Dialogo de prueba. Funciona?</string>
     <string name="play">Jugar</string>
     <string name="options">Opciones</string>
@@ -17,4 +17,5 @@
     <string name="dialog_02_02">Descubre cual es verdaderamente la tuya...</string>
     <string name="dialog_02_03">Encuentra la verdad sobre tus origenes.</string>
     <string name="dialog_02_04">Siento como si hablase de mi...</string>
+    <string name="dialog_03_01">La puerta está cerrada...</string>
 </resources>

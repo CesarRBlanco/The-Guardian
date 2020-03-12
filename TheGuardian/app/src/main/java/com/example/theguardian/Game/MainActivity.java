@@ -16,6 +16,8 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.theguardian.R;
@@ -40,18 +42,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-
         Game_Control gameControl = new Game_Control(this);
         gameControl.setKeepScreenOn(true);
         setContentView(gameControl);
-        View decorView = getWindow().getDecorView();
-        int opciones = View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Oculta la barra de navegación
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        decorView.setSystemUiVisibility(opciones);
 
         preferences = getSharedPreferences("config", Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -63,26 +56,43 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("actualScene", 1);
         editor.commit();
 
+        manageDecorationView(context, true);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        View decorView = getWindow().getDecorView();
-        int opciones = View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Oculta la barra de navegación
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        decorView.setSystemUiVisibility(opciones);
+    public void manageDecorationView(Context context, boolean onCreate) {
+        final int viewOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 
+        View decorationView = ((Activity) context).getWindow().getDecorView();
+        decorationView.setSystemUiVisibility(viewOptions);
+        //Desde API 16 oculta la Status Bar
+        ((Activity) context).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (onCreate) {
+            //En onResume no se coloca, salta excepción - Esta linea hace que no se inicie en Samsungs
+//            ((Activity) context).getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        manageDecorationView(context, false);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
 
     }
+
+
+
+
 }
+
+
+

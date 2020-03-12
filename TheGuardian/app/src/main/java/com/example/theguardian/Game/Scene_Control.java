@@ -23,7 +23,7 @@ public class Scene_Control {
     public boolean modal = false;
     public boolean menu = false;
     public static SoundPool sp;
-    public static int soundIds[];
+    public static int[] soundIds;
 
     public Scene_Control(Context context) {
 

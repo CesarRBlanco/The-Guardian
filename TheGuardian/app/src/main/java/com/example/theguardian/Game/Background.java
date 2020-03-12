@@ -41,6 +41,12 @@ public class Background {
     }
 
 
+    public int getEnd(){
+        int end=getX1()+img.getWidth();
+        return end;
+
+    }
+
     public int getX1() {
         return x1;
     }
@@ -49,6 +55,12 @@ public class Background {
         this.x1 = x1;
     }
 
+public void setImg(Bitmap img){
+        this.img=img;
+}
+    public Bitmap getImg(){
+        return img;
+    }
 
     public void move() {
         if (derecha) {

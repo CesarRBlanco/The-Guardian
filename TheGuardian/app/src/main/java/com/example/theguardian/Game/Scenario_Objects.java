@@ -15,6 +15,14 @@ public class Scenario_Objects {
     int top, left, right, bottom, x, y, velocidad = 10, altoPantalla, anchoPantalla;
     Bitmap sprite;
     Rect hitbox;
+    int x1, x2;
+    public void setDerecha(boolean derecha) {
+        this.derecha = derecha;
+    }
+
+    boolean derecha = true;
+
+
 
     public int getTop() {
         return top;
@@ -94,16 +102,30 @@ pincelRect=new Paint();
         this.hitbox = new Rect(x, y, x + sprite.getWidth(), y + sprite.getHeight());
     }
 
-    public void move() {
 
-
-        this.x=2000;
-        hitboxRefresh();
-    }
 
 
     public void draw(Canvas c) {
         c.drawBitmap(sprite, x, y, null);
         c.drawRect(hitbox,pincelRect);
+    }
+
+    public void setVelocidad(int velocidad) {
+        this.velocidad = velocidad;
+    }
+
+
+
+    public void move() {
+        if (derecha) {
+            x1 += velocidad;
+            x2 += velocidad;
+            if (x1 > anchoPantalla) {
+                x1 = x2 - sprite.getWidth();
+            }
+            if (x2 > anchoPantalla) {
+                x2 = x1 - sprite.getWidth();
+            }
+        }
     }
 }

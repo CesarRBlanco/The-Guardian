@@ -95,7 +95,7 @@ public class Menu_Scene extends Scene_Control {
 //                    editor.putInt("actualScene", 2);
 //                    editor.commit();
 
-                    Game_Control.sceneChange(10);
+                    Game_Control.sceneChange(13);
                 }
                 if (optionsBtn.contains(x, y)) {
                     editor = preferences.edit();
@@ -121,8 +121,6 @@ public class Menu_Scene extends Scene_Control {
 //                    editor.commit();
                     Game_Control.sceneChange(0);
                 }
-
-
                 return true;
         }
         return true;
@@ -140,13 +138,13 @@ public class Menu_Scene extends Scene_Control {
 
     public Bitmap escalaAltura(Bitmap bitmapAux, int nuevoAlto) {
         if (nuevoAlto == bitmapAux.getHeight()) return bitmapAux;
-        return bitmapAux.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) /
+        return Bitmap.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * nuevoAlto) /
                 bitmapAux.getHeight(), nuevoAlto, true);
     }
 
     public Bitmap escalaAncho(Bitmap bitmapAux, int nuevoAncho) {
         if (nuevoAncho == bitmapAux.getWidth()) return bitmapAux;
-        return bitmapAux.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
+        return Bitmap.createScaledBitmap(bitmapAux, nuevoAncho, (bitmapAux.getHeight() * nuevoAncho) / bitmapAux.getWidth(), true);
     }
 
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {

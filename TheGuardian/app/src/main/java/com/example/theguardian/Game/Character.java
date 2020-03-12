@@ -13,7 +13,7 @@ public class Character {
     int anchoPantalla = 0, altoPantalla = 0;
     Bitmap[] frames, framesD, framesI;
     int frameActual = 0;
-    int x, y;
+    int x, y,bottom;
     int cont = 0;
 
     int tickFrame = 100;
@@ -49,6 +49,8 @@ public class Character {
         pincelRect.setStyle(Paint.Style.STROKE);
         pincelRect.setStrokeWidth(10);
         cuadrado = new Rect(x, y, x + frames[frameActual].getWidth(), y + frames[frameActual].getHeight());
+
+
     }
 
     //actualiza rectangulo
@@ -58,7 +60,7 @@ public class Character {
 
     public void dibuja(Canvas c) {
         c.drawBitmap(frames[frameActual], x, y, null);
-//        c.drawRect(cuadrado, pincelRect);
+        c.drawRect(cuadrado, pincelRect);
     }
 
 
@@ -211,6 +213,12 @@ public class Character {
         this.cuadrado = cuadrado;
     }
 
+    public int getBottom(){
+        bottom=y + frames[frameActual].getHeight();
+        return bottom;
+    }
+
+
 
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
         Matrix matrix = new Matrix();
@@ -219,6 +227,9 @@ public class Character {
         return Bitmap.createBitmap(imagen, 0, 0, imagen.getWidth(),
                 imagen.getHeight(), matrix, false);
     }
+
+
+
 
 
 }
