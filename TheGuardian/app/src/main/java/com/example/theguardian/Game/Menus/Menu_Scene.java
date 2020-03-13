@@ -75,9 +75,6 @@ public class Menu_Scene extends Scene_Control {
 
     }
 
-    public void updateConfig() {
-        super.updateConfig();
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -95,12 +92,12 @@ public class Menu_Scene extends Scene_Control {
 //                    editor.putInt("actualScene", 2);
 //                    editor.commit();
 
-                    Game_Control.sceneChange(13);
+                    Game_Control.sceneChange(10);
                 }
                 if (optionsBtn.contains(x, y)) {
                     editor = preferences.edit();
                     editor.putInt("lastScene", 1);
-                    editor.commit();
+                    editor.apply();
                     Game_Control.sceneChange(2);
                 }
                 if (creditsBtn.contains(x, y)) {

@@ -300,6 +300,7 @@ public class Level_5_2 extends Scene_Control {
                 }
 
                 if (actionBtn.contains(x, y) && gemInteract) {
+//                  super.setGem2Take(true);
                     gemTake = true;
                     // Diualogos y transicion
                     Game_Control.sceneChange(12);

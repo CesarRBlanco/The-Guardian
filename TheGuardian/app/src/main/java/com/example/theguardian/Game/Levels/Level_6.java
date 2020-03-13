@@ -298,6 +298,7 @@ public class Level_6 extends Scene_Control {
 
                 if (actionBtn.contains(x, y) && gemInteract) {
                     gemTake = true;
+         super.gem1Take=true;
                     // Diualogos y transicion
                     Game_Control.sceneChange(12);
                 }

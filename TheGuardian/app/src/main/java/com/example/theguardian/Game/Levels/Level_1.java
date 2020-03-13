@@ -30,33 +30,33 @@ public class Level_1 extends Scene_Control {
         this.context = context;
         super.musicChange(2);
 
+        this._screenHeight = _screenHeight;
+        this._screenWidth = _screenWidth;
 
         invisiblePaint = new Paint();
         invisiblePaint.setColor(Color.argb(0, 0, 0, 0));
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(60);
-        Bitmap[] bitmaps = new Bitmap[3];
+        Bitmap[] bitmaps = new Bitmap[2];
         for (int i = 0; i < bitmaps.length; i++) {
-            bitmaps[i] = getBitmapFromAssets("sprite" + i + ".png");
+            bitmaps[i] = getBitmapFromAssets("player" + i + ".png");
             bitmaps[i] = escalaAltura(bitmaps[i], _screenHeight / 4);
         }
 
 
         // Imagenes
-        _player = new Character(bitmaps, preferences.getInt("playerX", 0),
-                preferences.getInt("playerY", _screenHeight / 2), _screenWidth, _screenHeight);
-        _playerSprite = getBitmapFromAssets("sprite0.png");
+        _player = new Character(bitmaps, 1,
+                _screenHeight / 2 + 50, _screenWidth, _screenHeight);
+        _playerSprite = getBitmapFromAssets("playerStance.png");
         _playerSprite = escalaAltura(_playerSprite, _screenHeight / 4);
-        _player = new Character(bitmaps, 1, _screenHeight - (_screenHeight / 3) - _playerSprite.getHeight(),
-                _screenWidth, _screenHeight);
-        _background = getBitmapFromAssets("bg_Level1.png");
+        _background = getBitmapFromAssets("level_1.png");
         _background = Bitmap.createScaledBitmap(_background, _screenWidth, _screenHeight, false);
         imgMove_L = getBitmapFromAssets("movement.png");
         imgMove_L = escalaAltura(imgMove_L, _screenHeight / 6);
         imgMove_L = espejo(imgMove_L, true);
-        imgMove_L = getBitmapFromAssets("movement.png");
-        imgMove_R = escalaAltura(imgMove_L, _screenHeight / 6);
+        imgMove_R = getBitmapFromAssets("movement.png");
+        imgMove_R = escalaAltura(imgMove_R, _screenHeight / 6);
         imgAction_W = getBitmapFromAssets("actionButtonWhite.png");
         imgAction_W = escalaAltura(imgAction_W, _screenHeight / 6);
         imgAction_R = getBitmapFromAssets("actionButtonBlack.png");
@@ -69,8 +69,11 @@ public class Level_1 extends Scene_Control {
         imgDialogAction = escalaAltura(imgDialogAction, _screenHeight / 6);
         imgOptions = getBitmapFromAssets("backOptions.png");
         imgOptions = escalaAltura(imgOptions, _screenHeight / 6);
-        box = getBitmapFromAssets("box.png");
-        box = escalaAltura(box, _screenHeight / 5);
+        box = getBitmapFromAssets("stoneDoor.png");
+        box = escalaAltura(box, _screenHeight / 2);
+        invisibleObject = getBitmapFromAssets("invisible_object.png");
+        invisibleObject = Bitmap.createScaledBitmap(invisibleObject, _screenWidth, _screenHeight, false);
+
 
         // Rectangulos
         btnMove_L = new Rect(20, _screenHeight - 20 - imgMove_L.getHeight(),
@@ -81,12 +84,12 @@ public class Level_1 extends Scene_Control {
                 _screenHeight - 20 - imgMove_R.getHeight(), _screenWidth, _screenHeight);
         btnOptions = new Rect(_screenWidth - imgMove_L.getWidth(), 0, _screenWidth,
                 imgMove_L.getHeight());
-        _floor = new Rect(0, _player.getBottom(), 
+        _floor = new Rect(0, _player.getBottom(),
                 _screenWidth - (_screenWidth / 5), _screenHeight);
 
         // Objects
-        objStoneDoor = new Scenario_Objects(_screenWidth / 2 + (_screenWidth / 11), 
-                _screenHeight / 3, _screenWidth - (_screenWidth / 4), 
+        objStoneDoor = new Scenario_Objects(_screenWidth / 2 + (_screenWidth / 20),
+                _screenHeight / 3 - 50, _screenWidth - (_screenWidth / 4),
                 _screenHeight - (_screenHeight / 4), box, _screenHeight, _screenWidth);
 
         // Auxiliares
@@ -100,6 +103,8 @@ public class Level_1 extends Scene_Control {
                 .build();
         soundIds = new int[1];
         soundIds[0] = sp.load(context, R.raw.effect, 1);
+        stoneClose = true;
+
     }
 
 
@@ -115,11 +120,11 @@ public class Level_1 extends Scene_Control {
             btnsEnabled = false;
             c.drawBitmap(imgDialogBckgrnd, 0, _screenHeight - imgDialogBckgrnd.getHeight(), null);
             c.drawBitmap(imgCharacDialog, -100, _screenHeight - imgCharacDialog.getHeight(), null);
-            c.drawBitmap(imgDialogAction, _screenWidth - imgAction_W.getWidth() - 20, 
+            c.drawBitmap(imgDialogAction, _screenWidth - imgAction_W.getWidth() - 20,
                     _screenHeight - 20 - imgMove_R.getHeight(), null);
             switch (dialogCont) {
                 case 1:
-                    c.drawText(context.getResources().getString(R.string.dialog_01_01), 
+                    c.drawText(context.getResources().getString(R.string.dialog_01_01),
                             imgCharacDialog.getWidth() + 40, _screenHeight - 150, textPaint);
                     break;
                 case 2:
@@ -131,15 +136,18 @@ public class Level_1 extends Scene_Control {
             btnsEnabled = true;
             c.drawBitmap(imgOptions, _screenWidth - imgAction_W.getWidth(), 0, null);
             c.drawBitmap(imgMove_L, 20, _screenHeight - 20 - imgMove_L.getHeight(), null);
-            c.drawBitmap(imgMove_R, 60 + imgMove_L.getWidth(), 
+            c.drawBitmap(imgMove_R, 60 + imgMove_L.getWidth(),
                     _screenHeight - 20 - imgMove_R.getHeight(), null);
             if (showActionRed) {
                 c.drawBitmap(imgAction_R, _screenWidth - imgAction_W.getWidth() - 20,
                         _screenHeight - 20 - imgMove_R.getHeight(), null);
             } else {
-                c.drawBitmap(imgAction_W, _screenWidth - imgAction_W.getWidth() - 20, 
+                c.drawBitmap(imgAction_W, _screenWidth - imgAction_W.getWidth() - 20,
                         _screenHeight - 20 - imgMove_R.getHeight(), null);
             }
+        }
+        if (!stoneClose) {
+            c.drawColor(Color.WHITE);
         }
     }
 
@@ -225,7 +233,15 @@ public class Level_1 extends Scene_Control {
 
                         _collisionR = false;
                         stoneClose = false;
-                        objStoneDoor = new Scenario_Objects(0, 0, 0, 0, null, _screenHeight, _screenWidth);
+                        objStoneDoor = new Scenario_Objects(0, 0, 0, 0, invisibleObject, _screenHeight, _screenWidth);
+
+                        stoneClose = false;
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Game_Control.sceneChange(11);
                     }
                 }
                 return true;

@@ -20,6 +20,7 @@ import com.example.theguardian.Game.Levels.Level_4;
 import com.example.theguardian.Game.Levels.Level_5_1;
 import com.example.theguardian.Game.Levels.Level_5_2;
 import com.example.theguardian.Game.Levels.Level_6;
+import com.example.theguardian.Game.Levels.Level_End;
 import com.example.theguardian.Game.Menus.Menu_Scene;
 import com.example.theguardian.Game.Menus.Options_Scene;
 
@@ -147,6 +148,15 @@ public class Game_Control extends SurfaceView implements SurfaceHolder.Callback 
                     actualScene = old;
                 } else {
                     actualScene = new Level_6(context, screenHeight, screenWidth);
+                    old = actualScene;
+                }
+                break;
+            case 17:
+
+                if (actualScene instanceof Options_Scene) {
+                    actualScene = old;
+                } else {
+                    actualScene = new Level_End(context, screenHeight, screenWidth);
                     old = actualScene;
                 }
                 break;

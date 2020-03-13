@@ -35,7 +35,7 @@ public class Level_End extends Scene_Control {
     Paint invisiblePaint;
     Character character;
     Enemy enemy1;
-    Bitmap background_past, background_present, botonR, luces, spirals, spirals2, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, timeSkipPresent, timeSkipPast, backOptions, pastFilter, gemSprite, invisibleObject;
+    Bitmap background_past, botonR, luces, spirals, spirals2, actionButton_W, actionButton_B, dialogImg, dialogBack, dialogArrow, spriteRef, timeSkipPresent, timeSkipPast, backOptions, pastFilter, gemSprite, invisibleObject;
     Rect lMoveBtn, rMoveBtn, actionBtn, timeSkip_Btn, backOptsBtn, floor, wallR, wallL;
     int charEnd, dialogCont = 0;
     Scenario_Objects gem;
@@ -142,11 +142,10 @@ public class Level_End extends Scene_Control {
 
     public void draw(Canvas c) {
         super.draw(c);
-        if (!presente) {
+
             c.drawBitmap(background_past, 0, 0, null);
-        } else {
-            c.drawBitmap(background_present, 0, 0, null);
-        }
+
+
 
 
 
@@ -296,6 +295,7 @@ public class Level_End extends Scene_Control {
 
                 if (actionBtn.contains(x, y) && gemInteract) {
                     gemTake = true;
+         super.gem1Take=true;
                     // Diualogos y transicion
                     Game_Control.sceneChange(12);
                 }

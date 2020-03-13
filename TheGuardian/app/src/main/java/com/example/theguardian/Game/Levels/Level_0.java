@@ -86,7 +86,7 @@ public class Level_0 extends Scene_Control {
         dialogBack = escalaAncho(dialogBack, anchoPantalla);
         dialogArrow = getBitmapFromAssets("dialog_arrow.png");
         dialogArrow = escalaAltura(dialogArrow, altoPantalla / 6);
-        box = getBitmapFromAssets("box.png");
+        box = getBitmapFromAssets("stoneDoor.png");
         box = escalaAltura(box, altoPantalla / 6);
         menuBackground = getBitmapFromAssets("menu.png");
         menuBackground = Bitmap.createScaledBitmap(menuBackground, anchoPantalla, altoPantalla, false);

@@ -91,7 +91,7 @@ public class Level_3 extends Scene_Control {
 
         spriteRef = getBitmapFromAssets("sprite0.png");
         spriteRef = escalaAltura(spriteRef, altoPantalla / 6);
-        character = new Character(bitmaps, screenWidth-20-spriteRef.getWidth() , altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
+        character = new Character(bitmaps, screenWidth - 20 - spriteRef.getWidth(), altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
         enemy1 = new Enemy(bitmaps, -200, altoPantalla - (altoPantalla / 3) - spriteRef.getHeight(), anchoPantalla, altoPantalla);
         background_past = getBitmapFromAssets("level_3_past.png");
         background_past = Bitmap.createScaledBitmap(background_past, screenWidth, screenHeight, false);
@@ -125,9 +125,9 @@ public class Level_3 extends Scene_Control {
         actionBtn = new Rect(anchoPantalla - actionButton_B.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), anchoPantalla, altoPantalla);
         backOptsBtn = new Rect(anchoPantalla - botonL.getWidth(), 0, anchoPantalla, botonL.getHeight());
         floor = new Rect(0, altoPantalla - (altoPantalla / 3), anchoPantalla, altoPantalla);
-        wallL = new Rect(0, 0, spriteRef.getWidth()-20, screenHeight);
+        wallL = new Rect(0, 0, spriteRef.getWidth() - 20, screenHeight);
         wallR = new Rect(screenWidth - spriteRef.getWidth(), 0, screenWidth, screenHeight);
-        pilar = new Rect((screenWidth / 5)-20, (screenHeight / 2) - screenHeight / 8, ((screenWidth / 5) *2)-20, screenHeight);
+        pilar = new Rect((screenWidth / 5) - 20, (screenHeight / 2) - screenHeight / 8, ((screenWidth / 5) * 2) - 20, screenHeight);
         // Auxiliares
 
 
@@ -139,7 +139,7 @@ public class Level_3 extends Scene_Control {
                 float y = event.values[1];
                 float x = event.values[0];
                 float z = event.values[2];
-                Log.i("acele","x:"+x);
+                Log.i("acele", "x:" + x);
 
                 if (enemyCatch) {
                     if (x > 2 && shakeUpDown) {
@@ -241,8 +241,6 @@ public class Level_3 extends Scene_Control {
         collisionSystem();
 
 
-
-
         if (Character.stance) {
             character.cambiaFrame();
         } else {
@@ -300,7 +298,7 @@ public class Level_3 extends Scene_Control {
             enemyCatch = true;
         }
 
-        if(character.getX()<=0){
+        if (character.getX() <= 0) {
             Game_Control.sceneChange(13);
         }
 
@@ -333,25 +331,30 @@ public class Level_3 extends Scene_Control {
                     }
                 }
                 if (actionBtn.contains(x, y) && showActionRed == true) {
-                    if (dialogStart && dialogCont == 1) {
-                        dialogEnd = true;
-                        buttonsEnabled = true;
-                    }
-                    dialogCont++;
-                    dialogStart = true;
-                    if (dialogEnd) {
-                        if (preferences.getBoolean("Vibration", true)) {
-                            Game_Control.v.vibrate(1000);
+
+                    if (super.gem1Take) {
+                        Game_Control.sceneChange(17);
+                    } else {
+
+
+                        if (dialogStart && dialogCont == 1) {
+                            dialogEnd = true;
+                            buttonsEnabled = true;
                         }
-                        Log.i("doorOpen", "yes");
-                        colisionI = false;
-                        stoneClose = false;
+                        dialogCont++;
+                        dialogStart = true;
+                        if (dialogEnd) {
+                            if (preferences.getBoolean("Vibration", true)) {
+                                Game_Control.v.vibrate(1000);
+                            }
+                            Log.i("doorOpen", "yes");
+                            colisionI = false;
+                            stoneClose = false;
 
 
+                        }
                     }
                 }
-
-
 
 
                 return true;

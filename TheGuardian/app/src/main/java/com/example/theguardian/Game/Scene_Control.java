@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.provider.MediaStore;
@@ -29,12 +32,34 @@ public class Scene_Control {
     public Context context;
     public Paint textPaint, invisiblePaint;
     public Bitmap imgMove_L, imgMove_R, _background, imgAction_W, imgAction_R, imgCharacDialog,
-            imgDialogBckgrnd, imgDialogAction, _playerSprite, box, imgOptions;
-    public Rect btnMove_L, btnMove_R, btnAction, btnOptions, _floor;
+            imgDialog, imgDialogBckgrnd, imgDialogAction, _playerSprite, box, imgOptions, invisibleObject, _backgroundPast, _backgroundPresent, pastFilter;
+    public Rect btnMove_L, btnMove_R, btnAction, btnOptions, _floor, _wall_L, _wall_R, _interact;
     public Character _player;
+    public Enemy _enemy;
     public Scenario_Objects objStoneDoor;
-    public boolean showActionRed, dialogStart, dialogEnd, _movementR, _movementL,
-            _collisionR, _collisionL, stoneClose, btnsEnabled;
+    public boolean showActionRed;
+    public boolean dialogStart;
+    public boolean dialogEnd;
+    public boolean _movementR;
+    public boolean _movementL;
+    public boolean _collisionR;
+    public boolean _collisionL;
+    public boolean stoneClose;
+    public boolean present;
+    public boolean btnsEnabled;
+    public boolean _enableInteraction;
+    public static boolean gem1Take;
+    public static boolean gem2Take;
+    public boolean enemyColision = false;
+    public boolean enemyTouch = false;
+    public boolean enemyCatch = false;
+    public int cont = 0;
+
+    public static SensorManager mSensorManager;
+    public static Sensor mAccelerometer;
+    public static SensorEventListener sensorEventListener;
+    public static boolean shakeUpDown = true;
+    public int shake = 0;
 
 
     public Scene_Control(Context context) {
@@ -48,38 +73,26 @@ public class Scene_Control {
     }
 
 
-    public void updateConfig() {
-
-
-//        int newScene = preferences.getInt("actualScene", 1);
-//        Game_Control.sceneChange(newScene);
-//
-//        int musicVol = preferences.getInt("MusicVolume", 1);
-//        Log.i("VOLGAME", musicVol + "");
-//        mediaPlayer.setVolume(musicVol, musicVol);
-    }
-
-
     public void updatePhysics() {
 
     }
 
 
     public void musicChange(int song) {
-        Log.i("mucadasd", "musicChange: " + song);
-        switch (song) {
-            case 1:
-                if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-                mediaPlayer = MediaPlayer.create(context, R.raw.music2);
-                mediaPlayer.setVolume(preferences.getInt("MusicVolume", 1), preferences.getInt("MusicVolume", 1));
-                break;
-            case 2:
-                if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-                mediaPlayer = MediaPlayer.create(context, R.raw.music);
-                mediaPlayer.setVolume(preferences.getInt("MusicVolume", 1), preferences.getInt("MusicVolume", 1));
-                break;
-        }
-        mediaPlayer.start();
+//        Log.i("mucadasd", "musicChange: " + song);
+//        switch (song) {
+//            case 1:
+//                if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+//                mediaPlayer = MediaPlayer.create(context, R.raw.music2);
+//                mediaPlayer.setVolume(preferences.getInt("MusicVolume", 1), preferences.getInt("MusicVolume", 1));
+//                break;
+//            case 2:
+//                if (mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+//                mediaPlayer = MediaPlayer.create(context, R.raw.music);
+//                mediaPlayer.setVolume(preferences.getInt("MusicVolume", 1), preferences.getInt("MusicVolume", 1));
+//                break;
+//        }
+//        mediaPlayer.start();
     }
 
     public boolean onTouchEvent(MotionEvent event) {
