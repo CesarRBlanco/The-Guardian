@@ -13,7 +13,7 @@ public class Character {
     int anchoPantalla = 0, altoPantalla = 0;
     Bitmap[] frames, framesD, framesI;
     int frameActual = 0;
-    int x, y,bottom;
+    int x, y, bottom;
     int cont = 0;
 
     int tickFrame = 100;
@@ -213,11 +213,15 @@ public class Character {
         this.cuadrado = cuadrado;
     }
 
-    public int getBottom(){
-        bottom=y + frames[frameActual].getHeight();
+    public int getBottom() {
+        bottom = y + frames[frameActual].getHeight();
         return bottom;
     }
 
+    public int getRight() {
+        int right = x + frames[frameActual].getWidth();
+        return right;
+    }
 
 
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
@@ -229,22 +233,19 @@ public class Character {
     }
 
 
-
-
-
 }
 
 
 //           if (System.currentTimeMillis() - tiempoVelocidad > tickVelocidad) {
 //        this.x += velocidad;
-//        if (this.x+this.frames[frameActual].getWidth() > screenWidth) {
-//            this.x=screenWidth-this.frames[frameActual].getWidth();
-//            this.x = screenWidth;
+//        if (this.x+this.frames[frameActual].getWidth() > _screenWidth) {
+//            this.x=_screenWidth-this.frames[frameActual].getWidth();
+//            this.x = _screenWidth;
 //            velocidad *= -1 * 1.5f;
 //            frames = framesI;
 //        }
-//        if(this.y>screenHeight)this.y=0;
-//        if(this.y<0)this.y=screenHeight;
+//        if(this.y>_screenHeight)this.y=0;
+//        if(this.y<0)this.y=_screenHeight;
 //        if (this.x < 0) {
 //            this.x = 0;
 //            velocidad *= -1*1.5f;

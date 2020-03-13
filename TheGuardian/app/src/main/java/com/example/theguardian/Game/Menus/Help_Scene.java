@@ -58,13 +58,13 @@ public class Help_Scene extends Scene_Control {
         c.drawColor(Color.BLUE);
 //        c.drawBitmap(menuBackground, 0, 0, null);
 //        c.drawRect(playBtn, textPaint);
-//        c.drawText(context.getResources().getString(R.string.play), screenWidth / 3, (screenHeight / 3 + 20) + 100, blackPaint);
+//        c.drawText(context.getResources().getString(R.string.play), _screenWidth / 3, (_screenHeight / 3 + 20) + 100, blackPaint);
 //        c.drawRect(optionsBtn, textPaint);
-//        c.drawText(context.getResources().getString(R.string.options), screenWidth / 3, (screenHeight / 2 + 20) + 100, blackPaint);
+//        c.drawText(context.getResources().getString(R.string.options), _screenWidth / 3, (_screenHeight / 2 + 20) + 100, blackPaint);
 //        c.drawRect(creditsBtn, textPaint);
-//        c.drawText(context.getResources().getString(R.string.credits), screenWidth / 3, (screenHeight - (screenHeight / 3) + 20) + 100, blackPaint);
+//        c.drawText(context.getResources().getString(R.string.credits), _screenWidth / 3, (_screenHeight - (_screenHeight / 3) + 20) + 100, blackPaint);
 //        c.drawRect(helpBtn, textPaint);
-//        c.drawText(context.getResources().getString(R.string.help), 20, screenHeight - 20 - botonL.getHeight() + 100, blackPaint);
+//        c.drawText(context.getResources().getString(R.string.help), 20, _screenHeight - 20 - botonL.getHeight() + 100, blackPaint);
     }
 
     public void updatePhysics() {

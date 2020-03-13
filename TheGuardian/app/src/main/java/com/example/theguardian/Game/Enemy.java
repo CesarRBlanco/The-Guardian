@@ -226,14 +226,14 @@ public class Enemy {
 
 //           if (System.currentTimeMillis() - tiempoVelocidad > tickVelocidad) {
 //        this.x += velocidad;
-//        if (this.x+this.frames[frameActual].getWidth() > screenWidth) {
-//            this.x=screenWidth-this.frames[frameActual].getWidth();
-//            this.x = screenWidth;
+//        if (this.x+this.frames[frameActual].getWidth() > _screenWidth) {
+//            this.x=_screenWidth-this.frames[frameActual].getWidth();
+//            this.x = _screenWidth;
 //            velocidad *= -1 * 1.5f;
 //            frames = framesI;
 //        }
-//        if(this.y>screenHeight)this.y=0;
-//        if(this.y<0)this.y=screenHeight;
+//        if(this.y>_screenHeight)this.y=0;
+//        if(this.y<0)this.y=_screenHeight;
 //        if (this.x < 0) {
 //            this.x = 0;
 //            velocidad *= -1*1.5f;

@@ -118,8 +118,8 @@ public class Level_5_1 extends Scene_Control {
         doorSprite = escalaAltura(doorSprite, altoPantalla / 4);
         keySprite = getBitmapFromAssets("generic_key.png");
         keySprite = escalaAltura(keySprite, screenHeight / 9);
-        key = new Scenario_Objects(spriteRef.getWidth()-30, screenHeight - spriteRef.getHeight(), spriteRef.getWidth()+keySprite.getWidth()-30, screenHeight, keySprite);
-        door = new Scenario_Objects(screenWidth / 4 - 20, screenHeight / 4 - 60, screenWidth / 4 - 20 + doorSprite.getWidth(), screenHeight / 4 - 60 + doorSprite.getHeight(), doorSprite);
+        key = new Scenario_Objects(spriteRef.getWidth()-30, screenHeight - spriteRef.getHeight(), spriteRef.getWidth()+keySprite.getWidth()-30, screenHeight, keySprite,screenHeight,screenWidth);
+        door = new Scenario_Objects(screenWidth / 4 - 20, screenHeight / 4 - 60, screenWidth / 4 - 20 + doorSprite.getWidth(), screenHeight / 4 - 60 + doorSprite.getHeight(), doorSprite,screenHeight,screenWidth);
         invisibleObject = getBitmapFromAssets("invisible_object.png");
         invisibleObject = Bitmap.createScaledBitmap(invisibleObject, anchoPantalla, altoPantalla, false);
 
@@ -161,7 +161,7 @@ public class Level_5_1 extends Scene_Control {
             c.drawBitmap(background_present, 0, 0, null);
 //            c.drawRect(timeSkip_Btn, textPaint);
             textPaint.setAlpha(50);
-//            c.drawRect(floor, textPaint);
+//            c.drawRect(_floor, textPaint);
 //            c.drawRect(collapse, textPaint);
             c.drawRect(wallL, textPaint);
             textPaint.setAlpha(100);
@@ -334,7 +334,7 @@ public class Level_5_1 extends Scene_Control {
 
                 if (actionBtn.contains(x, y) && doorInteract && keyTake) {
                     colisionD = false;
-                    door = new Scenario_Objects(0, 0, 0, 0, invisibleObject);
+                    door = new Scenario_Objects(0, 0, 0, 0, invisibleObject,screenHeight,screenWidth);
                 }
 
 

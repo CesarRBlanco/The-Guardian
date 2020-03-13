@@ -154,11 +154,11 @@ public class Level_4 extends Scene_Control {
         c.drawBitmap(background_past, 0, 0, null);
 
 
-//            c.drawRect(rMoveBtn, invisiblePaint);
-//            c.drawRect(actionBtn, invisiblePaint);
-//            c.drawRect(backOptsBtn, invisiblePaint);
+//            c.drawRect(btnMove_R, invisiblePaint);
+//            c.drawRect(btnAction, invisiblePaint);
+//            c.drawRect(btnOptions, invisiblePaint);
 
-//            c.drawRect(floor, textPaint);
+//            c.drawRect(_floor, textPaint);
 //            c.drawRect(wallR, textPaint);
 //            c.drawRect(wallL, textPaint);
 //        c.drawRect(pilar, textPaint);
@@ -248,11 +248,11 @@ public class Level_4 extends Scene_Control {
         }
 
 //        if (charEnd >= wallR.left ) {
-//            colisionI = true;
+//            _collisionR = true;
 //        }
 
-//        if (character.getX() <= wallL.right) {
-//            colisionD = true;
+//        if (_player.getX() <= wallL.right) {
+//            _collisionL = true;
 //        }
 
         if (charEnd > pilar.left && charEnd < pilar.right) {

@@ -78,12 +78,8 @@ public class Scenario_Objects {
 //    int tickVelocidad = 30;
 //    long tiempoVelocidad;
 
-    public Scenario_Objects(int altoPantalla, int anchoPantalla) {
-        this.altoPantalla = altoPantalla;
-        this.anchoPantalla = anchoPantalla;
-    }
 
-    public Scenario_Objects(int left, int top, int right, int bottom, Bitmap sprite) {
+    public Scenario_Objects(int left, int top, int right, int bottom, Bitmap sprite,int altoPantalla, int anchoPantalla) {
         this.left = left;
         this.top = top;
         this.right = right;
@@ -96,6 +92,8 @@ pincelRect=new Paint();
         pincelRect.setColor(Color.RED);
         pincelRect.setStyle(Paint.Style.STROKE);
         pincelRect.setStrokeWidth(10);
+        this.altoPantalla = altoPantalla;
+        this.anchoPantalla = anchoPantalla;
     }
 
     public void hitboxRefresh() {
@@ -116,16 +114,5 @@ pincelRect=new Paint();
 
 
 
-    public void move() {
-        if (derecha) {
-            x1 += velocidad;
-            x2 += velocidad;
-            if (x1 > anchoPantalla) {
-                x1 = x2 - sprite.getWidth();
-            }
-            if (x2 > anchoPantalla) {
-                x2 = x1 - sprite.getWidth();
-            }
-        }
-    }
+
 }

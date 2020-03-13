@@ -2,7 +2,10 @@ package com.example.theguardian.Game;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.provider.MediaStore;
@@ -16,14 +19,23 @@ import static com.example.theguardian.Game.Game_Control.context;
 
 public class Scene_Control {
 
-
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
     public static MediaPlayer mediaPlayer;
     public boolean modal = false;
-    public boolean menu = false;
     public static SoundPool sp;
     public static int[] soundIds;
+    public int _screenWidth = 0, _screenHeight = 0, dialogCont = 0;
+    public Context context;
+    public Paint textPaint, invisiblePaint;
+    public Bitmap imgMove_L, imgMove_R, _background, imgAction_W, imgAction_R, imgCharacDialog,
+            imgDialogBckgrnd, imgDialogAction, _playerSprite, box, imgOptions;
+    public Rect btnMove_L, btnMove_R, btnAction, btnOptions, _floor;
+    public Character _player;
+    public Scenario_Objects objStoneDoor;
+    public boolean showActionRed, dialogStart, dialogEnd, _movementR, _movementL,
+            _collisionR, _collisionL, stoneClose, btnsEnabled;
+
 
     public Scene_Control(Context context) {
 

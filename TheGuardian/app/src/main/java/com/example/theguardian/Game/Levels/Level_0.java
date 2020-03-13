@@ -101,7 +101,7 @@ public class Level_0 extends Scene_Control {
         ladderInteract = new Rect(anchoPantalla / 4 - 10, altoPantalla / 2 - 90, anchoPantalla / 4 + 90, altoPantalla - altoPantalla / 4 + 30);
 
 
-        boxObj = new Scenario_Objects(anchoPantalla / 2, altoPantalla - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla, box);
+        boxObj = new Scenario_Objects(anchoPantalla / 2, altoPantalla - box.getHeight(), anchoPantalla / 2 + box.getWidth(), altoPantalla, box,heightScreen,widthScreen);
 
 
         playBtn = new Rect(anchoPantalla / 3, altoPantalla / 3 + 20, anchoPantalla - (anchoPantalla / 3), altoPantalla / 2);
@@ -112,7 +112,7 @@ public class Level_0 extends Scene_Control {
 
 
         // Auxiliares
-        iniEO = new Scenario_Objects(altoPantalla, anchoPantalla);
+
 
         //  escenaActual = new Menu_Scene(context, altoPantalla, anchoPantalla);
     }
@@ -122,34 +122,34 @@ public class Level_0 extends Scene_Control {
         super.draw(c);
         Log.i("musicChange", "escena0");
         c.drawBitmap(fondo1, 0, 0, null);
-//            c.drawRect(lMoveBtn, invisiblePaint);
-//            c.drawRect(rMoveBtn, invisiblePaint);
-//            c.drawRect(actionBtn, textPaint);
+//            c.drawRect(btnMove_L, invisiblePaint);
+//            c.drawRect(btnMove_R, invisiblePaint);
+//            c.drawRect(btnAction, textPaint);
 //            c.drawRect(ladderInteract, textPaint);
-//            c.drawRect(backOptsBtn, textPaint);
+//            c.drawRect(btnOptions, textPaint);
 //
 //            if (dialogStart == false) {
 //                c.drawBitmap(botonL, 20, altoPantalla - 20 - botonL.getHeight(), null);
-//                c.drawBitmap(botonR, 60 + botonL.getWidth(), altoPantalla - 20 - botonR.getHeight(), null);
+//                c.drawBitmap(imgMove_R, 60 + botonL.getWidth(), altoPantalla - 20 - imgMove_R.getHeight(), null);
 //                if (showActionRed) {
-//                    c.drawBitmap(actionButton_B, anchoPantalla - actionButton_W.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+//                    c.drawBitmap(imgAction_R, anchoPantalla - imgAction_W.getWidth() - 20, altoPantalla - 20 - imgMove_R.getHeight(), null);
 //                } else {
 //
-//                    c.drawBitmap(actionButton_W, anchoPantalla - actionButton_W.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
+//                    c.drawBitmap(imgAction_W, anchoPantalla - imgAction_W.getWidth() - 20, altoPantalla - 20 - imgMove_R.getHeight(), null);
 //                }
-//                c.drawBitmap(backOptions, anchoPantalla - actionButton_W.getWidth(), 0, null);
+//                c.drawBitmap(imgOptions, anchoPantalla - imgAction_W.getWidth(), 0, null);
 //
 //
 //            } else {
-//                c.drawBitmap(dialogBack, 0, altoPantalla - dialogBack.getHeight(), null);
-//                c.drawBitmap(dialogImg, -100, altoPantalla - dialogImg.getHeight(), null);
-//                c.drawBitmap(dialogArrow, anchoPantalla - actionButton_W.getWidth() - 20, altoPantalla - 20 - botonR.getHeight(), null);
-//                c.drawText(getResources().getString(R.string.dialogTest), dialogImg.getWidth() + 40, altoPantalla - 150, textPaint);
+//                c.drawBitmap(imgDialogBckgrnd, 0, altoPantalla - imgDialogBckgrnd.getHeight(), null);
+//                c.drawBitmap(imgCharacDialog, -100, altoPantalla - imgCharacDialog.getHeight(), null);
+//                c.drawBitmap(imgDialogAction, anchoPantalla - imgAction_W.getWidth() - 20, altoPantalla - 20 - imgMove_R.getHeight(), null);
+//                c.drawText(getResources().getString(R.string.dialogTest), imgCharacDialog.getWidth() + 40, altoPantalla - 150, textPaint);
 //            }
 
 //        c.drawBitmap(box, anchoPantalla / 2, 1100 - box.getHeight(), null);
         boxObj.draw(c);
-//            charEnd = character.x + spriteRef.getWidth();
+//            charEnd = _player.x + _playerSprite.getWidth();
         c.drawText("" + charEnd + " // " + ladderInteract.left, 10, 50 + invisiblePaint.getTextSize(), textPaint);
 //        c.drawText("" + ladderInteract.right, 100, 50 + invisiblePaint.getTextSize(), textPaint);
         character.dibuja(c);

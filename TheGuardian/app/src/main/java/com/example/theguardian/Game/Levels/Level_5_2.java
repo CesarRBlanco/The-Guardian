@@ -133,7 +133,9 @@ public class Level_5_2 extends Scene_Control {
         floor = new Rect(0, altoPantalla - (altoPantalla / 5) - 40, anchoPantalla, altoPantalla);
         wallL = new Rect(0, 0, spriteRef.getWidth() - 20, screenHeight);
         wallR = new Rect(screenWidth - spriteRef.getWidth(), 0, screenWidth, screenHeight);
-        gem = new Scenario_Objects(spriteRef.getWidth() + (spriteRef.getWidth() / 2) - 20, screenHeight / 2 - gemSprite.getHeight() + 30, spriteRef.getWidth() + gemSprite.getWidth() + (spriteRef.getWidth() / 2) - 20, screenHeight / 2 + 30, gemSprite);
+        gem = new Scenario_Objects(spriteRef.getWidth() + (spriteRef.getWidth() / 2) - 20,
+                screenHeight / 2 - gemSprite.getHeight() + 30, spriteRef.getWidth() + gemSprite.getWidth() + (spriteRef.getWidth() / 2) - 20,
+                screenHeight / 2 + 30, gemSprite,screenHeight,screenWidth);
         // Auxiliares
 
 
@@ -153,9 +155,9 @@ public class Level_5_2 extends Scene_Control {
         c.drawBitmap(background_past, 0, 0, null);
 
 
-//            c.drawRect(rMoveBtn, invisiblePaint);
-//            c.drawRect(actionBtn, invisiblePaint);
-//            c.drawRect(backOptsBtn, invisiblePaint);
+//            c.drawRect(btnMove_R, invisiblePaint);
+//            c.drawRect(btnAction, invisiblePaint);
+//            c.drawRect(btnOptions, invisiblePaint);
 
         c.drawRect(floor, textPaint);
 //            c.drawRect(wallR, textPaint);
@@ -244,11 +246,11 @@ public class Level_5_2 extends Scene_Control {
         }
 
 //        if (charEnd >= wallR.left ) {
-//            colisionI = true;
+//            _collisionR = true;
 //        }
 
-//        if (character.getX() <= wallL.right) {
-//            colisionD = true;
+//        if (_player.getX() <= wallL.right) {
+//            _collisionL = true;
 //        }
 
         if (charEnd > gem.getLeft() && character.getX() < gem.getRight()) {
